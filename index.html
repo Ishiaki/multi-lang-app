@@ -1,51 +1,126 @@
 <!DOCTYPE html>
-<html lang="ja">
-<head>
+<html lang="ja"> <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>多言語学習アプリ</title>
-        <!-- PWA用マニフェストへのリンク -->
-    <link rel="manifest" href="./manifest.json" />
-    <meta name="theme-color" content="#14b8a6" />
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 他のスタイル・スクリプト -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>多言語学習アプリ</title> <link rel="manifest" href="./manifest.json" />
+    <meta name="theme-color" content="#14b8a6" /> <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-primary: #f8fafc; /* bg-slate-50 */
+            --text-primary: #334155; /* text-slate-700 */
+            --text-secondary: #64748b; /* text-slate-500 */
+            --text-accent: #14b8a6; /* teal-500 */
+            --text-accent-strong: #0d9488; /* teal-600 */
+            --container-bg: white;
+            --container-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --input-border: #64748b; /* border-slate-500 */
+            --input-focus-border: #14b8a6; /* focus:border-teal-500 */
+            --input-focus-ring: #14b8a6;
+            --history-item-bg: #f1f5f9; /* bg-slate-100 */
+            --history-item-border: #e2e8f0; /* border-slate-200 */
+            --history-item-hover-bg: #ccfbf1; /* bg-teal-100 */
+            --scrollbar-thumb: #cbd5e1;
+            --scrollbar-thumb-hover: #94a3b8;
+            --selection-bg: #5eead4;
+            --selection-text: #134e4a;
+            --btn-primary-bg: #14b8a6;
+            --btn-primary-border: #0d9488;
+            --btn-primary-hover-bg: #0d9488;
+            --btn-primary-active-bg: #0f766e;
+            --btn-primary-focus-ring: rgba(45, 212, 191, 0.45);
+            --btn-text-color: white;
+
+            --message-error-bg: #fee2e2;
+            --message-error-text: #b91c1c;
+            --message-error-border: #fecaca;
+            --message-warning-bg: #ffedd5;
+            --message-warning-text: #c2410c;
+            --message-warning-border: #fed7aa;
+            --message-success-bg: #ccfbf1;
+            --message-success-text: #0f766e;
+            --message-success-border: #99f6e4;
+        }
+
+        html.dark {
+            --bg-primary: #0f172a; /* slate-900 */
+            --text-primary: #e2e8f0; /* slate-200 */
+            --text-secondary: #94a3b8; /* slate-400 */
+            --text-accent: #2dd4bf; /* teal-400 */
+            --text-accent-strong: #14b8a6; /* teal-500 */
+            --container-bg: #1e293b; /* slate-800 */
+            --container-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.07);
+            --input-border: #475569; /* slate-600 */
+            --input-focus-border: #2dd4bf; /* teal-400 */
+            --input-focus-ring: #2dd4bf;
+            --history-item-bg: #334155; /* slate-700 */
+            --history-item-border: #475569; /* slate-600 */
+            --history-item-hover-bg: #0f766e; /* teal-700 */
+            --scrollbar-thumb: #475569;
+            --scrollbar-thumb-hover: #64748b;
+            --selection-bg: #14b8a6;
+            --selection-text: #f0fdfa;
+            --btn-primary-bg: #14b8a6;
+            --btn-primary-border: #0d9488;
+            --btn-primary-hover-bg: #0d9488;
+            --btn-primary-active-bg: #0f766e;
+            --btn-primary-focus-ring: rgba(45, 212, 191, 0.45);
+            /* Ensure button text color contrasts with dark buttons if needed, though Tailwind's default might be fine */
+
+            --message-error-bg: #5f2120; /* Adjusted for dark */
+            --message-error-text: #fca5a5;
+            --message-error-border: #b91c1c;
+            --message-warning-bg: #62300a; /* Adjusted for dark */
+            --message-warning-text: #fdba74;
+            --message-warning-border: #c2410c;
+            --message-success-bg: #0c4a4a; /* Adjusted for dark */
+            --message-success-text: #5eead4;
+            --message-success-border: #0f766e;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             transition: background-color 0.3s, color 0.3s;
             -webkit-overflow-scrolling: touch;
-            background-color: #f8fafc; /* bg-slate-50 */
-            color: #334155; /* text-slate-700 */
-        }
-        /* 初期ページのテキストエリアのスタイルをより具体的に指定 */
-        #input-section textarea {
-            min-height: 100px;
-            border-width: 2px; /* 枠線の太さを2pxに変更 */
-            border-color: #64748b; /* border-slate-500 - より濃い色に変更 */
-        }
-        #input-section textarea:focus {
-            border-color: #14b8a6; /* focus:border-teal-500 */
-            box-shadow: 0 0 0 2px #14b8a6; /* focus:ring-teal-500 - focus時のリングも太く見えるように調整 */
-        }
-        /* 学習セクション内のテキストエリア（解答欄）のスタイル */
-        #learning-section textarea.user-answer-input {
-            min-height: 60px; /* 解答欄は少し小さめに */
-            border-width: 1px; /* 解答欄の枠線は通常 */
-            border-color: #cbd5e1; /* border-slate-300 - 通常の色 */
-        }
-        #learning-section textarea.user-answer-input:focus {
-            border-color: #14b8a6; /* focus:border-teal-500 */
-            box-shadow: 0 0 0 1px #14b8a6; /* focus:ring-teal-500 */
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
         }
 
+        /* Apply CSS variables to elements */
         .main-container {
-            background-color: white;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            background-color: var(--container-bg);
+            box-shadow: var(--container-shadow);
             border-radius: 0.75rem; /* rounded-xl */
             margin-left: auto; /* mx-auto */
             margin-right: auto; /* mx-auto */
+        }
+        #input-section textarea {
+            min-height: 100px;
+            border-width: 2px;
+            border-color: var(--input-border);
+            background-color: var(--container-bg); /* Ensure textarea bg matches container in dark mode */
+            color: var(--text-primary); /* Ensure textarea text color matches body text */
+        }
+        #input-section textarea::placeholder {
+            color: var(--text-secondary);
+        }
+        #input-section textarea:focus {
+            border-color: var(--input-focus-border);
+            box-shadow: 0 0 0 2px var(--input-focus-ring);
+        }
+        #learning-section textarea.user-answer-input {
+            min-height: 60px;
+            border-width: 1px;
+            border-color: var(--input-border); /* Use themed border */
+            background-color: var(--container-bg);
+            color: var(--text-primary);
+        }
+        #learning-section textarea.user-answer-input::placeholder {
+            color: var(--text-secondary);
+        }
+        #learning-section textarea.user-answer-input:focus {
+            border-color: var(--input-focus-border);
+            box-shadow: 0 0 0 1px var(--input-focus-ring);
         }
 
         .message {
@@ -55,190 +130,260 @@
             font-weight: 500;
             transition: opacity 0.3s ease-in-out;
         }
-        .message-error { background-color: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
-        .message-warning { background-color: #ffedd5; color: #c2410c; border: 1px solid #fed7aa; }
-        .message-success { background-color: #ccfbf1; color: #0f766e; border: 1px solid #99f6e4; } /* Teal系 */
+        .message-error { background-color: var(--message-error-bg); color: var(--message-error-text); border: 1px solid var(--message-error-border); }
+        .message-warning { background-color: var(--message-warning-bg); color: var(--message-warning-text); border: 1px solid var(--message-warning-border); }
+        .message-success { background-color: var(--message-success-bg); color: var(--message-success-text); border: 1px solid var(--message-success-border); }
 
-        /* ボタンの共通スタイル */
         .btn {
             font-weight: 600;
-            padding: 0.5rem 1rem; /* 基本のパディング */
+            padding: 0.5rem 1rem;
             border-radius: 0.375rem;
             transition-property: background-color, border-color, color, box-shadow, transform;
             transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
             transition-duration: 150ms;
-            font-size: 0.875rem; /* 基本のフォントサイズ (text-sm) */
+            font-size: 0.875rem;
             line-height: 1.25rem;
             border: 1px solid #94a3b8; /* border-slate-400 */
             box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
             cursor: pointer;
             display: inline-block;
             text-align: center;
-            color: white; /* デフォルトの文字色を白に */
+            color: var(--btn-text-color); /* Default button text color */
         }
         .btn:hover {
-            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow */
+            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
         .btn:active {
-            box-shadow: inset 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-inner */
+            box-shadow: inset 0 1px 2px 0 rgba(0, 0, 0, 0.05);
         }
         .btn:focus {
             outline: 2px solid transparent;
             outline-offset: 2px;
         }
-
-        /* プライマリボタン (ティール系) */
         .btn-primary {
-            background-color: #14b8a6; /* bg-teal-500 */
-            border-color: #0d9488; /* border-teal-600 */
+            background-color: var(--btn-primary-bg);
+            border-color: var(--btn-primary-border);
         }
-        .btn-primary:hover { background-color: #0d9488; }
-        .btn-primary:active { background-color: #0f766e; }
-        .btn-primary:focus { box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.45); }
+        .btn-primary:hover { background-color: var(--btn-primary-hover-bg); }
+        .btn-primary:active { background-color: var(--btn-primary-active-bg); }
+        .btn-primary:focus { box-shadow: 0 0 0 3px var(--btn-primary-focus-ring); }
 
-        /* 「訳文を隠す/表示」ボタンの原文優先時 (学習中と同じティール系) */
         .btn-toggle-original-first {
-            background-color: #14b8a6; /* ティール系 */
-            border-color: #0d9488;
-            padding: 0.75rem 1.5rem;
-            font-size: 1rem; /* text-base */
-            line-height: 1.5rem;
+            background-color: var(--btn-primary-bg); /* Teal系 */
+            border-color: var(--btn-primary-border);
+            padding: 0.75rem 1.5rem; font-size: 1rem; line-height: 1.5rem;
         }
-        .btn-toggle-original-first:hover { background-color: #0d9488; }
-        .btn-toggle-original-first:active { background-color: #0f766e; }
-        .btn-toggle-original-first:focus { box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.45); }
+        .btn-toggle-original-first:hover { background-color: var(--btn-primary-hover-bg); }
+        .btn-toggle-original-first:active { background-color: var(--btn-primary-active-bg); }
+        .btn-toggle-original-first:focus { box-shadow: 0 0 0 3px var(--btn-primary-focus-ring); }
 
-        /* 「訳文を隠す/表示」ボタンの訳文優先時 (学習中と同じパープル系) */
-        .btn-toggle-translation-first {
-            background-color: #8b5cf6; /* パープル系 */
-            border-color: #7c3aed;
-            padding: 0.75rem 1.5rem;
-            font-size: 1rem; /* text-base */
-            line-height: 1.5rem;
+        .btn-toggle-translation-first { /* Purple系 */
+            background-color: #8b5cf6; border-color: #7c3aed;
+            padding: 0.75rem 1.5rem; font-size: 1rem; line-height: 1.5rem;
         }
         .btn-toggle-translation-first:hover { background-color: #7c3aed; }
         .btn-toggle-translation-first:active { background-color: #6d28d9; }
         .btn-toggle-translation-first:focus { box-shadow: 0 0 0 3px rgba(192, 132, 252, 0.45); }
+        html.dark .btn-toggle-translation-first {
+            background-color: #a78bfa; border-color: #8b5cf6; /* Lighter purple for dark mode */
+        }
+        html.dark .btn-toggle-translation-first:hover { background-color: #8b5cf6; }
 
-        /* 初期表示設定ボタン (toggle-display-priority-btn) のためのスタイル */
-        .btn-display-priority-original {
-            background-color: #6366f1; /* bg-indigo-500 */
-            border-color: #4f46e5; /* border-indigo-600 */
-            padding: 0.625rem 1.25rem;
-            font-size: 0.875rem; /* text-sm */
+
+        .btn-display-priority-original { /* Indigo系 */
+            background-color: #6366f1; border-color: #4f46e5;
+            padding: 0.625rem 1.25rem; font-size: 0.875rem;
         }
         .btn-display-priority-original:hover { background-color: #4f46e5; }
         .btn-display-priority-original:active { background-color: #4338ca; }
         .btn-display-priority-original:focus { box-shadow: 0 0 0 3px rgba(165, 180, 252, 0.45); }
+        html.dark .btn-display-priority-original {
+             background-color: #818cf8; border-color: #6366f1; /* Lighter indigo for dark mode */
+        }
+        html.dark .btn-display-priority-original:hover { background-color: #6366f1; }
 
-        .btn-display-priority-translation {
-            background-color: #f97316; /* bg-orange-500 */
-            border-color: #ea580c; /* border-orange-600 */
-            padding: 0.625rem 1.25rem;
-            font-size: 0.875rem; /* text-sm */
+
+        .btn-display-priority-translation { /* Orange系 */
+            background-color: #f97316; border-color: #ea580c;
+            padding: 0.625rem 1.25rem; font-size: 0.875rem;
         }
         .btn-display-priority-translation:hover { background-color: #ea580c; }
         .btn-display-priority-translation:active { background-color: #c2410c; }
         .btn-display-priority-translation:focus { box-shadow: 0 0 0 3px rgba(253, 186, 116, 0.45); }
+        html.dark .btn-display-priority-translation {
+            background-color: #fb923c; border-color: #f97316; /* Lighter orange for dark mode */
+        }
+        html.dark .btn-display-priority-translation:hover { background-color: #f97316; }
 
 
         .btn-secondary {
-            background-color: #64748b; /* bg-slate-500 */
-            border-color: #475569; /* border-slate-600 */
+            background-color: #64748b; border-color: #475569; color: white;
         }
         .btn-secondary:hover { background-color: #475569; }
         .btn-secondary:active { background-color: #334155; }
         .btn-secondary:focus { box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.45); }
-
-        .btn-warning {
-            background-color: #f59e0b; /* bg-amber-500 */
-            border-color: #d97706; /* border-amber-600 */
+        html.dark .btn-secondary {
+            background-color: #475569; border-color: #334155; color: #e2e8f0;
         }
+        html.dark .btn-secondary:hover { background-color: #334155; }
+
+
+        .btn-warning { background-color: #f59e0b; border-color: #d97706; }
         .btn-warning:hover { background-color: #d97706; }
         .btn-warning:active { background-color: #b45309; }
         .btn-warning:focus { box-shadow: 0 0 0 3px rgba(252, 211, 77, 0.45); }
+        html.dark .btn-warning { background-color: #facc15; border-color: #eab308; color: #422006;}
+        html.dark .btn-warning:hover { background-color: #eab308; }
 
-        .btn-info { /* 履歴表示ボタンなど */
-            background-color: #38bdf8; /* bg-sky-400 */
-            border-color: #0ea5e9; /* border-sky-500 */
-        }
+
+        .btn-info { background-color: #38bdf8; border-color: #0ea5e9; }
         .btn-info:hover { background-color: #0ea5e9; }
         .btn-info:active { background-color: #0284c7; }
         .btn-info:focus { box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.45); }
+        html.dark .btn-info { background-color: #7dd3fc; border-color: #38bdf8; color: #075985;}
+        html.dark .btn-info:hover { background-color: #38bdf8; }
 
-        .btn-success { /* CSVボタンなど */
-            background-color: #22c55e; /* bg-green-500 */
-            border-color: #16a34a; /* border-green-600 */
-        }
+
+        .btn-success { background-color: #22c55e; border-color: #16a34a; }
         .btn-success:hover { background-color: #16a34a; }
         .btn-success:active { background-color: #15803d; }
         .btn-success:focus { box-shadow: 0 0 0 3px rgba(134, 239, 172, 0.45); }
+        html.dark .btn-success { background-color: #4ade80; border-color: #22c55e; color: #14532d;}
+        html.dark .btn-success:hover { background-color: #22c55e; }
 
-        .btn-danger { /* 履歴クリアボタンなど */
-            background-color: #f43f5e; /* bg-rose-500 */
-            border-color: #e11d48; /* border-rose-600 */
-        }
+
+        .btn-danger { background-color: #f43f5e; border-color: #e11d48; }
         .btn-danger:hover { background-color: #e11d48; }
         .btn-danger:active { background-color: #be123c; }
         .btn-danger:focus { box-shadow: 0 0 0 3px rgba(253, 164, 175, 0.45); }
+        html.dark .btn-danger { background-color: #fb7185; border-color: #f43f5e; color: #7f1d1d;}
+        html.dark .btn-danger:hover { background-color: #f43f5e; }
+
 
         .btn-small {
-            padding: 0.25rem 0.75rem; /* py-1 px-3 */
-            font-size: 0.75rem; /* text-xs */
-            line-height: 1rem;
+            padding: 0.25rem 0.75rem; font-size: 0.75rem; line-height: 1rem;
         }
-
         .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            box-shadow: none;
-            border-color: #e2e8f0; /* border-slate-200 */
-            background-color: #f1f5f9; /* bg-slate-100 */
-            color: #94a3b8; /* text-slate-400 */
+            opacity: 0.6; cursor: not-allowed; box-shadow: none;
+            border-color: #e2e8f0; background-color: #f1f5f9; color: #94a3b8;
         }
-        .btn:disabled:hover {
-            box-shadow: none;
-            background-color: #f1f5f9;
+        html.dark .btn:disabled {
+            border-color: #334155; background-color: #1e293b; color: #64748b;
+        }
+        .btn:disabled:hover { box-shadow: none; background-color: #f1f5f9; }
+        html.dark .btn:disabled:hover { background-color: #1e293b; }
+
+        ::selection { background-color: var(--selection-bg); color: var(--selection-text); }
+        ::-moz-selection { background-color: var(--selection-bg); color: var(--selection-text); }
+
+        #history-items-container {
+            background-color: var(--history-item-bg);
+            border: 1px solid var(--history-item-border); /* Added border */
+            border-radius: 0.375rem; /* Added border-radius */
+        }
+        #history-items-container::-webkit-scrollbar { width: 8px; }
+        #history-items-container::-webkit-scrollbar-track { background: transparent; }
+        #history-items-container::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 4px; }
+        #history-items-container::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
+        .history-item {
+            background-color: var(--container-bg); /* Use container-bg for individual items */
+            border-color: var(--input-border); /* Use themed border */
+        }
+        .history-item:hover { background-color: var(--history-item-hover-bg); }
+        html.dark .history-item .text-teal-600 { color: var(--text-accent); }
+
+
+        .answer-correct { color: #10b981; } html.dark .answer-correct { color: #34d399; }
+        .answer-incorrect { color: #ef4444; } html.dark .answer-incorrect { color: #f87171; }
+        .audio-player { width: 100%; margin-top: 0.5rem; }
+        /* Style for audio player in dark mode if needed */
+        html.dark .audio-player {
+            filter: invert(90%) hue-rotate(180deg); /* Basic dark mode for controls */
         }
 
-        ::selection {
-            background-color: #5eead4; /* Tailwind teal-300 */
-            color: #134e4a; /* Tailwind teal-800 */
+        /* Menu Bar Styles */
+        #app-menu-bar {
+            background-color: var(--container-bg);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid var(--input-border);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
-        ::-moz-selection { /* Firefox */
-            background-color: #5eead4;
-            color: #134e4a;
+        html.dark #app-menu-bar {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-        #history-items-container {
-            background-color: #f1f5f9; /* bg-slate-100 */
-            border-color: #e2e8f0; /* border-slate-200 */
+        #app-menu-bar select, #app-menu-bar button {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--input-border);
+            border-radius: 0.375rem;
+            padding: 0.25rem 0.5rem;
         }
-        #history-items-container::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
+        #app-menu-bar select:focus, #app-menu-bar button:focus {
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+            border-color: var(--input-focus-border);
+            box-shadow: 0 0 0 2px var(--input-focus-ring);
         }
-        #history-items-container::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
+        .menu-label {
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 500; /* medium */
         }
-        .history-item:hover {
-            background-color: #ccfbf1; /* bg-teal-100 (薄いティール) */
+        .sentence-pair {
+            background-color: var(--container-bg);
+            border-color: var(--input-border);
         }
-        .answer-correct { color: #10b981; /* green-600 */ }
-        .answer-incorrect { color: #ef4444; /* red-500 */ }
-        .audio-player { width: 100%; margin-top: 0.5rem; }
+        .original-sentence { color: var(--text-primary); }
+        .translation-sentence {
+            background-color: var(--history-item-bg); /* Slightly different background */
+            border-color: var(--input-border);
+            color: var(--text-primary);
+        }
+        html.dark .text-slate-800 { color: var(--text-primary); }
+        html.dark .text-slate-700 { color: var(--text-primary); }
+        html.dark .text-slate-500 { color: var(--text-secondary); }
+        html.dark .text-slate-400 { color: var(--text-secondary); }
+        html.dark .text-teal-600 { color: var(--text-accent-strong); }
+        html.dark .border-slate-200 { border-color: var(--input-border); }
+        html.dark .border-slate-300 { border-color: var(--input-border); }
+        html.dark .file\:bg-teal-50 { background-color: #1f2937; } /* dark:bg-gray-700 */
+        html.dark .file\:text-teal-700 { color: #9ca3af; } /* dark:text-gray-400 */
+        html.dark .hover\:file\:bg-teal-100 { background-color: #374151; } /* dark:hover:bg-gray-600 */
+
     </style>
 </head>
-<body class="text-slate-700 flex flex-col items-center min-h-screen p-4">
-    <div class="w-full max-w-3xl main-container p-6 md:p-8">
+<body class="flex flex-col items-center min-h-screen p-0 sm:p-4">
+    <nav id="app-menu-bar" class="w-full mb-0">
+        <div class="max-w-3xl mx-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-2 py-2 px-2">
+            <div class="flex items-center space-x-2">
+                <label for="language-select" class="menu-label" id="language-select-label">Language:</label>
+                <select id="language-select" class="text-sm">
+                    <option value="ja">日本語</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+            <div class="flex items-center space-x-2">
+                <label for="theme-select" class="menu-label" id="theme-select-label">Theme:</label>
+                <select id="theme-select" class="text-sm">
+                    <option value="light" id="theme-light-option">Light</option>
+                    <option value="dark" id="theme-dark-option">Dark</option>
+                    <option value="system" id="theme-system-option">System</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <div class="w-full max-w-3xl main-container p-6 md:p-8 mt-0 sm:mt-4 rounded-none sm:rounded-xl">
         <header class="mb-6">
             <div class="flex justify-between items-center mb-4">
-                <h1 id="app-title" class="text-3xl md:text-4xl font-bold text-teal-600">多言語学習アプリ</h1>
+                <h1 id="app-title" class="text-3xl md:text-4xl font-bold" style="color: var(--text-accent-strong);">多言語学習アプリ</h1>
             </div>
-            <p id="app-subtitle" class="text-center text-slate-500 mt-2">長文を入力し、文ごとに学習しましょう。</p>
+            <p id="app-subtitle" class="text-center mt-2" style="color: var(--text-secondary);">長文を入力し、文ごとに学習しましょう。</p>
         </header>
 
         <div id="input-section" class="space-y-6 mb-8">
             <div id="mode-selection" class="mb-4">
-                <h3 id="mode-select-label" class="text-lg font-medium text-slate-700 mb-2">学習モード:</h3>
+                <h3 id="mode-select-label" class="text-lg font-medium mb-2" style="color: var(--text-primary);">学習モード:</h3>
                 <div class="flex flex-wrap gap-2">
                     <button id="mode-memorization-btn" data-mode="memorization" class="mode-btn btn btn-sm">暗記</button>
                     <button id="mode-test-btn" data-mode="test" class="mode-btn btn btn-sm">確認</button>
@@ -247,8 +392,8 @@
             </div>
 
             <div id="audio-input-container" class="hidden mb-4">
-                <label for="audio-files-input" id="audio-files-label" class="block text-sm font-medium text-slate-700 mb-1">音声ファイル (学習開始前に選択):</label>
-                <input type="file" id="audio-files-input" multiple accept="audio/*" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100">
+                <label for="audio-files-input" id="audio-files-label" class="block text-sm font-medium mb-1" style="color: var(--text-primary);">音声ファイル (学習開始前に選択):</label>
+                <input type="file" id="audio-files-input" multiple accept="audio/*" class="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100" style="color: var(--text-secondary);">
             </div>
 
             <div class="flex flex-col sm:flex-row gap-2 mb-4">
@@ -257,31 +402,30 @@
                 <button id="export-csv-btn" class="btn btn-success w-full sm:w-auto text-base">CSVへ出力</button>
             </div>
 
-            <div class="mt-2 mb-6 space-y-2 border-t border-b border-slate-200 py-4">
+            <div class="mt-2 mb-6 space-y-2 border-t border-b py-4" style="border-color: var(--input-border);">
                 <div class="flex flex-col sm:flex-row gap-2 items-center justify-between">
-                    <h3 id="history-section-title" class="text-lg font-medium text-slate-700 self-start sm:self-center">入力履歴</h3>
+                    <h3 id="history-section-title" class="text-lg font-medium self-start sm:self-center" style="color: var(--text-primary);">入力履歴</h3>
                     <div class="flex gap-2 self-end sm:self-center">
                         <button id="toggle-history-btn" class="btn btn-info btn-small">履歴を表示</button>
                         <button id="clear-history-btn" class="btn btn-danger btn-small" disabled>履歴をクリア</button>
                     </div>
                 </div>
-                <div id="history-items-container" class="hidden max-h-60 overflow-y-auto space-y-2">
-                    <p id="no-history-message" class="text-center text-slate-500 py-2">履歴はありません。</p>
+                <div id="history-items-container" class="hidden max-h-60 overflow-y-auto space-y-2 p-2"> <p id="no-history-message" class="text-center py-2" style="color: var(--text-secondary);">履歴はありません。</p>
                 </div>
             </div>
 
             <div>
-                <label for="original-text" id="original-text-label" class="block text-lg font-medium text-slate-700 mb-2">原文 (中国語・英語・日本語):</label>
+                <label for="original-text" id="original-text-label" class="block text-lg font-medium mb-2" style="color: var(--text-primary);">原文 (中国語・英語・日本語):</label>
                 <textarea id="original-text" rows="4" class="w-full p-3 rounded-md shadow-sm resize-y"
-                        placeholder="ここに原文の長文テキストを入力してください。文の区切りは「.」「?」「!」「。」「？」「！」です。"></textarea>
+                          placeholder="ここに原文の長文テキストを入力してください。文の区切りは「.」「?」「!」「。」「？」「！」です。"></textarea>
             </div>
             <div>
-                <label for="translation-text" id="translation-text-label" class="block text-lg font-medium text-slate-700 mb-2">訳文 (中国語・英語・日本語):</label>
+                <label for="translation-text" id="translation-text-label" class="block text-lg font-medium mb-2" style="color: var(--text-primary);">訳文 (中国語・英語・日本語):</label>
                 <textarea id="translation-text" rows="4" class="w-full p-3 rounded-md shadow-sm resize-y"
-                        placeholder="ここに訳文の長文テキストを入力してください。文の区切りは「.」「?」「!」「。」「？」「！」です。"></textarea>
+                          placeholder="ここに訳文の長文テキストを入力してください。文の区切りは「.」「?」「!」「。」「？」「！」です。"></textarea>
             </div>
             <div class="flex items-center space-x-4">
-                <span id="display-priority-label" class="text-sm text-slate-600">初期表示 (暗記モード):</span>
+                <span id="display-priority-label" class="text-sm" style="color: var(--text-secondary);">初期表示 (暗記モード):</span>
                 <button id="toggle-display-priority-btn" class="btn">原文を隠す</button>
             </div>
             <div id="message-area" class="mt-4" aria-live="polite"></div>
@@ -302,32 +446,33 @@
                 </div>
         </main>
 
-        <footer class="mt-10 text-center text-sm text-slate-400">
-            <p>&copy; 2025 多言語学習アプリ</p>
+        <footer class="mt-10 text-center text-sm" style="color: var(--text-secondary);">
+            <p id="footer-text">&copy; 2025 Multilingual Learning App</p>
         </footer>
     </div>
 
-    <script>
+    <script defer>
     // --- Global Variables & State Management ---
     let currentPairedSentences = [];
     let undoHistory = [];
-    let redoHistory = [];
+    let redoHistory = []; // Though not currently used for redo, structure is there
     const MAX_UNDO_HISTORY = 10;
 
-    const currentLanguage = 'ja';
+    let currentSelectedLang = 'ja'; // Default language
     let displayPriority = 'originalFirst';
     let textInputHistory = [];
     const MAX_TEXT_HISTORY_ITEMS = 20;
     const TEXT_HISTORY_STORAGE_KEY = 'multiLangAppHistory_v2';
+    const THEME_STORAGE_KEY = 'multiLangAppTheme_v1';
+    const LANGUAGE_STORAGE_KEY = 'multiLangAppLanguage_v1';
 
     let currentMode = 'memorization';
     let loadedAudioFiles = [];
-    let audioObjectUrls = [];
+    let audioObjectUrls = []; // To keep track of URLs for revocation
     let allTranslationsManuallyToggled = false;
 
-
     // --- i18n (Internationalization) Data ---
-    const i18n = {
+    const i18nData = {
         ja: {
             appTitle: "多言語学習アプリ",
             appSubtitle: "長文を入力し、文ごとに学習しましょう。",
@@ -362,7 +507,7 @@
             errorNoUndoState: "元に戻せる操作がありません。",
             noPairsToDisplay: "表示するペアがありません。",
             successCsvImported: "CSVからテキストを読み込みました。「学習開始」ボタンを押してください。",
-            errorCsvFormat: "CSVファイルの形式が正しくありません。A列に原文、B列に訳文が入力されていることを確認してください。", 
+            errorCsvFormat: "CSVファイルの形式が正しくありません。A列に原文、B列に訳文が入力されていることを確認してください。",
             errorNoPairsToExport: "エクスポートするペアがありません。",
             delimiterRegex: /(?<=[.?!。？！])\s*/g,
             historySectionTitle: "入力履歴",
@@ -382,7 +527,7 @@
             audioFilesLabel: "音声ファイル (学習開始前に選択):",
             shufflePairs: "ペアをシャッフル",
             successShuffled: "ペアの順番をシャッフルしました。",
-            enterYourAnswerPlaceholder: "ここに訳文を入力してください", // Changed placeholder
+            enterYourAnswerPlaceholder: "ここに訳文を入力してください",
             checkAnswer: "判定",
             correctAnswerSymbol: "○",
             incorrectAnswerSymbol: "×",
@@ -398,9 +543,96 @@
             hideTranslationAudio: "訳文非表示",
             showAllTranslations: "訳文を一括表示",
             hideAllTranslations: "訳文を一括非表示",
+            footerText: "&copy; 2025 多言語学習アプリ",
+            languageSelectLabel: "言語:",
+            themeSelectLabel: "テーマ:",
+            themeLightOption: "ライト",
+            themeDarkOption: "ダーク",
+            themeSystemOption: "システム",
+            csvExportNotSupported: "このブラウザではCSVエクスポートが完全にはサポートされていない可能性があります。",
+            audioFilesSelected: (count) => `${count}件の音声ファイルを選択しました。`,
+        },
+        en: {
+            appTitle: "Multilingual Learning App",
+            appSubtitle: "Input long texts and learn sentence by sentence.",
+            originalTextLabel: "Original Text (Chinese/English/Japanese):",
+            translationTextLabel: "Translated Text (Chinese/English/Japanese):",
+            originalPlaceholder: "Enter the original long text here. Sentences are delimited by '.', '?', '!', '。', '？', '！'.",
+            translationPlaceholder: "Enter the translated long text here. Sentences are delimited by '.', '?', '!', '。', '？', '！'.",
+            startLearning: "Start Learning",
+            reset: "Reset",
+            importCsv: "Import from CSV",
+            exportCsv: "Export to CSV",
+            undoMerge: "Undo Merge",
+            showTranslation: "Show Translation",
+            hideTranslation: "Hide Translation",
+            showOriginal: "Show Original",
+            hideOriginal: "Hide Original",
+            mergeWithPreviousOriginal: "Merge with Previous Original",
+            mergeWithPreviousTranslation: "Merge with Previous Translation",
+            mergePairWithPrevious: "Merge Pair with Previous",
+            backToInput: "Back to Input",
+            displayPriorityLabel: "Initial Display (Memorization Mode):",
+            toggleDisplayPriorityOriginalFirst: "Hide Translation (Original First)",
+            toggleDisplayPriorityTranslationFirst: "Hide Original (Translation First)",
+            errorBothTextsRequired: "Please enter both original and translated texts.",
+            errorNoValidSentences: "No valid sentences found. Please check the delimiters.",
+            warningSentenceCountMismatch: (originalCount, translationCount, pairCount) => `Found ${originalCount} original sentences and ${translationCount} translated sentences. Creating ${pairCount} pairs based on the shorter count.`,
+            successPairsCreated: (pairCount) => `Successfully created ${pairCount} pairs.`,
+            successMerged: "Sentences merged and list updated.",
+            successPairMerged: "Pair merged and list updated.",
+            successReset: "Inputs have been reset.",
+            successUndo: "Last action undone.",
+            errorNoUndoState: "No action to undo.",
+            noPairsToDisplay: "No pairs to display.",
+            successCsvImported: "Text imported from CSV. Press 'Start Learning'.",
+            errorCsvFormat: "Incorrect CSV file format. Ensure column A has original text and column B has translations.",
+            errorNoPairsToExport: "No pairs to export.",
+            delimiterRegex: /(?<=[.?!。？！])\s*/g, // This might need adjustment for English-only texts if Japanese delimiters are not expected. For now, keeping it broad.
+            historySectionTitle: "Input History",
+            showHistory: "Show History",
+            hideHistory: "Hide History",
+            clearHistory: "Clear History",
+            manualInputLabel: "Manual Input",
+            noHistory: "No history yet.",
+            confirmClearHistory: "Are you sure you want to delete all input history? This action cannot be undone.",
+            historyCleared: "Input history cleared.",
+            loadedFromHistory: "Loaded text from history.",
+            historyItemSourceLabel: "Source: ",
+            modeSelectLabel: "Learning Mode:",
+            memorizationMode: "Memorization",
+            testMode: "Test",
+            audioMode: "Audio",
+            audioFilesLabel: "Audio Files (Select before starting):",
+            shufflePairs: "Shuffle Pairs",
+            successShuffled: "Pair order has been shuffled.",
+            enterYourAnswerPlaceholder: "Enter your translation here",
+            checkAnswer: "Check",
+            correctAnswerSymbol: "✓",
+            incorrectAnswerSymbol: "✗",
+            answerCorrect: "Correct!",
+            answerIncorrect: "Incorrect.",
+            noAudioForThisPair: "No audio for this pair.",
+            errorAudioFileAssignment: "Problem assigning audio files. Number of files might not match pairs, or no files selected.",
+            warningNotAllPairsHaveAudio: (assignedCount, totalPairs) => `Assigned ${assignedCount} audio files to ${totalPairs} pairs. Some pairs may not have audio.`,
+            errorNoAudioFilesSelectedForAudioMode: "Audio mode is selected, but no audio files are loaded. Please go 'Back to Input' to select files.",
+            showOriginalAudio: "Show Original",
+            hideOriginalAudio: "Hide Original",
+            showTranslationAudio: "Show Translation",
+            hideTranslationAudio: "Hide Translation",
+            showAllTranslations: "Show All Translations",
+            hideAllTranslations: "Hide All Translations",
+            footerText: "&copy; 2025 Multilingual Learning App",
+            languageSelectLabel: "Language:",
+            themeSelectLabel: "Theme:",
+            themeLightOption: "Light",
+            themeDarkOption: "Dark",
+            themeSystemOption: "System",
+            csvExportNotSupported: "CSV export might not be fully supported on this browser.",
+            audioFilesSelected: (count) => `Selected ${count} audio file(s).`,
         }
     };
-    const t = i18n.ja;
+    let t = i18nData[currentSelectedLang]; // Initialize t
 
     // --- DOM Element Retrieval ---
     const originalTextInput = document.getElementById('original-text');
@@ -421,7 +653,6 @@
     const clearHistoryBtn = document.getElementById('clear-history-btn');
     const historyItemsContainer = document.getElementById('history-items-container');
     const noHistoryMessage = document.getElementById('no-history-message');
-
     const modeMemorizationBtn = document.getElementById('mode-memorization-btn');
     const modeTestBtn = document.getElementById('mode-test-btn');
     const modeAudioBtn = document.getElementById('mode-audio-btn');
@@ -430,6 +661,79 @@
     const audioFilesInput = document.getElementById('audio-files-input');
     const shufflePairsBtn = document.getElementById('shuffle-pairs-btn');
     const toggleAllTranslationsBtn = document.getElementById('toggle-all-translations-btn');
+    const languageSelect = document.getElementById('language-select');
+    const themeSelect = document.getElementById('theme-select');
+
+    // --- Theme Management ---
+    function applyTheme(theme) {
+        if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+        // Potentially update PWA theme-color meta tag
+        const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+        if (themeColorMeta) {
+            themeColorMeta.content = theme === 'dark' ? '#0f172a' : '#14b8a6';
+        }
+    }
+
+    function getSystemPreference() {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    function loadAndApplyTheme() {
+        const savedTheme = localStorage.getItem(THEME_STORAGE_KEY) || 'system';
+        themeSelect.value = savedTheme;
+        if (savedTheme === 'system') {
+            applyTheme(getSystemPreference());
+        } else {
+            applyTheme(savedTheme);
+        }
+    }
+
+    themeSelect.addEventListener('change', (e) => {
+        const selectedTheme = e.target.value;
+        localStorage.setItem(THEME_STORAGE_KEY, selectedTheme);
+        if (selectedTheme === 'system') {
+            applyTheme(getSystemPreference());
+        } else {
+            applyTheme(selectedTheme);
+        }
+    });
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+        if (themeSelect.value === 'system') {
+            applyTheme(e.matches ? 'dark' : 'light');
+        }
+    });
+
+    // --- Language Management ---
+    function setLanguage(lang) {
+        if (i18nData[lang]) {
+            currentSelectedLang = lang;
+            t = i18nData[currentSelectedLang];
+            localStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
+            document.documentElement.lang = lang;
+            updateUIText();
+            // Re-render sentences if in learning view to update button texts etc.
+            if (!learningSection.classList.contains('hidden') && currentPairedSentences.length > 0) {
+                renderSentences();
+            }
+            // Re-render history list for date formats or source labels if they become language-dependent
+             renderTextInputHistoryList();
+        }
+    }
+
+    languageSelect.addEventListener('change', (e) => {
+        setLanguage(e.target.value);
+    });
+
+    function loadAndApplyLanguage() {
+        const savedLang = localStorage.getItem(LANGUAGE_STORAGE_KEY) || 'ja';
+        languageSelect.value = savedLang;
+        setLanguage(savedLang); // This will also call updateUIText
+    }
 
 
     // --- Undo/Redo Helper Functions ---
@@ -438,7 +742,7 @@
         if (undoHistory.length > MAX_UNDO_HISTORY) {
             undoHistory.shift();
         }
-        redoHistory = [];
+        redoHistory = []; // Clear redo history on new action
         updateUndoRedoButtonStates();
     }
 
@@ -454,7 +758,6 @@
 
     // --- UI Update Functions ---
     function updateUIText() {
-        document.documentElement.lang = 'ja';
         document.title = t.appTitle;
         document.getElementById('app-title').textContent = t.appTitle;
         document.getElementById('app-subtitle').textContent = t.appSubtitle;
@@ -489,6 +792,19 @@
         modeAudioBtn.textContent = t.audioMode;
         document.getElementById('audio-files-label').textContent = t.audioFilesLabel;
         shufflePairsBtn.textContent = t.shufflePairs;
+        document.getElementById('footer-text').innerHTML = t.footerText; // Use innerHTML for &copy;
+
+        // Menu bar text
+        document.getElementById('language-select-label').textContent = t.languageSelectLabel;
+        document.getElementById('theme-select-label').textContent = t.themeSelectLabel;
+        document.getElementById('theme-light-option').textContent = t.themeLightOption;
+        document.getElementById('theme-dark-option').textContent = t.themeDarkOption;
+        document.getElementById('theme-system-option').textContent = t.themeSystemOption;
+
+        // Update toggle all translations button text if visible
+        if (toggleAllTranslationsBtn && !toggleAllTranslationsBtn.classList.contains('hidden')) {
+             toggleAllTranslationsBtn.textContent = allTranslationsManuallyToggled ? t.hideAllTranslations : t.showAllTranslations;
+        }
     }
 
     function updateToggleHistoryButtonText() {
@@ -507,20 +823,43 @@
         });
         audioInputContainer.classList.toggle('hidden', currentMode !== 'audio');
         toggleAllTranslationsBtn.classList.toggle('hidden', currentMode !== 'memorization' || currentPairedSentences.length === 0);
+        if (toggleAllTranslationsBtn && currentMode === 'memorization' && currentPairedSentences.length > 0) {
+            toggleAllTranslationsBtn.textContent = allTranslationsManuallyToggled ? t.hideAllTranslations : t.showAllTranslations;
+        }
+
 
         if (!learningSection.classList.contains('hidden') && currentPairedSentences.length > 0) {
-            renderSentences();
+            renderSentences(); // Re-render sentences as mode change might affect their appearance/functionality
         }
     }
 
-
     // --- Message Display Function ---
-    function showMessage(text, type = 'error', isKey = false, duration = 3000) {
-        messageArea.innerHTML = '';
+    function showMessage(textOrKey, type = 'error', isKey = false, duration = 3000) {
+        messageArea.innerHTML = ''; // Clear previous messages
         const messageDiv = document.createElement('div');
-        const messageText = isKey ? (t[text] || text) : text;
+        let messageText = textOrKey;
+
+        if (isKey) {
+            const translation = t[textOrKey];
+            if (typeof translation === 'function') {
+                // If the translation is a function (e.g., for dynamic counts), call it.
+                // This requires knowing the arguments, which is a limitation here.
+                // For simplicity, assuming such keys are handled by specific showMessage calls.
+                // For generic calls, we'll try to resolve it or use the key.
+                // Example: showMessage(t.warningSentenceCountMismatch(origCount, transCount, pairCount), "warning");
+                // Here, we assume textOrKey is already the processed string if it was a function.
+                messageText = textOrKey; // If it's a key that results in a function, it should be pre-called.
+            } else {
+                messageText = translation || textOrKey; // Fallback to key if not found
+            }
+        }
         
-        messageDiv.textContent = typeof messageText === 'function' ? messageText() : messageText;
+        // If the resolved messageText is a function itself (e.g. from i18n for dynamic messages)
+        // This part handles cases where the key maps to a function that needs arguments.
+        // This is tricky if arguments are not passed. For now, we assume simple string or pre-called function.
+        // For `warningSentenceCountMismatch` and `successPairsCreated`, they are called with args before showMessage.
+
+        messageDiv.textContent = messageText; // Directly use the (potentially resolved) text
         messageDiv.className = `message message-${type}`;
         messageArea.appendChild(messageDiv);
 
@@ -533,13 +872,15 @@
         }
     }
 
+
     // --- Text Splitting Function ---
     function splitTextIntoSentences(text) {
         if (!text || !text.trim()) return [];
-        const delimiterRegex = t.delimiterRegex;
+        // The regex is language-agnostic enough for general punctuation.
+        const delimiterRegex = i18nData[currentSelectedLang].delimiterRegex || i18nData.ja.delimiterRegex;
         return text.split(delimiterRegex)
-                .map(s => s.trim())
-                .filter(s => s.length > 0);
+                   .map(s => s.trim())
+                   .filter(s => s.length > 0);
     }
 
     // --- Audio File Handling ---
@@ -549,14 +890,16 @@
     }
 
     audioFilesInput.addEventListener('change', (event) => {
-        revokePreviousAudioUrls();
+        revokePreviousAudioUrls(); // Revoke any existing URLs before creating new ones
         loadedAudioFiles = Array.from(event.target.files).map(file => {
             const url = URL.createObjectURL(file);
-            audioObjectUrls.push(url);
+            audioObjectUrls.push(url); // Store for later revocation
             return { file, url };
         });
         if (loadedAudioFiles.length > 0) {
-            showMessage(`${loadedAudioFiles.length}件の音声ファイルを選択しました。`, "success");
+            const messageKey = 'audioFilesSelected';
+            const messageText = typeof t[messageKey] === 'function' ? t[messageKey](loadedAudioFiles.length) : `${loadedAudioFiles.length} audio file(s) selected.`;
+            showMessage(messageText, "success");
         }
     });
     
@@ -579,11 +922,14 @@
 
     function addEntryToTextInputHistory(original, translation, sourceFilename) {
         const newSource = sourceFilename || t.manualInputLabel;
+        // Avoid adding exact duplicate of the most recent entry
         if (textInputHistory.length > 0) {
             const lastEntry = textInputHistory[0];
             if (lastEntry.original === original &&
                 lastEntry.translation === translation &&
                 lastEntry.source === newSource) {
+                // Optionally, update timestamp of existing entry or just skip
+                // For simplicity, we'll shift it to be the newest if we re-add
                 textInputHistory.shift(); 
             }
         }
@@ -591,7 +937,7 @@
             id: `hist-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
             original: original,
             translation: translation,
-            source: newSource,
+            source: newSource, // This will be translated by renderTextInputHistoryList
             timestamp: new Date().toISOString()
         };
         textInputHistory.unshift(newEntry);
@@ -603,11 +949,13 @@
     }
 
     function renderTextInputHistoryList() {
+        // Clear only dynamic items, keep noHistoryMessage
         const dynamicItems = historyItemsContainer.querySelectorAll('div[role="button"]');
         dynamicItems.forEach(item => item.remove());
 
         if (textInputHistory.length === 0) {
             noHistoryMessage.style.display = 'block';
+            noHistoryMessage.textContent = t.noHistory; // Ensure it's translated
             clearHistoryBtn.disabled = true;
             return;
         }
@@ -617,19 +965,31 @@
         const fragment = document.createDocumentFragment();
         textInputHistory.forEach(entry => {
             const historyEntryDiv = document.createElement('div');
-            historyEntryDiv.className = 'history-item p-3 bg-white border border-slate-300 rounded-md hover:bg-teal-50 cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-opacity-75';
+            historyEntryDiv.className = 'history-item p-3 border rounded-md cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-opacity-75';
+            // Tailwind classes for colors will be applied by CSS variables / dark mode automatically
+            historyEntryDiv.classList.add('border-slate-300', 'hover:bg-teal-50', 'focus:ring-teal-500');
+
+
             historyEntryDiv.setAttribute('role', 'button');
             historyEntryDiv.tabIndex = 0;
             historyEntryDiv.dataset.historyId = entry.id;
 
-            const sourceDisplay = entry.source === t.manualInputLabel ? t.manualInputLabel : `${t.historyItemSourceLabel}${entry.source}`;
+            // Translate "Manual Input" or "Source: " part
+            const sourceDisplay = entry.source === i18nData.ja.manualInputLabel || entry.source === i18nData.en.manualInputLabel
+                ? t.manualInputLabel
+                : `${t.historyItemSourceLabel}${entry.source}`;
+
             const snippet = entry.original.substring(0, 70) + (entry.original.length > 70 ? '...' : '');
+            const localeForDate = currentSelectedLang === 'ja' ? 'ja-JP' : 'en-US';
 
             historyEntryDiv.innerHTML = `
-                <p class="text-xs text-slate-400">${new Date(entry.timestamp).toLocaleString('ja-JP')}</p>
+                <p class="text-xs text-slate-400">${new Date(entry.timestamp).toLocaleString(localeForDate)}</p>
                 <p class="font-medium text-sm text-teal-600">${sourceDisplay}</p>
                 <p class="text-sm text-slate-600 break-all" title="${entry.original.substring(0,200)}...">${snippet}</p>
             `;
+            // Apply dark mode text colors if needed, or rely on inherited var(--text-primary) etc.
+            // e.g., historyEntryDiv.querySelector('.text-slate-400').style.color = 'var(--text-secondary)';
+
             historyEntryDiv.addEventListener('click', () => loadTextInputHistoryEntry(entry.id));
             historyEntryDiv.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -649,11 +1009,12 @@
             translationTextInput.value = entry.translation;
             showMessage(t.loadedFromHistory, "success", true);
             
-            currentPairedSentences = [];
+            currentPairedSentences = []; // Clear current learning session
             clearUndoRedoHistory();
             sentenceContainer.innerHTML = '';
             updateUndoRedoButtonStates();
 
+            // Switch back to input section if on learning section
             if (!learningSection.classList.contains('hidden')) {
                 learningSection.classList.add('hidden');
                 inputSection.classList.remove('hidden');
@@ -661,15 +1022,17 @@
             originalTextInput.focus();
         }
     }
+    
 
     // --- Learning Content Rendering Function ---
     function normalizeAnswerForComparison(answer) {
         let normalized = String(answer || '').trim();
-        if (normalized.endsWith('。') || normalized.endsWith('.')) {
+        // More robust period removal for multiple languages
+        if (normalized.endsWith('。') || normalized.endsWith('.') || normalized.endsWith('！') || normalized.endsWith('？') || normalized.endsWith('!') || normalized.endsWith('?')) {
             normalized = normalized.slice(0, -1);
         }
-        normalized = normalized.replace(/\s+/g, '').replace(/　+/g, '');
-        return normalized.trim();
+        normalized = normalized.replace(/\s+/g, '').replace(/　+/g, ''); // Remove all spaces (half/full width)
+        return normalized.trim().toLowerCase(); // Compare in lowercase
     }
 
     function renderSentences() {
@@ -690,7 +1053,9 @@
 
         currentPairedSentences.forEach((sentenceData, index) => {
             const pairDiv = document.createElement('div');
-            pairDiv.className = 'sentence-pair p-5 border border-slate-200 rounded-lg bg-white hover:shadow-lg transition-shadow duration-300';
+            pairDiv.className = 'sentence-pair p-5 border rounded-lg hover:shadow-lg transition-shadow duration-300';
+            // Tailwind classes for colors will be applied by CSS variables / dark mode automatically
+            pairDiv.classList.add('border-slate-200', 'bg-white');
             pairDiv.dataset.id = sentenceData.id; 
 
             const originalPara = document.createElement('p');
@@ -698,7 +1063,9 @@
             originalPara.textContent = sentenceData.original;
 
             const translationPara = document.createElement('p');
-            translationPara.className = 'translation-sentence text-lg text-slate-700 p-3 bg-teal-50 border border-teal-200 rounded-md mt-2 break-words';
+            translationPara.className = 'translation-sentence text-lg text-slate-700 p-3 border rounded-md mt-2 break-words';
+            // Tailwind classes for colors will be applied by CSS variables / dark mode automatically
+            translationPara.classList.add('bg-teal-50', 'border-teal-200');
             translationPara.textContent = sentenceData.translation;
 
             if (currentMode === 'memorization') {
@@ -708,12 +1075,15 @@
 
                 if (displayPriority === 'originalFirst') {
                     toggleBtnClasses += 'btn-toggle-original-first';
+                    // Use allTranslationsManuallyToggled to determine initial state for all,
+                    // then allow individual toggles to override their own state.
+                    // For simplicity, if allTranslationsManuallyToggled is true, show it, else hide.
                     translationPara.classList.toggle('hidden', !allTranslationsManuallyToggled);
-                    toggleBtn.textContent = allTranslationsManuallyToggled ? t.hideTranslation : t.showTranslation;
+                    toggleBtn.textContent = translationPara.classList.contains('hidden') ? t.showTranslation : t.hideTranslation;
                 } else { 
                     toggleBtnClasses += 'btn-toggle-translation-first';
                     originalPara.classList.toggle('hidden', !allTranslationsManuallyToggled);
-                    toggleBtn.textContent = allTranslationsManuallyToggled ? t.hideOriginal : t.showOriginal;
+                    toggleBtn.textContent = originalPara.classList.contains('hidden') ? t.showOriginal : t.hideOriginal;
                 }
                 toggleBtn.className = toggleBtnClasses;
                 toggleBtn.addEventListener('click', () => {
@@ -725,18 +1095,21 @@
                         toggleBtn.textContent = originalPara.classList.contains('hidden') ? t.showOriginal : t.hideOriginal;
                     }
                     
-                    let allCurrentlyShown = true;
-                    document.querySelectorAll('.sentence-pair').forEach(pDiv => {
-                        const individualToggle = pDiv.querySelector('.individual-toggle-btn');
-                        if (individualToggle) { 
-                            if (displayPriority === 'originalFirst') {
-                                if (pDiv.querySelector('.translation-sentence').classList.contains('hidden')) allCurrentlyShown = false;
-                            } else {
-                                if (pDiv.querySelector('.original-sentence').classList.contains('hidden')) allCurrentlyShown = false;
+                    // Check if all individual toggles match the global toggle state
+                    let allCurrentlyEffectivelyShown = true;
+                    document.querySelectorAll('.sentence-pair .individual-toggle-btn').forEach(btnEl => {
+                        const parentPairDiv = btnEl.closest('.sentence-pair');
+                        if (displayPriority === 'originalFirst') {
+                            if (parentPairDiv.querySelector('.translation-sentence').classList.contains('hidden')) {
+                                allCurrentlyEffectivelyShown = false;
+                            }
+                        } else {
+                            if (parentPairDiv.querySelector('.original-sentence').classList.contains('hidden')) {
+                                allCurrentlyEffectivelyShown = false;
                             }
                         }
                     });
-                    allTranslationsManuallyToggled = allCurrentlyShown; 
+                    allTranslationsManuallyToggled = allCurrentlyEffectivelyShown;
                     if (toggleAllTranslationsBtn) {
                         toggleAllTranslationsBtn.textContent = allTranslationsManuallyToggled ? t.hideAllTranslations : t.showAllTranslations;
                     }
@@ -752,34 +1125,42 @@
                     pairDiv.appendChild(originalPara);
                 }
             } else if (currentMode === 'test') {
-                originalPara.classList.remove('hidden');
-                translationPara.classList.add('hidden');
+                originalPara.classList.remove('hidden'); // Always show original in test mode
+                translationPara.classList.add('hidden'); // Hide correct translation initially
+
                 const testArea = document.createElement('div');
                 testArea.className = 'test-area mt-3 space-y-2';
+
                 const userAnswerInput = document.createElement('textarea');
-                userAnswerInput.className = 'user-answer-input w-full p-2 border border-slate-300 rounded-md resize-y'; // Standard border
+                userAnswerInput.className = 'user-answer-input w-full p-2 border rounded-md resize-y';
+                userAnswerInput.classList.add('border-slate-300'); // Themed via CSS
                 userAnswerInput.rows = 2;
-                userAnswerInput.placeholder = t.enterYourAnswerPlaceholder; // Updated placeholder
+                userAnswerInput.placeholder = t.enterYourAnswerPlaceholder;
+
                 const checkAnswerBtn = document.createElement('button');
                 checkAnswerBtn.className = 'check-answer-btn btn btn-primary btn-small';
                 checkAnswerBtn.textContent = t.checkAnswer;
+
                 const answerResultDiv = document.createElement('div');
                 answerResultDiv.className = 'answer-result text-lg font-bold mt-1';
+
                 checkAnswerBtn.addEventListener('click', () => {
                     const userAnswer = userAnswerInput.value; 
                     const correctAnswer = sentenceData.translation;
                     const normalizedUserAnswer = normalizeAnswerForComparison(userAnswer);
                     const normalizedCorrectAnswer = normalizeAnswerForComparison(correctAnswer);
-                    if (normalizedUserAnswer.toLowerCase() === normalizedCorrectAnswer.toLowerCase()) {
+
+                    if (normalizedUserAnswer === normalizedCorrectAnswer) {
                         answerResultDiv.textContent = `${t.correctAnswerSymbol} ${t.answerCorrect}`;
                         answerResultDiv.className = 'answer-result text-lg font-bold mt-1 answer-correct';
                     } else {
                         answerResultDiv.textContent = `${t.incorrectAnswerSymbol} ${t.answerIncorrect}`;
                         answerResultDiv.className = 'answer-result text-lg font-bold mt-1 answer-incorrect';
                     }
-                    translationPara.classList.remove('hidden');
-                    checkAnswerBtn.disabled = true;
+                    translationPara.classList.remove('hidden'); // Show correct answer
+                    checkAnswerBtn.disabled = true; // Disable after checking
                 });
+
                 pairDiv.appendChild(originalPara);
                 testArea.appendChild(userAnswerInput);
                 testArea.appendChild(checkAnswerBtn);
@@ -789,8 +1170,10 @@
             } else if (currentMode === 'audio') {
                 originalPara.classList.add('hidden'); 
                 translationPara.classList.add('hidden');
+
                 const audioControlsDiv = document.createElement('div');
                 audioControlsDiv.className = 'audio-controls my-3 space-y-2';
+
                 if (sentenceData.audioSrc) { 
                     const audioPlayer = document.createElement('audio');
                     audioPlayer.className = 'audio-player';
@@ -803,13 +1186,19 @@
                     noAudioMsg.textContent = t.noAudioForThisPair;
                     audioControlsDiv.appendChild(noAudioMsg);
                 }
+
+                const buttonContainer = document.createElement('div');
+                buttonContainer.className = 'flex flex-wrap gap-2 mt-2';
+
+
                 const showOriginalBtn = document.createElement('button');
-                showOriginalBtn.className = 'btn btn-secondary btn-small mr-2';
+                showOriginalBtn.className = 'btn btn-secondary btn-small';
                 showOriginalBtn.textContent = t.showOriginalAudio;
                 showOriginalBtn.addEventListener('click', () => {
                     originalPara.classList.toggle('hidden');
                     showOriginalBtn.textContent = originalPara.classList.contains('hidden') ? t.showOriginalAudio : t.hideOriginalAudio;
                 });
+
                 const showTranslationBtn = document.createElement('button');
                 showTranslationBtn.className = 'btn btn-secondary btn-small';
                 showTranslationBtn.textContent = t.showTranslationAudio;
@@ -817,33 +1206,42 @@
                     translationPara.classList.toggle('hidden');
                     showTranslationBtn.textContent = translationPara.classList.contains('hidden') ? t.showTranslationAudio : t.hideTranslationAudio;
                 });
-                audioControlsDiv.appendChild(showOriginalBtn);
-                audioControlsDiv.appendChild(showTranslationBtn);
+                
+                buttonContainer.appendChild(showOriginalBtn);
+                buttonContainer.appendChild(showTranslationBtn);
+                audioControlsDiv.appendChild(buttonContainer);
+
                 pairDiv.appendChild(audioControlsDiv);
                 pairDiv.appendChild(originalPara); 
+
+                // Test area for audio mode (optional, but good for recall)
                 const testArea = document.createElement('div');
                 testArea.className = 'test-area mt-3 space-y-2';
                 const userAnswerInput = document.createElement('textarea');
-                userAnswerInput.className = 'user-answer-input w-full p-2 border border-slate-300 rounded-md resize-y'; // Standard border
+                userAnswerInput.className = 'user-answer-input w-full p-2 border rounded-md resize-y';
+                userAnswerInput.classList.add('border-slate-300');
                 userAnswerInput.rows = 2;
-                userAnswerInput.placeholder = t.enterYourAnswerPlaceholder; // Updated placeholder
+                userAnswerInput.placeholder = t.enterYourAnswerPlaceholder; 
                 const checkAnswerBtn = document.createElement('button');
                 checkAnswerBtn.className = 'check-answer-btn btn btn-primary btn-small';
                 checkAnswerBtn.textContent = t.checkAnswer;
                 const answerResultDiv = document.createElement('div');
                 answerResultDiv.className = 'answer-result text-lg font-bold mt-1';
+
                 checkAnswerBtn.addEventListener('click', () => {
                     const userAnswer = userAnswerInput.value; 
                     const correctAnswer = sentenceData.translation; 
                     const normalizedUserAnswer = normalizeAnswerForComparison(userAnswer);
                     const normalizedCorrectAnswer = normalizeAnswerForComparison(correctAnswer);
-                    if (normalizedUserAnswer.toLowerCase() === normalizedCorrectAnswer.toLowerCase()) {
+
+                    if (normalizedUserAnswer === normalizedCorrectAnswer) {
                         answerResultDiv.textContent = `${t.correctAnswerSymbol} ${t.answerCorrect}`;
                         answerResultDiv.className = 'answer-result text-lg font-bold mt-1 answer-correct';
                     } else {
                         answerResultDiv.textContent = `${t.incorrectAnswerSymbol} ${t.answerIncorrect}`;
                         answerResultDiv.className = 'answer-result text-lg font-bold mt-1 answer-incorrect';
                     }
+                    // Optionally show translation text after check in audio mode
                     translationPara.classList.remove('hidden'); 
                     showTranslationBtn.textContent = t.hideTranslationAudio; 
                     checkAnswerBtn.disabled = true;
@@ -855,31 +1253,37 @@
                 pairDiv.appendChild(translationPara); 
             }
 
+            // Merge buttons (common for all modes if index > 0)
             if (index > 0) {
-                const buttonContainer = document.createElement('div');
-                buttonContainer.className = 'mt-3 border-t border-slate-200 pt-3 flex flex-wrap gap-2 justify-start';
+                const mergeButtonContainer = document.createElement('div');
+                mergeButtonContainer.className = 'mt-3 border-t pt-3 flex flex-wrap gap-2 justify-start';
+                mergeButtonContainer.style.borderColor = 'var(--input-border)'; // Themed border
+
                 const mergeOriginalBtn = document.createElement('button');
                 mergeOriginalBtn.className = 'btn btn-warning btn-small';
                 mergeOriginalBtn.textContent = t.mergeWithPreviousOriginal;
                 mergeOriginalBtn.dataset.index = index;
                 mergeOriginalBtn.dataset.type = 'original';
                 mergeOriginalBtn.addEventListener('click', handleMergeWithPrevious);
+
                 const mergeTranslationBtn = document.createElement('button');
                 mergeTranslationBtn.className = 'btn btn-warning btn-small';
                 mergeTranslationBtn.textContent = t.mergeWithPreviousTranslation;
                 mergeTranslationBtn.dataset.index = index;
                 mergeTranslationBtn.dataset.type = 'translation';
                 mergeTranslationBtn.addEventListener('click', handleMergeWithPrevious);
+
                 const mergePairBtn = document.createElement('button');
                 mergePairBtn.className = 'btn btn-info btn-small';
                 mergePairBtn.textContent = t.mergePairWithPrevious;
                 mergePairBtn.dataset.index = index;
                 mergePairBtn.dataset.type = 'full_pair';
                 mergePairBtn.addEventListener('click', handleMergeWithPrevious);
-                buttonContainer.appendChild(mergeOriginalBtn);
-                buttonContainer.appendChild(mergeTranslationBtn);
-                buttonContainer.appendChild(mergePairBtn);
-                pairDiv.appendChild(buttonContainer);
+
+                mergeButtonContainer.appendChild(mergeOriginalBtn);
+                mergeButtonContainer.appendChild(mergeTranslationBtn);
+                mergeButtonContainer.appendChild(mergePairBtn);
+                pairDiv.appendChild(mergeButtonContainer);
             }
             sentenceContainer.appendChild(pairDiv);
         });
@@ -892,16 +1296,16 @@
         button.addEventListener('click', () => {
             currentMode = button.dataset.mode;
             allTranslationsManuallyToggled = false; 
-            updateModeSelectionUI();
+            updateModeSelectionUI(); // This will call renderSentences if needed
         });
     });
 
     toggleDisplayPriorityBtn.addEventListener('click', () => {
         displayPriority = displayPriority === 'originalFirst' ? 'translationFirst' : 'originalFirst';
         allTranslationsManuallyToggled = false; 
-        updateUIText();
+        updateUIText(); // Update button text
         if (!learningSection.classList.contains('hidden') && currentPairedSentences.length > 0 && currentMode === 'memorization') {
-            renderSentences();
+            renderSentences(); // Re-render for memorization mode
         }
     });
 
@@ -911,11 +1315,16 @@
         const translationText = translationTextInput.value;
 
         if (!originalText.trim() && !translationText.trim()) {
-            showMessage("errorBothTextsRequired", "error", true);
+            // Check if both are empty or only one is empty
+            if (!originalText.trim() && translationText.trim() || originalText.trim() && !translationText.trim()) {
+                 showMessage(t.errorBothTextsRequired, "error"); // Use translated key
+            } else { // Both are empty
+                 showMessage(t.errorBothTextsRequired, "error");
+            }
             return;
         }
         
-        addEntryToTextInputHistory(originalText, translationText, null);
+        addEntryToTextInputHistory(originalText, translationText, null); // null for manual input source
 
         const originalSentences = splitTextIntoSentences(originalText);
         const translationSentences = splitTextIntoSentences(translationText);
@@ -940,12 +1349,13 @@
         let audioAssignedCount = 0;
         for (let i = 0; i < pairCount; i++) {
             let audioSrc = null;
+            // Assign audio files sequentially if in audio mode and files are loaded
             if (currentMode === 'audio' && loadedAudioFiles[i]) {
                 audioSrc = loadedAudioFiles[i].url;
                 audioAssignedCount++;
             }
             currentPairedSentences.push({
-                id: `s-${Date.now()}-${i}`,
+                id: `s-${Date.now()}-${i}`, // Unique ID for each pair
                 original: originalSentences[i],
                 translation: translationSentences[i],
                 audioSrc: audioSrc
@@ -955,16 +1365,17 @@
         if (currentMode === 'audio') {
             if (loadedAudioFiles.length === 0 && pairCount > 0) {
                 showMessage("errorNoAudioFilesSelectedForAudioMode", "warning", true, 5000);
-            } else if (audioAssignedCount < pairCount && pairCount > 0) {
+            } else if (audioAssignedCount < pairCount && pairCount > 0 && loadedAudioFiles.length > 0) {
+                // Only show this warning if some files were loaded but not enough
                 showMessage(t.warningNotAllPairsHaveAudio(audioAssignedCount, pairCount), "warning", false, 5000);
             }
         }
         
         inputSection.classList.add('hidden');
         learningSection.classList.remove('hidden'); 
-        updateModeSelectionUI(); 
+        updateModeSelectionUI(); // This will call renderSentences
         
-        window.scrollTo(0,0);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
     function handleMergeWithPrevious(event) {
@@ -972,7 +1383,7 @@
         const type = event.target.dataset.type;
 
         if (currentIndex > 0 && currentIndex < currentPairedSentences.length) {
-            saveStateForUndo();
+            saveStateForUndo(); // Save current state before modification
 
             const previousPair = currentPairedSentences[currentIndex - 1];
             const currentMergingPair = currentPairedSentences[currentIndex];
@@ -980,32 +1391,37 @@
 
             if (type === 'original') {
                 previousPair.original = (previousPair.original + " " + currentMergingPair.original).trim();
+                // Shift subsequent original sentences up
                 for (let i = currentIndex; i < currentPairedSentences.length - 1; i++) {
                     currentPairedSentences[i].original = currentPairedSentences[i + 1].original;
                 }
-                if (currentPairedSentences.length > currentIndex) {
-                    currentPairedSentences[currentPairedSentences.length - 1].original = "";
+                // Clear the original text of the last pair if it was shifted from
+                if (currentPairedSentences.length > currentIndex) { // Check if there's a last pair to clear
+                     currentPairedSentences[currentPairedSentences.length -1].original = "";
                 }
                 messageKey = "successMerged";
             } else if (type === 'translation') {
                 previousPair.translation = (previousPair.translation + " " + currentMergingPair.translation).trim();
+                // Shift subsequent translation sentences up
                 for (let i = currentIndex; i < currentPairedSentences.length - 1; i++) {
                     currentPairedSentences[i].translation = currentPairedSentences[i + 1].translation;
                 }
                 if (currentPairedSentences.length > currentIndex) {
-                    currentPairedSentences[currentPairedSentences.length - 1].translation = "";
+                    currentPairedSentences[currentPairedSentences.length -1].translation = "";
                 }
                 messageKey = "successMerged";
             } else if (type === 'full_pair') {
                 previousPair.original = (previousPair.original + " " + currentMergingPair.original).trim();
                 previousPair.translation = (previousPair.translation + " " + currentMergingPair.translation).trim();
+                // If previous pair had no audio but current one does, take current's audio
                 if (!previousPair.audioSrc && currentMergingPair.audioSrc) {
                     previousPair.audioSrc = currentMergingPair.audioSrc;
                 }
-                currentPairedSentences.splice(currentIndex, 1);
+                currentPairedSentences.splice(currentIndex, 1); // Remove the merged pair
                 messageKey = "successPairMerged";
             }
             
+            // If merging only original or translation, check if the last pair became empty
             if (type === 'original' || type === 'translation') {
                 if (currentPairedSentences.length > 0) {
                     const lastPairIndex = currentPairedSentences.length - 1;
@@ -1015,6 +1431,7 @@
                 }
             }
             
+            allTranslationsManuallyToggled = false; // Reset bulk toggle state
             renderSentences();
             showMessage(messageKey, "success", true);
         }
@@ -1022,12 +1439,13 @@
     
     undoMergeBtn.addEventListener('click', () => {
         if (undoHistory.length > 0) {
-            redoHistory.push(JSON.parse(JSON.stringify(currentPairedSentences.map(p => ({id: p.id, original: p.original, translation: p.translation, audioSrc: p.audioSrc})))));
+            // Current state is not pushed to redoHistory here as per original logic.
+            // If redo is desired, currentPairedSentences would be pushed to redoHistory.
             currentPairedSentences = undoHistory.pop();
             allTranslationsManuallyToggled = false; 
             renderSentences();
             showMessage("successUndo", "success", true);
-            updateUndoRedoButtonStates();
+            updateUndoRedoButtonStates(); // Update button state after undo
         } else {
             showMessage("errorNoUndoState", "warning", true);
         }
@@ -1035,7 +1453,8 @@
 
     shufflePairsBtn.addEventListener('click', () => {
         if (currentPairedSentences.length > 1) {
-            saveStateForUndo();
+            saveStateForUndo(); // Save state before shuffling
+            // Fisher-Yates shuffle
             for (let i = currentPairedSentences.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [currentPairedSentences[i], currentPairedSentences[j]] = [currentPairedSentences[j], currentPairedSentences[i]];
@@ -1051,6 +1470,7 @@
 
         allTranslationsManuallyToggled = !allTranslationsManuallyToggled; 
 
+        // Update all individual sentence pairs based on the new global state
         currentPairedSentences.forEach(pair => {
             const pairDiv = sentenceContainer.querySelector(`.sentence-pair[data-id="${pair.id}"]`);
             if (!pairDiv) return;
@@ -1067,6 +1487,7 @@
                 if (individualToggleBtn) individualToggleBtn.textContent = allTranslationsManuallyToggled ? t.hideOriginal : t.showOriginal;
             }
         });
+        // Update the main toggle button's text
         if (toggleAllTranslationsBtn) {
             toggleAllTranslationsBtn.textContent = allTranslationsManuallyToggled ? t.hideAllTranslations : t.showAllTranslations;
         }
@@ -1078,12 +1499,14 @@
         translationTextInput.value = '';
         currentPairedSentences = [];
         clearUndoRedoHistory();
-        revokePreviousAudioUrls();
-        loadedAudioFiles = [];
-        audioFilesInput.value = '';
+        revokePreviousAudioUrls(); // Clear audio object URLs
+        loadedAudioFiles = [];    // Clear the list of loaded files
+        audioFilesInput.value = ''; // Reset the file input field
         sentenceContainer.innerHTML = '';
-        learningSection.classList.add('hidden');
-        inputSection.classList.remove('hidden');
+        if (!learningSection.classList.contains('hidden')) { // Only if learning section is visible
+            learningSection.classList.add('hidden');
+            inputSection.classList.remove('hidden');
+        }
         messageArea.innerHTML = '';
         allTranslationsManuallyToggled = false;
         showMessage("successReset", "success", true);
@@ -1093,31 +1516,32 @@
     backToInputBtn.addEventListener('click', () => {
         learningSection.classList.add('hidden');
         inputSection.classList.remove('hidden');
-        messageArea.innerHTML = '';
+        messageArea.innerHTML = ''; // Clear messages when going back
         allTranslationsManuallyToggled = false; 
+        // Do not clear currentPairedSentences or undo history here, user might want to resume
         originalTextInput.focus();
     });
     
     toggleHistoryBtn.addEventListener('click', () => {
         historyItemsContainer.classList.toggle('hidden');
-        updateToggleHistoryButtonText();
+        updateToggleHistoryButtonText(); // Update button text based on new state
     });
 
     clearHistoryBtn.addEventListener('click', () => {
         if (textInputHistory.length > 0 && confirm(t.confirmClearHistory)) {
             textInputHistory = [];
             saveTextInputHistoryToStorage();
-            renderTextInputHistoryList();
+            renderTextInputHistoryList(); // Re-render to show "No history"
             showMessage(t.historyCleared, "success", true);
         }
     });
 
     importCsvBtn.addEventListener('click', () => {
-        csvFileInput.click();
+        csvFileInput.click(); // Trigger hidden file input
     });
 
     /**
-     * Parses a CSV text string into an array of records (rows), where each record is an array of fields (cells).
+     * Parses a CSV text string into an array of records (rows).
      * Handles quoted fields containing commas, newlines, and escaped double quotes ("").
      * @param {string} csvText The raw CSV text.
      * @returns {string[][]} An array of rows, where each row is an array of cell strings.
@@ -1128,6 +1552,7 @@
         let currentField = "";
         let inQuotes = false;
 
+        // Normalize line endings to \n
         const normalizedText = csvText.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
 
         for (let i = 0; i < normalizedText.length; i++) {
@@ -1135,49 +1560,53 @@
 
             if (inQuotes) {
                 if (char === '"') {
+                    // Check for escaped quote ("")
                     if (i + 1 < normalizedText.length && normalizedText[i + 1] === '"') {
                         currentField += '"';
-                        i++; 
+                        i++; // Skip next quote
                     } else {
-                        inQuotes = false; 
+                        inQuotes = false; // End of quoted field
                     }
                 } else {
-                    currentField += char; 
+                    currentField += char; // Character inside quoted field
                 }
-            } else { 
+            } else { // Not in quotes
                 if (char === '"') {
-                    inQuotes = true;
-                    if (currentField.length > 0) {
-                        // This indicates an unquoted field ended right before a quote, which is unusual.
-                        // Standard CSV parsers might treat this quote literally or as an error.
-                        // For simplicity, we will treat the existing currentField as a complete field.
-                        // currentRecord.push(currentField); 
-                        // currentField = ""; 
-                        // The line above would be one way, but it's better to assume quotes start a field or are escaped.
-                        // If a quote appears outside a quoted field and currentField is not empty,
-                        // it's likely part of the data. Let's assume this simple parser
-                        // expects quotes to either fully enclose a field or be escaped within one.
-                        // If a field starts with a quote, it must end with one.
-                        // If currentField is empty, this is the start of a quoted field.
+                    // Start of a new quoted field.
+                    // If currentField has content, it's an unquoted field ending before a new quoted one.
+                    // This case is ambiguous in "simple" CSV. Standard parsers might error or treat the quote literally.
+                    // Assuming if a quote starts a field, the field is quoted.
+                    // If currentField is not empty here, it implies malformed CSV or a quote within an unquoted field.
+                    // For this parser: if currentField is empty, this is the start of a quoted field.
+                    // If currentField is not empty, the quote is treated as a literal character in an unquoted field.
+                    if (currentField.length === 0) {
+                        inQuotes = true;
+                    } else {
+                         currentField += char; // Treat as literal if field already has content
                     }
                 } else if (char === ',') {
                     currentRecord.push(currentField);
                     currentField = "";
                 } else if (char === '\n') {
-                    currentRecord.push(currentField); 
-                    records.push([...currentRecord]); 
-                    currentRecord = []; 
+                    currentRecord.push(currentField); // Add last field of the row
+                    records.push([...currentRecord]); // Add completed record
+                    currentRecord = []; // Start new record
                     currentField = "";
                 } else {
-                    currentField += char;
+                    currentField += char; // Character in unquoted field
                 }
             }
         }
+        // Add the last field and record after loop
         currentRecord.push(currentField);
-        if (currentRecord.some(f => f.length > 0) || (records.length === 0 && currentRecord.length > 0) ) {
-            records.push([...currentRecord]);
+        // Add the last record only if it has content or if it's the only record
+        if (currentRecord.some(f => f.trim().length > 0) || (records.length === 0 && currentRecord.length > 0)) {
+             if (!(records.length === 0 && currentRecord.length === 1 && currentRecord[0].trim() === "")) { // Avoid adding totally empty single line
+                records.push([...currentRecord]);
+             }
         }
         
+        // Filter out records that are completely empty or just commas
         return records.filter(record => record.length > 0 && record.some(field => field.trim() !== ""));
     }
 
@@ -1191,37 +1620,37 @@
                 try {
                     const parsedRows = parseCSVText_custom(csvText);
                     
-                    if (parsedRows.length > 0) {
+                    if (parsedRows.length > 0 && parsedRows.some(row => row.length >=1 && row[0].trim() !== "")) { // Check if there's at least one row with content in the first column
                         let originalTextParts = [];
                         let translationTextParts = [];
 
                         parsedRows.forEach(rowCells => {
-                            let cellA = rowCells.length > 0 ? rowCells[0] : "";
-                            let cellB = rowCells.length > 1 ? rowCells[1] : "";
+                            // Ensure cells are strings, default to empty string if undefined
+                            let cellA = String(rowCells.length > 0 ? rowCells[0] : "").trim();
+                            let cellB = String(rowCells.length > 1 ? rowCells[1] : "").trim();
                             
-                            // Replace literal "\\n" with actual newline characters
+                            // Replace literal "\\n" with actual newline characters for multi-line cells
                             cellA = cellA.replace(/\\n/g, '\n');
                             cellB = cellB.replace(/\\n/g, '\n');
 
-                            if (cellA.trim()) { // Add only if cell A has content after trim
-                                originalTextParts.push(cellA.trim());
-                            }
-                            // Add cell B content if cell A had content, even if B is empty, to maintain pairing
-                            if (cellA.trim()) {
-                                translationTextParts.push(cellB.trim());
+                            if (cellA) { // Only add if cell A (original) has content
+                                originalTextParts.push(cellA);
+                                // Add cell B content (translation), even if empty, to maintain pairing
+                                translationTextParts.push(cellB);
                             }
                         });
                         
-                        // Join original parts, ensuring each ends with "。"
+                        // Join parts, ensuring each ends with a sentence delimiter.
+                        // Using "。" for Japanese-like originals and "." for English-like translations as a heuristic.
+                        // This might need to be smarter based on actual content language.
                         const finalOriginalText = originalTextParts
-                            .map(p => p.replace(/[.。？！]$/, "") + "。")
-                            .join(""); 
+                            .map(p => p.replace(/[.。？！]$/, "") + (/[一-龠ぁ-んァ-ヶ]/.test(p) ? "。" : ".")) // Add Japanese period if Japanese chars detected, else English period
+                            .join(" "); // Join with space to allow splitTextIntoSentences to work correctly
 
-                        // Join translation parts, ensuring each ends with "." and parts are space-separated
                         const finalTranslationText = translationTextParts
                             .map(p => {
                                 if (!p) return "."; // If part is empty, just a period.
-                                return p.replace(/[.。？！]$/, "") + ".";
+                                return p.replace(/[.。？！]$/, "") + (/[一-龠ぁ-んァ-ヶ]/.test(p) ? "。" : ".");
                             })
                             .join(" ")
                             .replace(/\s+\.\s*/g, ". ") // Clean up: " . " -> ". "
@@ -1234,9 +1663,10 @@
                         if (finalOriginalText || finalTranslationText) {
                             showMessage("successCsvImported", "success", true);
                             addEntryToTextInputHistory(finalOriginalText, finalTranslationText, file.name);
-                            clearUndoRedoHistory();
+                            clearUndoRedoHistory(); // New text loaded, clear old undo history
                             updateUndoRedoButtonStates();
                         } else {
+                            // This case should be rare if the outer parsedRows.length check is good
                             showMessage(t.errorCsvFormat, "error", true);
                         }
                     } else {
@@ -1247,8 +1677,8 @@
                     console.error("CSV Parse Error:", err);
                 }
             };
-            reader.readAsText(file, 'UTF-8');
-            csvFileInput.value = '';
+            reader.readAsText(file, 'UTF-8'); // Specify UTF-8 encoding
+            csvFileInput.value = ''; // Reset file input to allow re-selection of the same file
         }
     });
 
@@ -1257,8 +1687,10 @@
             showMessage("errorNoPairsToExport", "warning", true);
             return;
         }
-        let csvContent = '"Original","Translation"\n';
+        // CSV Header
+        let csvContent = '"Original","Translation"\n'; 
         currentPairedSentences.forEach(pair => {
+            // Escape double quotes within fields by doubling them
             const original = `"${pair.original.replace(/"/g, '""')}"`;
             const translation = `"${pair.translation.replace(/"/g, '""')}"`;
             csvContent += `${original},${translation}\n`;
@@ -1266,7 +1698,7 @@
 
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
-        if (link.download !== undefined) {
+        if (link.download !== undefined) { // Check for browser support
             const url = URL.createObjectURL(blob);
             link.setAttribute("href", url);
             link.setAttribute("download", "learned_pairs.csv");
@@ -1274,35 +1706,36 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            URL.revokeObjectURL(url);
+            URL.revokeObjectURL(url); // Clean up
         } else {
-            showMessage("CSV export might not be fully supported on this browser.", "warning");
+            showMessage(t.csvExportNotSupported, "warning", true);
         }
     });
 
     // --- Initialization ---
     document.addEventListener('DOMContentLoaded', () => {
+        loadAndApplyTheme(); // Load and apply theme first
+        loadAndApplyLanguage(); // Load and apply language (this will call updateUIText)
         loadTextInputHistoryFromStorage();
-        updateUIText();
+        // updateUIText(); // Called by loadAndApplyLanguage
         updateUndoRedoButtonStates();
         renderTextInputHistoryList();
-        updateModeSelectionUI();
+        updateModeSelectionUI(); // Set initial mode button styles
     });
 
+    // Cleanup audio object URLs on page leave
     window.addEventListener('beforeunload', () => {
         revokePreviousAudioUrls();
     });
 
+    // PWA Service Worker Registration (from your original script)
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js')
+            .then(reg => console.log('Service Worker registered:', reg.scope))
+            .catch(err => console.error('Service Worker registration failed:', err));
+        });
+    }
     </script>
 </body>
 </html>
-<script>
-    if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-        .then(reg => console.log('SW registered:', reg.scope))
-        .catch(err => console.error('SW registration failed:', err));
-    });
-    }
-    </script>
-    
