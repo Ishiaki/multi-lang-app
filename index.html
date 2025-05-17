@@ -14,18 +14,18 @@
             --text-accent-strong: #0d9488; /* teal-600 */
             --container-bg: white;
             --container-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --input-border: #64748b; /* border-slate-500 */
-            --input-focus-border: #14b8a6; /* focus:border-teal-500 */
+            --input-border-color: #64748b; /* Renamed from --input-border to avoid conflict with CSS border property */
+            --input-focus-border: #14b8a6;
             --input-focus-ring: #14b8a6;
-            --history-item-bg: #f1f5f9; /* bg-slate-100 */
-            --history-item-border: #e2e8f0; /* border-slate-200 */
-            --history-item-hover-bg: #ccfbf1; /* bg-teal-100 */
+            --history-item-bg: #f1f5f9;
+            --history-item-border-color: #e2e8f0; /* Renamed */
+            --history-item-hover-bg: #ccfbf1;
             --scrollbar-thumb: #cbd5e1;
             --scrollbar-thumb-hover: #94a3b8;
             --selection-bg: #5eead4;
             --selection-text: #134e4a;
             --btn-primary-bg: #14b8a6;
-            --btn-primary-border: #0d9488;
+            --btn-primary-border-color: #0d9488; /* Renamed */
             --btn-primary-hover-bg: #0d9488;
             --btn-primary-active-bg: #0f766e;
             --btn-primary-focus-ring: rgba(45, 212, 191, 0.45);
@@ -33,49 +33,49 @@
 
             --message-error-bg: #fee2e2;
             --message-error-text: #b91c1c;
-            --message-error-border: #fecaca;
+            --message-error-border-color: #fecaca; /* Renamed */
             --message-warning-bg: #ffedd5;
             --message-warning-text: #c2410c;
-            --message-warning-border: #fed7aa;
+            --message-warning-border-color: #fed7aa; /* Renamed */
             --message-success-bg: #ccfbf1;
             --message-success-text: #0f766e;
-            --message-success-border: #99f6e4;
+            --message-success-border-color: #99f6e4; /* Renamed */
         }
 
         html.dark {
-            --bg-primary: #0f172a; /* slate-900 */
-            --text-primary: #e2e8f0; /* slate-200 */
-            --text-secondary: #94a3b8; /* slate-400 */
+            --bg-primary: #121212; /* Very dark gray (Material Design dark theme standard) */
+            --text-primary: #FFFFFF; /* Pure white */
+            --text-secondary: #a1a1aa; /* zinc-400, for less emphasized text */
             --text-accent: #2dd4bf; /* teal-400 */
             --text-accent-strong: #14b8a6; /* teal-500 */
-            --container-bg: #1e293b; /* slate-800 */
-            --container-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.07);
-            --input-border: #475569; /* slate-600 */
-            --input-focus-border: #2dd4bf; /* teal-400 */
-            --input-focus-ring: #2dd4bf;
-            --history-item-bg: #334155; /* slate-700 */
-            --history-item-border: #475569; /* slate-600 */
-            --history-item-hover-bg: #0f766e; /* teal-700 */
+            --container-bg: #18181b; /* zinc-900, very dark, slightly lighter than body */
+            --container-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.15); /* Darker, more subtle shadow */
+            --input-border-color: #3f3f46; /* zinc-700 */
+            --input-focus-border: var(--text-accent);
+            --input-focus-ring: var(--text-accent);
+            --history-item-bg: #27272a; /* zinc-800, for translation box, distinct but dark */
+            --history-item-border-color: #3f3f46; /* zinc-700 */
+            --history-item-hover-bg: #3f3f46; /* zinc-700 for hover, slightly lighter */
             --scrollbar-thumb: #475569;
             --scrollbar-thumb-hover: #64748b;
             --selection-bg: #14b8a6;
             --selection-text: #f0fdfa;
-            --btn-primary-bg: #14b8a6;
-            --btn-primary-border: #0d9488;
+            --btn-primary-bg: #14b8a6; /* Teal 500 */
+            --btn-primary-border-color: #0d9488; /* Teal 600 */
             --btn-primary-hover-bg: #0d9488;
             --btn-primary-active-bg: #0f766e;
             --btn-primary-focus-ring: rgba(45, 212, 191, 0.45);
-            /* Ensure button text color contrasts with dark buttons if needed, though Tailwind's default might be fine */
+            --btn-text-color: white; /* Default for primary buttons */
 
-            --message-error-bg: #5f2120; /* Adjusted for dark */
-            --message-error-text: #fca5a5;
-            --message-error-border: #b91c1c;
-            --message-warning-bg: #62300a; /* Adjusted for dark */
-            --message-warning-text: #fdba74;
-            --message-warning-border: #c2410c;
-            --message-success-bg: #0c4a4a; /* Adjusted for dark */
-            --message-success-text: #5eead4;
-            --message-success-border: #0f766e;
+            --message-error-bg: #3f2222; /* Darker red */
+            --message-error-text: #fca5a5; /* Light red text */
+            --message-error-border-color: #7f1d1d;
+            --message-warning-bg: #452f11; /* Darker orange/amber */
+            --message-warning-text: #fdba74; /* Light orange text */
+            --message-warning-border-color: #92400e;
+            --message-success-bg: #103c30; /* Darker green/teal */
+            --message-success-text: #5eead4; /* Light teal text */
+            --message-success-border-color: #0f766e;
         }
 
         body {
@@ -86,20 +86,19 @@
             color: var(--text-primary);
         }
 
-        /* Apply CSS variables to elements */
         .main-container {
             background-color: var(--container-bg);
             box-shadow: var(--container-shadow);
-            border-radius: 0.75rem; /* rounded-xl */
-            margin-left: auto; /* mx-auto */
-            margin-right: auto; /* mx-auto */
+            border-radius: 0.75rem;
+            margin-left: auto;
+            margin-right: auto;
         }
         #input-section textarea {
             min-height: 100px;
             border-width: 2px;
-            border-color: var(--input-border);
-            background-color: var(--container-bg); /* Ensure textarea bg matches container in dark mode */
-            color: var(--text-primary); /* Ensure textarea text color matches body text */
+            border-color: var(--input-border-color);
+            background-color: var(--container-bg);
+            color: var(--text-primary);
         }
         #input-section textarea::placeholder {
             color: var(--text-secondary);
@@ -111,7 +110,7 @@
         #learning-section textarea.user-answer-input {
             min-height: 60px;
             border-width: 1px;
-            border-color: var(--input-border); /* Use themed border */
+            border-color: var(--input-border-color);
             background-color: var(--container-bg);
             color: var(--text-primary);
         }
@@ -124,170 +123,156 @@
         }
 
         .message {
-            padding: 0.75rem 1rem;
-            margin-bottom: 1rem;
-            border-radius: 0.375rem; /* rounded-md */
-            font-weight: 500;
-            transition: opacity 0.3s ease-in-out;
+            padding: 0.75rem 1rem; margin-bottom: 1rem; border-radius: 0.375rem;
+            font-weight: 500; transition: opacity 0.3s ease-in-out;
         }
-        .message-error { background-color: var(--message-error-bg); color: var(--message-error-text); border: 1px solid var(--message-error-border); }
-        .message-warning { background-color: var(--message-warning-bg); color: var(--message-warning-text); border: 1px solid var(--message-warning-border); }
-        .message-success { background-color: var(--message-success-bg); color: var(--message-success-text); border: 1px solid var(--message-success-border); }
+        .message-error { background-color: var(--message-error-bg); color: var(--message-error-text); border: 1px solid var(--message-error-border-color); }
+        .message-warning { background-color: var(--message-warning-bg); color: var(--message-warning-text); border: 1px solid var(--message-warning-border-color); }
+        .message-success { background-color: var(--message-success-bg); color: var(--message-success-text); border: 1px solid var(--message-success-border-color); }
 
         .btn {
-            font-weight: 600;
-            padding: 0.5rem 1rem;
-            border-radius: 0.375rem;
+            font-weight: 600; padding: 0.5rem 1rem; border-radius: 0.375rem;
             transition-property: background-color, border-color, color, box-shadow, transform;
-            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-            transition-duration: 150ms;
-            font-size: 0.875rem;
-            line-height: 1.25rem;
-            border: 1px solid #94a3b8; /* border-slate-400 */
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
-            cursor: pointer;
-            display: inline-block;
-            text-align: center;
-            color: var(--btn-text-color); /* Default button text color */
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms;
+            font-size: 0.875rem; line-height: 1.25rem;
+            border: 1px solid var(--input-border-color); /* Use variable for base border */
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            cursor: pointer; display: inline-block; text-align: center;
+            color: var(--btn-text-color);
         }
-        .btn:hover {
-            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        html.dark .btn { /* Adjust base button border for dark mode */
+             border-color: #52525b; /* zinc-600, slightly lighter than input border for buttons */
         }
-        .btn:active {
-            box-shadow: inset 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-        }
-        .btn:focus {
-            outline: 2px solid transparent;
-            outline-offset: 2px;
-        }
+
+        .btn:hover { box-shadow: 0 2px 4px -1px rgba(0,0,0,0.06), 0 2px 4px -1px rgba(0,0,0,0.06); }
+        .btn:active { box-shadow: inset 0 1px 2px 0 rgba(0,0,0,0.05); }
+        .btn:focus { outline: 2px solid transparent; outline-offset: 2px; }
+
         .btn-primary {
             background-color: var(--btn-primary-bg);
-            border-color: var(--btn-primary-border);
+            border-color: var(--btn-primary-border-color);
         }
         .btn-primary:hover { background-color: var(--btn-primary-hover-bg); }
         .btn-primary:active { background-color: var(--btn-primary-active-bg); }
         .btn-primary:focus { box-shadow: 0 0 0 3px var(--btn-primary-focus-ring); }
 
         .btn-toggle-original-first {
-            background-color: var(--btn-primary-bg); /* Teal系 */
-            border-color: var(--btn-primary-border);
+            background-color: var(--btn-primary-bg);
+            border-color: var(--btn-primary-border-color);
             padding: 0.75rem 1.5rem; font-size: 1rem; line-height: 1.5rem;
         }
         .btn-toggle-original-first:hover { background-color: var(--btn-primary-hover-bg); }
         .btn-toggle-original-first:active { background-color: var(--btn-primary-active-bg); }
         .btn-toggle-original-first:focus { box-shadow: 0 0 0 3px var(--btn-primary-focus-ring); }
 
-        .btn-toggle-translation-first { /* Purple系 */
-            background-color: #8b5cf6; border-color: #7c3aed;
+        .btn-toggle-translation-first {
+            background-color: #8b5cf6; border-color: #7c3aed; color: white;
             padding: 0.75rem 1.5rem; font-size: 1rem; line-height: 1.5rem;
         }
         .btn-toggle-translation-first:hover { background-color: #7c3aed; }
         .btn-toggle-translation-first:active { background-color: #6d28d9; }
         .btn-toggle-translation-first:focus { box-shadow: 0 0 0 3px rgba(192, 132, 252, 0.45); }
         html.dark .btn-toggle-translation-first {
-            background-color: #a78bfa; border-color: #8b5cf6; /* Lighter purple for dark mode */
+            background-color: #7c3aed; border-color: #6d28d9; color: var(--text-primary);
         }
-        html.dark .btn-toggle-translation-first:hover { background-color: #8b5cf6; }
+        html.dark .btn-toggle-translation-first:hover { background-color: #6d28d9; }
 
 
-        .btn-display-priority-original { /* Indigo系 */
-            background-color: #6366f1; border-color: #4f46e5;
+        .btn-display-priority-original {
+            background-color: #6366f1; border-color: #4f46e5; color: white;
             padding: 0.625rem 1.25rem; font-size: 0.875rem;
         }
         .btn-display-priority-original:hover { background-color: #4f46e5; }
         .btn-display-priority-original:active { background-color: #4338ca; }
         .btn-display-priority-original:focus { box-shadow: 0 0 0 3px rgba(165, 180, 252, 0.45); }
         html.dark .btn-display-priority-original {
-             background-color: #818cf8; border-color: #6366f1; /* Lighter indigo for dark mode */
+             background-color: #4f46e5; border-color: #4338ca; color: var(--text-primary);
         }
-        html.dark .btn-display-priority-original:hover { background-color: #6366f1; }
+        html.dark .btn-display-priority-original:hover { background-color: #4338ca; }
 
 
-        .btn-display-priority-translation { /* Orange系 */
-            background-color: #f97316; border-color: #ea580c;
+        .btn-display-priority-translation {
+            background-color: #f97316; border-color: #ea580c; color: white;
             padding: 0.625rem 1.25rem; font-size: 0.875rem;
         }
         .btn-display-priority-translation:hover { background-color: #ea580c; }
         .btn-display-priority-translation:active { background-color: #c2410c; }
         .btn-display-priority-translation:focus { box-shadow: 0 0 0 3px rgba(253, 186, 116, 0.45); }
         html.dark .btn-display-priority-translation {
-            background-color: #fb923c; border-color: #f97316; /* Lighter orange for dark mode */
+            background-color: #ea580c; border-color: #c2410c; color: var(--text-primary);
         }
-        html.dark .btn-display-priority-translation:hover { background-color: #f97316; }
+        html.dark .btn-display-priority-translation:hover { background-color: #c2410c; }
 
 
-        .btn-secondary {
-            background-color: #64748b; border-color: #475569; color: white;
-        }
+        .btn-secondary { background-color: #64748b; border-color: #475569; color: white; }
         .btn-secondary:hover { background-color: #475569; }
         .btn-secondary:active { background-color: #334155; }
         .btn-secondary:focus { box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.45); }
         html.dark .btn-secondary {
-            background-color: #475569; border-color: #334155; color: #e2e8f0;
+            background-color: #3f3f46; border-color: #27272a; color: var(--text-primary); /* Zinc 700/800 */
         }
-        html.dark .btn-secondary:hover { background-color: #334155; }
+        html.dark .btn-secondary:hover { background-color: #27272a; }
 
 
-        .btn-warning { background-color: #f59e0b; border-color: #d97706; }
+        .btn-warning { background-color: #f59e0b; border-color: #d97706; color: white; }
         .btn-warning:hover { background-color: #d97706; }
         .btn-warning:active { background-color: #b45309; }
         .btn-warning:focus { box-shadow: 0 0 0 3px rgba(252, 211, 77, 0.45); }
-        html.dark .btn-warning { background-color: #facc15; border-color: #eab308; color: #422006;}
-        html.dark .btn-warning:hover { background-color: #eab308; }
+        html.dark .btn-warning { background-color: #d97706; border-color: #b45309; color: var(--text-primary); }
+        html.dark .btn-warning:hover { background-color: #b45309; }
 
 
-        .btn-info { background-color: #38bdf8; border-color: #0ea5e9; }
+        .btn-info { background-color: #38bdf8; border-color: #0ea5e9; color: white; }
         .btn-info:hover { background-color: #0ea5e9; }
         .btn-info:active { background-color: #0284c7; }
         .btn-info:focus { box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.45); }
-        html.dark .btn-info { background-color: #7dd3fc; border-color: #38bdf8; color: #075985;}
-        html.dark .btn-info:hover { background-color: #38bdf8; }
+        html.dark .btn-info { background-color: #0ea5e9; border-color: #0284c7; color: var(--text-primary); }
+        html.dark .btn-info:hover { background-color: #0284c7; }
 
 
-        .btn-success { background-color: #22c55e; border-color: #16a34a; }
+        .btn-success { background-color: #22c55e; border-color: #16a34a; color: white; }
         .btn-success:hover { background-color: #16a34a; }
         .btn-success:active { background-color: #15803d; }
         .btn-success:focus { box-shadow: 0 0 0 3px rgba(134, 239, 172, 0.45); }
-        html.dark .btn-success { background-color: #4ade80; border-color: #22c55e; color: #14532d;}
-        html.dark .btn-success:hover { background-color: #22c55e; }
+        html.dark .btn-success { background-color: #16a34a; border-color: #15803d; color: var(--text-primary); }
+        html.dark .btn-success:hover { background-color: #15803d; }
 
 
-        .btn-danger { background-color: #f43f5e; border-color: #e11d48; }
+        .btn-danger { background-color: #f43f5e; border-color: #e11d48; color: white; }
         .btn-danger:hover { background-color: #e11d48; }
         .btn-danger:active { background-color: #be123c; }
         .btn-danger:focus { box-shadow: 0 0 0 3px rgba(253, 164, 175, 0.45); }
-        html.dark .btn-danger { background-color: #fb7185; border-color: #f43f5e; color: #7f1d1d;}
-        html.dark .btn-danger:hover { background-color: #f43f5e; }
+        html.dark .btn-danger { background-color: #e11d48; border-color: #be123c; color: var(--text-primary); }
+        html.dark .btn-danger:hover { background-color: #be123c; }
 
 
-        .btn-small {
-            padding: 0.25rem 0.75rem; font-size: 0.75rem; line-height: 1rem;
-        }
+        .btn-small { padding: 0.25rem 0.75rem; font-size: 0.75rem; line-height: 1rem; }
+
         .btn:disabled {
-            opacity: 0.6; cursor: not-allowed; box-shadow: none;
+            opacity: 0.5; cursor: not-allowed; box-shadow: none;
             border-color: #e2e8f0; background-color: #f1f5f9; color: #94a3b8;
         }
         html.dark .btn:disabled {
-            border-color: #334155; background-color: #1e293b; color: #64748b;
+            border-color: #27272a; background-color: #18181b; color: #52525b; opacity: 0.4;
         }
         .btn:disabled:hover { box-shadow: none; background-color: #f1f5f9; }
-        html.dark .btn:disabled:hover { background-color: #1e293b; }
+        html.dark .btn:disabled:hover { background-color: #18181b; }
 
         ::selection { background-color: var(--selection-bg); color: var(--selection-text); }
         ::-moz-selection { background-color: var(--selection-bg); color: var(--selection-text); }
 
         #history-items-container {
             background-color: var(--history-item-bg);
-            border: 1px solid var(--history-item-border); /* Added border */
-            border-radius: 0.375rem; /* Added border-radius */
+            border: 1px solid var(--history-item-border-color);
+            border-radius: 0.375rem;
         }
         #history-items-container::-webkit-scrollbar { width: 8px; }
         #history-items-container::-webkit-scrollbar-track { background: transparent; }
         #history-items-container::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 4px; }
         #history-items-container::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
         .history-item {
-            background-color: var(--container-bg); /* Use container-bg for individual items */
-            border-color: var(--input-border); /* Use themed border */
+            background-color: var(--container-bg);
+            border: 1px solid var(--input-border-color); /* Use themed border for items */
         }
         .history-item:hover { background-color: var(--history-item-hover-bg); }
         html.dark .history-item .text-teal-600 { color: var(--text-accent); }
@@ -296,28 +281,27 @@
         .answer-correct { color: #10b981; } html.dark .answer-correct { color: #34d399; }
         .answer-incorrect { color: #ef4444; } html.dark .answer-incorrect { color: #f87171; }
         .audio-player { width: 100%; margin-top: 0.5rem; }
-        /* Style for audio player in dark mode if needed */
         html.dark .audio-player {
-            filter: invert(90%) hue-rotate(180deg); /* Basic dark mode for controls */
+            filter: invert(100%) hue-rotate(180deg) contrast(0.8); /* Adjusted for better visibility on dark bg */
         }
 
-        /* Menu Bar Styles */
         #app-menu-bar {
             background-color: var(--container-bg);
             color: var(--text-primary);
             padding: 0.5rem 1rem;
-            border-bottom: 1px solid var(--input-border);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-bottom: 1px solid var(--input-border-color);
+            box-shadow: var(--container-shadow); /* Use variable for consistency */
         }
-        html.dark #app-menu-bar {
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
+        /* html.dark #app-menu-bar shadow is handled by var(--container-shadow) in html.dark */
         #app-menu-bar select, #app-menu-bar button {
-            background-color: var(--bg-primary);
+            background-color: var(--bg-primary); /* Should be slightly different from menu bar's bg */
             color: var(--text-primary);
-            border: 1px solid var(--input-border);
+            border: 1px solid var(--input-border-color);
             border-radius: 0.375rem;
             padding: 0.25rem 0.5rem;
+        }
+        html.dark #app-menu-bar select, html.dark #app-menu-bar button {
+             background-color: var(--history-item-bg); /* e.g. zinc-800 */
         }
         #app-menu-bar select:focus, #app-menu-bar button:focus {
             outline: 2px solid transparent;
@@ -326,29 +310,34 @@
             box-shadow: 0 0 0 2px var(--input-focus-ring);
         }
         .menu-label {
-            font-size: 0.875rem; /* text-sm */
-            font-weight: 500; /* medium */
+            font-size: 0.875rem; font-weight: 500;
         }
         .sentence-pair {
             background-color: var(--container-bg);
-            border-color: var(--input-border);
+            border: 1px solid var(--input-border-color); /* Use themed border */
         }
         .original-sentence { color: var(--text-primary); }
         .translation-sentence {
-            background-color: var(--history-item-bg); /* Slightly different background */
-            border-color: var(--input-border);
+            background-color: var(--history-item-bg);
+            border: 1px solid var(--input-border-color); /* Use themed border */
             color: var(--text-primary);
         }
-        html.dark .text-slate-800 { color: var(--text-primary); }
+        /* General text color overrides for dark mode if Tailwind classes are too specific */
+        html.dark .text-slate-800,
         html.dark .text-slate-700 { color: var(--text-primary); }
-        html.dark .text-slate-500 { color: var(--text-secondary); }
+        html.dark .text-slate-500,
         html.dark .text-slate-400 { color: var(--text-secondary); }
         html.dark .text-teal-600 { color: var(--text-accent-strong); }
-        html.dark .border-slate-200 { border-color: var(--input-border); }
-        html.dark .border-slate-300 { border-color: var(--input-border); }
-        html.dark .file\:bg-teal-50 { background-color: #1f2937; } /* dark:bg-gray-700 */
-        html.dark .file\:text-teal-700 { color: #9ca3af; } /* dark:text-gray-400 */
-        html.dark .hover\:file\:bg-teal-100 { background-color: #374151; } /* dark:hover:bg-gray-600 */
+
+        /* Border color overrides for dark mode */
+        html.dark .border-slate-200,
+        html.dark .border-slate-300,
+        html.dark .border-teal-200 { border-color: var(--input-border-color); }
+
+        /* File input button styling in dark mode */
+        html.dark .file\:bg-teal-50 { background-color: #3f3f46; } /* zinc-700 */
+        html.dark .file\:text-teal-700 { color: var(--text-primary); }
+        html.dark .hover\:file\:bg-teal-100 { background-color: #52525b; } /* zinc-600 */
 
     </style>
 </head>
@@ -393,7 +382,7 @@
 
             <div id="audio-input-container" class="hidden mb-4">
                 <label for="audio-files-input" id="audio-files-label" class="block text-sm font-medium mb-1" style="color: var(--text-primary);">音声ファイル (学習開始前に選択):</label>
-                <input type="file" id="audio-files-input" multiple accept="audio/mpeg, audio/mp3" class="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100" style="color: var(--text-secondary);">
+                <input type="file" id="audio-files-input" multiple accept="audio/*" class="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold" style="color: var(--text-secondary);">
             </div>
 
             <div class="flex flex-col sm:flex-row gap-2 mb-4">
@@ -402,7 +391,7 @@
                 <button id="export-csv-btn" class="btn btn-success w-full sm:w-auto text-base">CSVへ出力</button>
             </div>
 
-            <div class="mt-2 mb-6 space-y-2 border-t border-b py-4" style="border-color: var(--input-border);">
+            <div class="mt-2 mb-6 space-y-2 border-t border-b py-4" style="border-top-color: var(--input-border-color); border-bottom-color: var(--input-border-color);">
                 <div class="flex flex-col sm:flex-row gap-2 items-center justify-between">
                     <h3 id="history-section-title" class="text-lg font-medium self-start sm:self-center" style="color: var(--text-primary);">入力履歴</h3>
                     <div class="flex gap-2 self-end sm:self-center">
@@ -410,7 +399,8 @@
                         <button id="clear-history-btn" class="btn btn-danger btn-small" disabled>履歴をクリア</button>
                     </div>
                 </div>
-                <div id="history-items-container" class="hidden max-h-60 overflow-y-auto space-y-2 p-2"> <p id="no-history-message" class="text-center py-2" style="color: var(--text-secondary);">履歴はありません。</p>
+                <div id="history-items-container" class="hidden max-h-60 overflow-y-auto space-y-2 p-2">
+                    <p id="no-history-message" class="text-center py-2" style="color: var(--text-secondary);">履歴はありません。</p>
                 </div>
             </div>
 
@@ -588,7 +578,7 @@
             successCsvImported: "Text imported from CSV. Press 'Start Learning'.",
             errorCsvFormat: "Incorrect CSV file format. Ensure column A has original text and column B has translations.",
             errorNoPairsToExport: "No pairs to export.",
-            delimiterRegex: /(?<=[.?!。？！])\s*/g, // This might need adjustment for English-only texts if Japanese delimiters are not expected. For now, keeping it broad.
+            delimiterRegex: /(?<=[.?!。？！])\s*/g, 
             historySectionTitle: "Input History",
             showHistory: "Show History",
             hideHistory: "Hide History",
@@ -632,9 +622,8 @@
             audioFilesSelected: (count) => `Selected ${count} audio file(s).`,
         }
     };
-    let t = i18nData[currentSelectedLang]; // Initialize t
+    let t = i18nData[currentSelectedLang];
 
-    // --- DOM Element Retrieval ---
     const originalTextInput = document.getElementById('original-text');
     const translationTextInput = document.getElementById('translation-text');
     const startLearningBtn = document.getElementById('start-learning-btn');
@@ -664,17 +653,15 @@
     const languageSelect = document.getElementById('language-select');
     const themeSelect = document.getElementById('theme-select');
 
-    // --- Theme Management ---
     function applyTheme(theme) {
         if (theme === 'dark') {
             document.documentElement.classList.add('dark');
         } else {
             document.documentElement.classList.remove('dark');
         }
-        // Potentially update PWA theme-color meta tag
         const themeColorMeta = document.querySelector('meta[name="theme-color"]');
         if (themeColorMeta) {
-            themeColorMeta.content = theme === 'dark' ? '#0f172a' : '#14b8a6';
+            themeColorMeta.content = theme === 'dark' ? 'var(--bg-primary)' : '#14b8a6'; // Use CSS var for dark
         }
     }
 
@@ -708,7 +695,6 @@
         }
     });
 
-    // --- Language Management ---
     function setLanguage(lang) {
         if (i18nData[lang]) {
             currentSelectedLang = lang;
@@ -716,12 +702,10 @@
             localStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
             document.documentElement.lang = lang;
             updateUIText();
-            // Re-render sentences if in learning view to update button texts etc.
             if (!learningSection.classList.contains('hidden') && currentPairedSentences.length > 0) {
                 renderSentences();
             }
-            // Re-render history list for date formats or source labels if they become language-dependent
-             renderTextInputHistoryList();
+            renderTextInputHistoryList();
         }
     }
 
@@ -732,17 +716,15 @@
     function loadAndApplyLanguage() {
         const savedLang = localStorage.getItem(LANGUAGE_STORAGE_KEY) || 'ja';
         languageSelect.value = savedLang;
-        setLanguage(savedLang); // This will also call updateUIText
+        setLanguage(savedLang);
     }
 
-
-    // --- Undo/Redo Helper Functions ---
     function saveStateForUndo() {
         undoHistory.push(JSON.parse(JSON.stringify(currentPairedSentences.map(p => ({id: p.id, original: p.original, translation: p.translation, audioSrc: p.audioSrc})))));
         if (undoHistory.length > MAX_UNDO_HISTORY) {
             undoHistory.shift();
         }
-        redoHistory = []; // Clear redo history on new action
+        redoHistory = [];
         updateUndoRedoButtonStates();
     }
 
@@ -756,7 +738,6 @@
         updateUndoRedoButtonStates();
     }
 
-    // --- UI Update Functions ---
     function updateUIText() {
         document.title = t.appTitle;
         document.getElementById('app-title').textContent = t.appTitle;
@@ -792,16 +773,14 @@
         modeAudioBtn.textContent = t.audioMode;
         document.getElementById('audio-files-label').textContent = t.audioFilesLabel;
         shufflePairsBtn.textContent = t.shufflePairs;
-        document.getElementById('footer-text').innerHTML = t.footerText; // Use innerHTML for &copy;
+        document.getElementById('footer-text').innerHTML = t.footerText;
 
-        // Menu bar text
         document.getElementById('language-select-label').textContent = t.languageSelectLabel;
         document.getElementById('theme-select-label').textContent = t.themeSelectLabel;
         document.getElementById('theme-light-option').textContent = t.themeLightOption;
         document.getElementById('theme-dark-option').textContent = t.themeDarkOption;
         document.getElementById('theme-system-option').textContent = t.themeSystemOption;
 
-        // Update toggle all translations button text if visible
         if (toggleAllTranslationsBtn && !toggleAllTranslationsBtn.classList.contains('hidden')) {
              toggleAllTranslationsBtn.textContent = allTranslationsManuallyToggled ? t.hideAllTranslations : t.showAllTranslations;
         }
@@ -813,13 +792,8 @@
 
     function updateModeSelectionUI() {
         modeButtons.forEach(btn => {
-            if (btn.dataset.mode === currentMode) {
-                btn.classList.remove('btn-secondary');
-                btn.classList.add('btn-primary');
-            } else {
-                btn.classList.remove('btn-primary');
-                btn.classList.add('btn-secondary');
-            }
+            btn.classList.toggle('btn-primary', btn.dataset.mode === currentMode);
+            btn.classList.toggle('btn-secondary', btn.dataset.mode !== currentMode);
         });
         audioInputContainer.classList.toggle('hidden', currentMode !== 'audio');
         toggleAllTranslationsBtn.classList.toggle('hidden', currentMode !== 'memorization' || currentPairedSentences.length === 0);
@@ -827,39 +801,22 @@
             toggleAllTranslationsBtn.textContent = allTranslationsManuallyToggled ? t.hideAllTranslations : t.showAllTranslations;
         }
 
-
         if (!learningSection.classList.contains('hidden') && currentPairedSentences.length > 0) {
-            renderSentences(); // Re-render sentences as mode change might affect their appearance/functionality
+            renderSentences();
         }
     }
 
-    // --- Message Display Function ---
     function showMessage(textOrKey, type = 'error', isKey = false, duration = 3000) {
-        messageArea.innerHTML = ''; // Clear previous messages
+        messageArea.innerHTML = '';
         const messageDiv = document.createElement('div');
         let messageText = textOrKey;
 
         if (isKey) {
             const translation = t[textOrKey];
-            if (typeof translation === 'function') {
-                // If the translation is a function (e.g., for dynamic counts), call it.
-                // This requires knowing the arguments, which is a limitation here.
-                // For simplicity, assuming such keys are handled by specific showMessage calls.
-                // For generic calls, we'll try to resolve it or use the key.
-                // Example: showMessage(t.warningSentenceCountMismatch(origCount, transCount, pairCount), "warning");
-                // Here, we assume textOrKey is already the processed string if it was a function.
-                messageText = textOrKey; // If it's a key that results in a function, it should be pre-called.
-            } else {
-                messageText = translation || textOrKey; // Fallback to key if not found
-            }
+            messageText = typeof translation === 'function' ? textOrKey : (translation || textOrKey);
         }
         
-        // If the resolved messageText is a function itself (e.g. from i18n for dynamic messages)
-        // This part handles cases where the key maps to a function that needs arguments.
-        // This is tricky if arguments are not passed. For now, we assume simple string or pre-called function.
-        // For `warningSentenceCountMismatch` and `successPairsCreated`, they are called with args before showMessage.
-
-        messageDiv.textContent = messageText; // Directly use the (potentially resolved) text
+        messageDiv.textContent = messageText;
         messageDiv.className = `message message-${type}`;
         messageArea.appendChild(messageDiv);
 
@@ -872,28 +829,24 @@
         }
     }
 
-
-    // --- Text Splitting Function ---
     function splitTextIntoSentences(text) {
         if (!text || !text.trim()) return [];
-        // The regex is language-agnostic enough for general punctuation.
         const delimiterRegex = i18nData[currentSelectedLang].delimiterRegex || i18nData.ja.delimiterRegex;
         return text.split(delimiterRegex)
                    .map(s => s.trim())
                    .filter(s => s.length > 0);
     }
 
-    // --- Audio File Handling ---
     function revokePreviousAudioUrls() {
         audioObjectUrls.forEach(url => URL.revokeObjectURL(url));
         audioObjectUrls = [];
     }
 
     audioFilesInput.addEventListener('change', (event) => {
-        revokePreviousAudioUrls(); // Revoke any existing URLs before creating new ones
+        revokePreviousAudioUrls();
         loadedAudioFiles = Array.from(event.target.files).map(file => {
             const url = URL.createObjectURL(file);
-            audioObjectUrls.push(url); // Store for later revocation
+            audioObjectUrls.push(url);
             return { file, url };
         });
         if (loadedAudioFiles.length > 0) {
@@ -903,7 +856,6 @@
         }
     });
     
-    // --- Text Input History Functions ---
     function loadTextInputHistoryFromStorage() {
         const storedHistory = localStorage.getItem(TEXT_HISTORY_STORAGE_KEY);
         if (storedHistory) {
@@ -922,14 +874,11 @@
 
     function addEntryToTextInputHistory(original, translation, sourceFilename) {
         const newSource = sourceFilename || t.manualInputLabel;
-        // Avoid adding exact duplicate of the most recent entry
         if (textInputHistory.length > 0) {
             const lastEntry = textInputHistory[0];
             if (lastEntry.original === original &&
                 lastEntry.translation === translation &&
                 lastEntry.source === newSource) {
-                // Optionally, update timestamp of existing entry or just skip
-                // For simplicity, we'll shift it to be the newest if we re-add
                 textInputHistory.shift(); 
             }
         }
@@ -937,7 +886,7 @@
             id: `hist-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
             original: original,
             translation: translation,
-            source: newSource, // This will be translated by renderTextInputHistoryList
+            source: newSource,
             timestamp: new Date().toISOString()
         };
         textInputHistory.unshift(newEntry);
@@ -949,13 +898,12 @@
     }
 
     function renderTextInputHistoryList() {
-        // Clear only dynamic items, keep noHistoryMessage
         const dynamicItems = historyItemsContainer.querySelectorAll('div[role="button"]');
         dynamicItems.forEach(item => item.remove());
 
         if (textInputHistory.length === 0) {
             noHistoryMessage.style.display = 'block';
-            noHistoryMessage.textContent = t.noHistory; // Ensure it's translated
+            noHistoryMessage.textContent = t.noHistory;
             clearHistoryBtn.disabled = true;
             return;
         }
@@ -966,15 +914,13 @@
         textInputHistory.forEach(entry => {
             const historyEntryDiv = document.createElement('div');
             historyEntryDiv.className = 'history-item p-3 border rounded-md cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-opacity-75';
-            // Tailwind classes for colors will be applied by CSS variables / dark mode automatically
-            historyEntryDiv.classList.add('border-slate-300', 'hover:bg-teal-50', 'focus:ring-teal-500');
-
+            // Specific classes for light/dark are handled by CSS variables now
+            // historyEntryDiv.classList.add('border-slate-300', 'hover:bg-teal-50', 'focus:ring-teal-500');
 
             historyEntryDiv.setAttribute('role', 'button');
             historyEntryDiv.tabIndex = 0;
             historyEntryDiv.dataset.historyId = entry.id;
 
-            // Translate "Manual Input" or "Source: " part
             const sourceDisplay = entry.source === i18nData.ja.manualInputLabel || entry.source === i18nData.en.manualInputLabel
                 ? t.manualInputLabel
                 : `${t.historyItemSourceLabel}${entry.source}`;
@@ -983,13 +929,11 @@
             const localeForDate = currentSelectedLang === 'ja' ? 'ja-JP' : 'en-US';
 
             historyEntryDiv.innerHTML = `
-                <p class="text-xs text-slate-400">${new Date(entry.timestamp).toLocaleString(localeForDate)}</p>
-                <p class="font-medium text-sm text-teal-600">${sourceDisplay}</p>
-                <p class="text-sm text-slate-600 break-all" title="${entry.original.substring(0,200)}...">${snippet}</p>
+                <p class="text-xs" style="color: var(--text-secondary);">${new Date(entry.timestamp).toLocaleString(localeForDate)}</p>
+                <p class="font-medium text-sm" style="color: var(--text-accent-strong);">${sourceDisplay}</p>
+                <p class="text-sm break-all" style="color: var(--text-secondary);" title="${entry.original.substring(0,200)}...">${snippet}</p>
             `;
-            // Apply dark mode text colors if needed, or rely on inherited var(--text-primary) etc.
-            // e.g., historyEntryDiv.querySelector('.text-slate-400').style.color = 'var(--text-secondary)';
-
+            
             historyEntryDiv.addEventListener('click', () => loadTextInputHistoryEntry(entry.id));
             historyEntryDiv.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -1009,12 +953,11 @@
             translationTextInput.value = entry.translation;
             showMessage(t.loadedFromHistory, "success", true);
             
-            currentPairedSentences = []; // Clear current learning session
+            currentPairedSentences = [];
             clearUndoRedoHistory();
             sentenceContainer.innerHTML = '';
             updateUndoRedoButtonStates();
 
-            // Switch back to input section if on learning section
             if (!learningSection.classList.contains('hidden')) {
                 learningSection.classList.add('hidden');
                 inputSection.classList.remove('hidden');
@@ -1023,16 +966,13 @@
         }
     }
     
-
-    // --- Learning Content Rendering Function ---
     function normalizeAnswerForComparison(answer) {
         let normalized = String(answer || '').trim();
-        // More robust period removal for multiple languages
         if (normalized.endsWith('。') || normalized.endsWith('.') || normalized.endsWith('！') || normalized.endsWith('？') || normalized.endsWith('!') || normalized.endsWith('?')) {
             normalized = normalized.slice(0, -1);
         }
-        normalized = normalized.replace(/\s+/g, '').replace(/　+/g, ''); // Remove all spaces (half/full width)
-        return normalized.trim().toLowerCase(); // Compare in lowercase
+        normalized = normalized.replace(/\s+/g, '').replace(/　+/g, '');
+        return normalized.trim().toLowerCase();
     }
 
     function renderSentences() {
@@ -1054,18 +994,14 @@
         currentPairedSentences.forEach((sentenceData, index) => {
             const pairDiv = document.createElement('div');
             pairDiv.className = 'sentence-pair p-5 border rounded-lg hover:shadow-lg transition-shadow duration-300';
-            // Tailwind classes for colors will be applied by CSS variables / dark mode automatically
-            pairDiv.classList.add('border-slate-200', 'bg-white');
             pairDiv.dataset.id = sentenceData.id; 
 
             const originalPara = document.createElement('p');
-            originalPara.className = 'original-sentence text-xl font-semibold text-slate-800 mb-2 break-words';
+            originalPara.className = 'original-sentence text-xl font-semibold mb-2 break-words';
             originalPara.textContent = sentenceData.original;
 
             const translationPara = document.createElement('p');
-            translationPara.className = 'translation-sentence text-lg text-slate-700 p-3 border rounded-md mt-2 break-words';
-            // Tailwind classes for colors will be applied by CSS variables / dark mode automatically
-            translationPara.classList.add('bg-teal-50', 'border-teal-200');
+            translationPara.className = 'translation-sentence text-lg p-3 border rounded-md mt-2 break-words';
             translationPara.textContent = sentenceData.translation;
 
             if (currentMode === 'memorization') {
@@ -1075,9 +1011,6 @@
 
                 if (displayPriority === 'originalFirst') {
                     toggleBtnClasses += 'btn-toggle-original-first';
-                    // Use allTranslationsManuallyToggled to determine initial state for all,
-                    // then allow individual toggles to override their own state.
-                    // For simplicity, if allTranslationsManuallyToggled is true, show it, else hide.
                     translationPara.classList.toggle('hidden', !allTranslationsManuallyToggled);
                     toggleBtn.textContent = translationPara.classList.contains('hidden') ? t.showTranslation : t.hideTranslation;
                 } else { 
@@ -1095,7 +1028,6 @@
                         toggleBtn.textContent = originalPara.classList.contains('hidden') ? t.showOriginal : t.hideOriginal;
                     }
                     
-                    // Check if all individual toggles match the global toggle state
                     let allCurrentlyEffectivelyShown = true;
                     document.querySelectorAll('.sentence-pair .individual-toggle-btn').forEach(btnEl => {
                         const parentPairDiv = btnEl.closest('.sentence-pair');
@@ -1125,15 +1057,14 @@
                     pairDiv.appendChild(originalPara);
                 }
             } else if (currentMode === 'test') {
-                originalPara.classList.remove('hidden'); // Always show original in test mode
-                translationPara.classList.add('hidden'); // Hide correct translation initially
+                originalPara.classList.remove('hidden');
+                translationPara.classList.add('hidden');
 
                 const testArea = document.createElement('div');
                 testArea.className = 'test-area mt-3 space-y-2';
 
                 const userAnswerInput = document.createElement('textarea');
                 userAnswerInput.className = 'user-answer-input w-full p-2 border rounded-md resize-y';
-                userAnswerInput.classList.add('border-slate-300'); // Themed via CSS
                 userAnswerInput.rows = 2;
                 userAnswerInput.placeholder = t.enterYourAnswerPlaceholder;
 
@@ -1157,8 +1088,8 @@
                         answerResultDiv.textContent = `${t.incorrectAnswerSymbol} ${t.answerIncorrect}`;
                         answerResultDiv.className = 'answer-result text-lg font-bold mt-1 answer-incorrect';
                     }
-                    translationPara.classList.remove('hidden'); // Show correct answer
-                    checkAnswerBtn.disabled = true; // Disable after checking
+                    translationPara.classList.remove('hidden');
+                    checkAnswerBtn.disabled = true;
                 });
 
                 pairDiv.appendChild(originalPara);
@@ -1182,14 +1113,14 @@
                     audioControlsDiv.appendChild(audioPlayer);
                 } else { 
                     const noAudioMsg = document.createElement('p');
-                    noAudioMsg.className = 'text-sm text-slate-500';
+                    noAudioMsg.className = 'text-sm'; // Rely on var(--text-secondary)
+                    noAudioMsg.style.color = 'var(--text-secondary)';
                     noAudioMsg.textContent = t.noAudioForThisPair;
                     audioControlsDiv.appendChild(noAudioMsg);
                 }
 
                 const buttonContainer = document.createElement('div');
                 buttonContainer.className = 'flex flex-wrap gap-2 mt-2';
-
 
                 const showOriginalBtn = document.createElement('button');
                 showOriginalBtn.className = 'btn btn-secondary btn-small';
@@ -1214,12 +1145,10 @@
                 pairDiv.appendChild(audioControlsDiv);
                 pairDiv.appendChild(originalPara); 
 
-                // Test area for audio mode (optional, but good for recall)
                 const testArea = document.createElement('div');
                 testArea.className = 'test-area mt-3 space-y-2';
                 const userAnswerInput = document.createElement('textarea');
                 userAnswerInput.className = 'user-answer-input w-full p-2 border rounded-md resize-y';
-                userAnswerInput.classList.add('border-slate-300');
                 userAnswerInput.rows = 2;
                 userAnswerInput.placeholder = t.enterYourAnswerPlaceholder; 
                 const checkAnswerBtn = document.createElement('button');
@@ -1241,7 +1170,6 @@
                         answerResultDiv.textContent = `${t.incorrectAnswerSymbol} ${t.answerIncorrect}`;
                         answerResultDiv.className = 'answer-result text-lg font-bold mt-1 answer-incorrect';
                     }
-                    // Optionally show translation text after check in audio mode
                     translationPara.classList.remove('hidden'); 
                     showTranslationBtn.textContent = t.hideTranslationAudio; 
                     checkAnswerBtn.disabled = true;
@@ -1253,11 +1181,10 @@
                 pairDiv.appendChild(translationPara); 
             }
 
-            // Merge buttons (common for all modes if index > 0)
             if (index > 0) {
                 const mergeButtonContainer = document.createElement('div');
                 mergeButtonContainer.className = 'mt-3 border-t pt-3 flex flex-wrap gap-2 justify-start';
-                mergeButtonContainer.style.borderColor = 'var(--input-border)'; // Themed border
+                mergeButtonContainer.style.borderColor = 'var(--input-border-color)';
 
                 const mergeOriginalBtn = document.createElement('button');
                 mergeOriginalBtn.className = 'btn btn-warning btn-small';
@@ -1290,22 +1217,20 @@
         updateUndoRedoButtonStates();
     }
     
-
-    // --- Event Listeners ---
     modeButtons.forEach(button => {
         button.addEventListener('click', () => {
             currentMode = button.dataset.mode;
             allTranslationsManuallyToggled = false; 
-            updateModeSelectionUI(); // This will call renderSentences if needed
+            updateModeSelectionUI();
         });
     });
 
     toggleDisplayPriorityBtn.addEventListener('click', () => {
         displayPriority = displayPriority === 'originalFirst' ? 'translationFirst' : 'originalFirst';
         allTranslationsManuallyToggled = false; 
-        updateUIText(); // Update button text
+        updateUIText();
         if (!learningSection.classList.contains('hidden') && currentPairedSentences.length > 0 && currentMode === 'memorization') {
-            renderSentences(); // Re-render for memorization mode
+            renderSentences();
         }
     });
 
@@ -1315,16 +1240,15 @@
         const translationText = translationTextInput.value;
 
         if (!originalText.trim() && !translationText.trim()) {
-            // Check if both are empty or only one is empty
-            if (!originalText.trim() && translationText.trim() || originalText.trim() && !translationText.trim()) {
-                 showMessage(t.errorBothTextsRequired, "error"); // Use translated key
-            } else { // Both are empty
-                 showMessage(t.errorBothTextsRequired, "error");
-            }
+             showMessage(t.errorBothTextsRequired, "error", true); // isKey true
+            return;
+        }
+         if (!originalText.trim() || !translationText.trim()) { // one is empty
+             showMessage(t.errorBothTextsRequired, "error", true); // isKey true
             return;
         }
         
-        addEntryToTextInputHistory(originalText, translationText, null); // null for manual input source
+        addEntryToTextInputHistory(originalText, translationText, null);
 
         const originalSentences = splitTextIntoSentences(originalText);
         const translationSentences = splitTextIntoSentences(translationText);
@@ -1341,21 +1265,20 @@
         const pairCount = Math.min(originalSentences.length, translationSentences.length);
 
         if (originalSentences.length !== translationSentences.length) {
-            showMessage(t.warningSentenceCountMismatch(originalSentences.length, translationSentences.length, pairCount), "warning");
+            showMessage(t.warningSentenceCountMismatch(originalSentences.length, translationSentences.length, pairCount), "warning", false); // isKey false as it's already processed
         } else {
-            showMessage(t.successPairsCreated(pairCount), "success");
+            showMessage(t.successPairsCreated(pairCount), "success", false); // isKey false
         }
 
         let audioAssignedCount = 0;
         for (let i = 0; i < pairCount; i++) {
             let audioSrc = null;
-            // Assign audio files sequentially if in audio mode and files are loaded
             if (currentMode === 'audio' && loadedAudioFiles[i]) {
                 audioSrc = loadedAudioFiles[i].url;
                 audioAssignedCount++;
             }
             currentPairedSentences.push({
-                id: `s-${Date.now()}-${i}`, // Unique ID for each pair
+                id: `s-${Date.now()}-${i}`,
                 original: originalSentences[i],
                 translation: translationSentences[i],
                 audioSrc: audioSrc
@@ -1366,14 +1289,13 @@
             if (loadedAudioFiles.length === 0 && pairCount > 0) {
                 showMessage("errorNoAudioFilesSelectedForAudioMode", "warning", true, 5000);
             } else if (audioAssignedCount < pairCount && pairCount > 0 && loadedAudioFiles.length > 0) {
-                // Only show this warning if some files were loaded but not enough
                 showMessage(t.warningNotAllPairsHaveAudio(audioAssignedCount, pairCount), "warning", false, 5000);
             }
         }
         
         inputSection.classList.add('hidden');
         learningSection.classList.remove('hidden'); 
-        updateModeSelectionUI(); // This will call renderSentences
+        updateModeSelectionUI();
         
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
@@ -1383,7 +1305,7 @@
         const type = event.target.dataset.type;
 
         if (currentIndex > 0 && currentIndex < currentPairedSentences.length) {
-            saveStateForUndo(); // Save current state before modification
+            saveStateForUndo();
 
             const previousPair = currentPairedSentences[currentIndex - 1];
             const currentMergingPair = currentPairedSentences[currentIndex];
@@ -1391,18 +1313,15 @@
 
             if (type === 'original') {
                 previousPair.original = (previousPair.original + " " + currentMergingPair.original).trim();
-                // Shift subsequent original sentences up
                 for (let i = currentIndex; i < currentPairedSentences.length - 1; i++) {
                     currentPairedSentences[i].original = currentPairedSentences[i + 1].original;
                 }
-                // Clear the original text of the last pair if it was shifted from
-                if (currentPairedSentences.length > currentIndex) { // Check if there's a last pair to clear
+                if (currentPairedSentences.length > currentIndex) {
                      currentPairedSentences[currentPairedSentences.length -1].original = "";
                 }
                 messageKey = "successMerged";
             } else if (type === 'translation') {
                 previousPair.translation = (previousPair.translation + " " + currentMergingPair.translation).trim();
-                // Shift subsequent translation sentences up
                 for (let i = currentIndex; i < currentPairedSentences.length - 1; i++) {
                     currentPairedSentences[i].translation = currentPairedSentences[i + 1].translation;
                 }
@@ -1413,15 +1332,13 @@
             } else if (type === 'full_pair') {
                 previousPair.original = (previousPair.original + " " + currentMergingPair.original).trim();
                 previousPair.translation = (previousPair.translation + " " + currentMergingPair.translation).trim();
-                // If previous pair had no audio but current one does, take current's audio
                 if (!previousPair.audioSrc && currentMergingPair.audioSrc) {
                     previousPair.audioSrc = currentMergingPair.audioSrc;
                 }
-                currentPairedSentences.splice(currentIndex, 1); // Remove the merged pair
+                currentPairedSentences.splice(currentIndex, 1);
                 messageKey = "successPairMerged";
             }
             
-            // If merging only original or translation, check if the last pair became empty
             if (type === 'original' || type === 'translation') {
                 if (currentPairedSentences.length > 0) {
                     const lastPairIndex = currentPairedSentences.length - 1;
@@ -1431,7 +1348,7 @@
                 }
             }
             
-            allTranslationsManuallyToggled = false; // Reset bulk toggle state
+            allTranslationsManuallyToggled = false;
             renderSentences();
             showMessage(messageKey, "success", true);
         }
@@ -1439,13 +1356,11 @@
     
     undoMergeBtn.addEventListener('click', () => {
         if (undoHistory.length > 0) {
-            // Current state is not pushed to redoHistory here as per original logic.
-            // If redo is desired, currentPairedSentences would be pushed to redoHistory.
             currentPairedSentences = undoHistory.pop();
             allTranslationsManuallyToggled = false; 
             renderSentences();
             showMessage("successUndo", "success", true);
-            updateUndoRedoButtonStates(); // Update button state after undo
+            updateUndoRedoButtonStates();
         } else {
             showMessage("errorNoUndoState", "warning", true);
         }
@@ -1453,8 +1368,7 @@
 
     shufflePairsBtn.addEventListener('click', () => {
         if (currentPairedSentences.length > 1) {
-            saveStateForUndo(); // Save state before shuffling
-            // Fisher-Yates shuffle
+            saveStateForUndo();
             for (let i = currentPairedSentences.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [currentPairedSentences[i], currentPairedSentences[j]] = [currentPairedSentences[j], currentPairedSentences[i]];
@@ -1470,7 +1384,6 @@
 
         allTranslationsManuallyToggled = !allTranslationsManuallyToggled; 
 
-        // Update all individual sentence pairs based on the new global state
         currentPairedSentences.forEach(pair => {
             const pairDiv = sentenceContainer.querySelector(`.sentence-pair[data-id="${pair.id}"]`);
             if (!pairDiv) return;
@@ -1487,23 +1400,21 @@
                 if (individualToggleBtn) individualToggleBtn.textContent = allTranslationsManuallyToggled ? t.hideOriginal : t.showOriginal;
             }
         });
-        // Update the main toggle button's text
         if (toggleAllTranslationsBtn) {
             toggleAllTranslationsBtn.textContent = allTranslationsManuallyToggled ? t.hideAllTranslations : t.showAllTranslations;
         }
     });
-
 
     resetAllBtn.addEventListener('click', () => {
         originalTextInput.value = '';
         translationTextInput.value = '';
         currentPairedSentences = [];
         clearUndoRedoHistory();
-        revokePreviousAudioUrls(); // Clear audio object URLs
-        loadedAudioFiles = [];    // Clear the list of loaded files
-        audioFilesInput.value = ''; // Reset the file input field
+        revokePreviousAudioUrls();
+        loadedAudioFiles = [];
+        audioFilesInput.value = '';
         sentenceContainer.innerHTML = '';
-        if (!learningSection.classList.contains('hidden')) { // Only if learning section is visible
+        if (!learningSection.classList.contains('hidden')) {
             learningSection.classList.add('hidden');
             inputSection.classList.remove('hidden');
         }
@@ -1516,100 +1427,77 @@
     backToInputBtn.addEventListener('click', () => {
         learningSection.classList.add('hidden');
         inputSection.classList.remove('hidden');
-        messageArea.innerHTML = ''; // Clear messages when going back
+        messageArea.innerHTML = '';
         allTranslationsManuallyToggled = false; 
-        // Do not clear currentPairedSentences or undo history here, user might want to resume
         originalTextInput.focus();
     });
     
     toggleHistoryBtn.addEventListener('click', () => {
         historyItemsContainer.classList.toggle('hidden');
-        updateToggleHistoryButtonText(); // Update button text based on new state
+        updateToggleHistoryButtonText();
     });
 
     clearHistoryBtn.addEventListener('click', () => {
         if (textInputHistory.length > 0 && confirm(t.confirmClearHistory)) {
             textInputHistory = [];
             saveTextInputHistoryToStorage();
-            renderTextInputHistoryList(); // Re-render to show "No history"
+            renderTextInputHistoryList();
             showMessage(t.historyCleared, "success", true);
         }
     });
 
     importCsvBtn.addEventListener('click', () => {
-        csvFileInput.click(); // Trigger hidden file input
+        csvFileInput.click();
     });
 
-    /**
-     * Parses a CSV text string into an array of records (rows).
-     * Handles quoted fields containing commas, newlines, and escaped double quotes ("").
-     * @param {string} csvText The raw CSV text.
-     * @returns {string[][]} An array of rows, where each row is an array of cell strings.
-     */
     function parseCSVText_custom(csvText) {
         const records = [];
         let currentRecord = [];
         let currentField = "";
         let inQuotes = false;
-
-        // Normalize line endings to \n
         const normalizedText = csvText.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
 
         for (let i = 0; i < normalizedText.length; i++) {
             const char = normalizedText[i];
-
             if (inQuotes) {
                 if (char === '"') {
-                    // Check for escaped quote ("")
                     if (i + 1 < normalizedText.length && normalizedText[i + 1] === '"') {
                         currentField += '"';
-                        i++; // Skip next quote
+                        i++;
                     } else {
-                        inQuotes = false; // End of quoted field
+                        inQuotes = false;
                     }
                 } else {
-                    currentField += char; // Character inside quoted field
+                    currentField += char;
                 }
-            } else { // Not in quotes
+            } else {
                 if (char === '"') {
-                    // Start of a new quoted field.
-                    // If currentField has content, it's an unquoted field ending before a new quoted one.
-                    // This case is ambiguous in "simple" CSV. Standard parsers might error or treat the quote literally.
-                    // Assuming if a quote starts a field, the field is quoted.
-                    // If currentField is not empty here, it implies malformed CSV or a quote within an unquoted field.
-                    // For this parser: if currentField is empty, this is the start of a quoted field.
-                    // If currentField is not empty, the quote is treated as a literal character in an unquoted field.
                     if (currentField.length === 0) {
                         inQuotes = true;
                     } else {
-                         currentField += char; // Treat as literal if field already has content
+                         currentField += char;
                     }
                 } else if (char === ',') {
                     currentRecord.push(currentField);
                     currentField = "";
                 } else if (char === '\n') {
-                    currentRecord.push(currentField); // Add last field of the row
-                    records.push([...currentRecord]); // Add completed record
-                    currentRecord = []; // Start new record
+                    currentRecord.push(currentField);
+                    records.push([...currentRecord]);
+                    currentRecord = [];
                     currentField = "";
                 } else {
-                    currentField += char; // Character in unquoted field
+                    currentField += char;
                 }
             }
         }
-        // Add the last field and record after loop
         currentRecord.push(currentField);
-        // Add the last record only if it has content or if it's the only record
         if (currentRecord.some(f => f.trim().length > 0) || (records.length === 0 && currentRecord.length > 0)) {
-             if (!(records.length === 0 && currentRecord.length === 1 && currentRecord[0].trim() === "")) { // Avoid adding totally empty single line
+             if (!(records.length === 0 && currentRecord.length === 1 && currentRecord[0].trim() === "")) {
                 records.push([...currentRecord]);
              }
         }
-        
-        // Filter out records that are completely empty or just commas
         return records.filter(record => record.length > 0 && record.some(field => field.trim() !== ""));
     }
-
 
     csvFileInput.addEventListener('change', (event) => {
         const file = event.target.files[0];
@@ -1620,42 +1508,34 @@
                 try {
                     const parsedRows = parseCSVText_custom(csvText);
                     
-                    if (parsedRows.length > 0 && parsedRows.some(row => row.length >=1 && row[0].trim() !== "")) { // Check if there's at least one row with content in the first column
+                    if (parsedRows.length > 0 && parsedRows.some(row => row.length >=1 && (row[0] || "").trim() !== "")) {
                         let originalTextParts = [];
                         let translationTextParts = [];
 
                         parsedRows.forEach(rowCells => {
-                            // Ensure cells are strings, default to empty string if undefined
                             let cellA = String(rowCells.length > 0 ? rowCells[0] : "").trim();
                             let cellB = String(rowCells.length > 1 ? rowCells[1] : "").trim();
-                            
-                            // Replace literal "\\n" with actual newline characters for multi-line cells
                             cellA = cellA.replace(/\\n/g, '\n');
                             cellB = cellB.replace(/\\n/g, '\n');
 
-                            if (cellA) { // Only add if cell A (original) has content
+                            if (cellA) {
                                 originalTextParts.push(cellA);
-                                // Add cell B content (translation), even if empty, to maintain pairing
                                 translationTextParts.push(cellB);
                             }
                         });
                         
-                        // Join parts, ensuring each ends with a sentence delimiter.
-                        // Using "。" for Japanese-like originals and "." for English-like translations as a heuristic.
-                        // This might need to be smarter based on actual content language.
                         const finalOriginalText = originalTextParts
-                            .map(p => p.replace(/[.。？！]$/, "") + (/[一-龠ぁ-んァ-ヶ]/.test(p) ? "。" : ".")) // Add Japanese period if Japanese chars detected, else English period
-                            .join(" "); // Join with space to allow splitTextIntoSentences to work correctly
+                            .map(p => p.replace(/[.。？！]$/, "") + (/[一-龠ぁ-んァ-ヶ]/.test(p) ? "。" : "."))
+                            .join(" ");
 
                         const finalTranslationText = translationTextParts
                             .map(p => {
-                                if (!p) return "."; // If part is empty, just a period.
+                                if (!p) return ".";
                                 return p.replace(/[.。？！]$/, "") + (/[一-龠ぁ-んァ-ヶ]/.test(p) ? "。" : ".");
                             })
                             .join(" ")
-                            .replace(/\s+\.\s*/g, ". ") // Clean up: " . " -> ". "
+                            .replace(/\s+\.\s*/g, ". ")
                             .trim();
-
 
                         originalTextInput.value = finalOriginalText;
                         translationTextInput.value = finalTranslationText;
@@ -1663,10 +1543,9 @@
                         if (finalOriginalText || finalTranslationText) {
                             showMessage("successCsvImported", "success", true);
                             addEntryToTextInputHistory(finalOriginalText, finalTranslationText, file.name);
-                            clearUndoRedoHistory(); // New text loaded, clear old undo history
+                            clearUndoRedoHistory();
                             updateUndoRedoButtonStates();
                         } else {
-                            // This case should be rare if the outer parsedRows.length check is good
                             showMessage(t.errorCsvFormat, "error", true);
                         }
                     } else {
@@ -1677,8 +1556,8 @@
                     console.error("CSV Parse Error:", err);
                 }
             };
-            reader.readAsText(file, 'UTF-8'); // Specify UTF-8 encoding
-            csvFileInput.value = ''; // Reset file input to allow re-selection of the same file
+            reader.readAsText(file, 'UTF-8');
+            csvFileInput.value = '';
         }
     });
 
@@ -1687,10 +1566,8 @@
             showMessage("errorNoPairsToExport", "warning", true);
             return;
         }
-        // CSV Header
         let csvContent = '"Original","Translation"\n'; 
         currentPairedSentences.forEach(pair => {
-            // Escape double quotes within fields by doubling them
             const original = `"${pair.original.replace(/"/g, '""')}"`;
             const translation = `"${pair.translation.replace(/"/g, '""')}"`;
             csvContent += `${original},${translation}\n`;
@@ -1698,7 +1575,7 @@
 
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
-        if (link.download !== undefined) { // Check for browser support
+        if (link.download !== undefined) {
             const url = URL.createObjectURL(blob);
             link.setAttribute("href", url);
             link.setAttribute("download", "learned_pairs.csv");
@@ -1706,29 +1583,25 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            URL.revokeObjectURL(url); // Clean up
+            URL.revokeObjectURL(url);
         } else {
             showMessage(t.csvExportNotSupported, "warning", true);
         }
     });
 
-    // --- Initialization ---
     document.addEventListener('DOMContentLoaded', () => {
-        loadAndApplyTheme(); // Load and apply theme first
-        loadAndApplyLanguage(); // Load and apply language (this will call updateUIText)
+        loadAndApplyTheme();
+        loadAndApplyLanguage();
         loadTextInputHistoryFromStorage();
-        // updateUIText(); // Called by loadAndApplyLanguage
         updateUndoRedoButtonStates();
         renderTextInputHistoryList();
-        updateModeSelectionUI(); // Set initial mode button styles
+        updateModeSelectionUI();
     });
 
-    // Cleanup audio object URLs on page leave
     window.addEventListener('beforeunload', () => {
         revokePreviousAudioUrls();
     });
 
-    // PWA Service Worker Registration (from your original script)
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js')
