@@ -1,12 +1,9 @@
 const CACHE_NAME = 'multi-lang-app-v1';
 const ASSETS = [
-'./',
-'./index.html',
-'./manifest.json',
-'./icons/icon-192.png',
-'./icons/icon-512.png',
-'./styles.css',   // スタイルシート（存在する場合）
-'./main.js'       // メインスクリプト（存在する場合）
+'index.html',
+'manifest.json',
+'icons/icon-192.png',
+'icons/icon-512.png'
 ];
 
 self.addEventListener('install', event => {
