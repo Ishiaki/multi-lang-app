@@ -579,6 +579,7 @@
             mySetDeleted: (name) => `マイセット「${name}」を削除しました。`,
             errorSavingMySetNoName: "セット名が入力されていません。",
             errorSavingMySetEmpty: "原文または訳文が空のため、マイセットとして保存できません。",
+            unnamedMySet: "(無名のセット)", // For My Sets
             clearAppData: "アプリデータをクリア",
             confirmClearAppData: "アプリの全データ（履歴、マイセット、設定）をクリアしますか？この操作は元に戻せません。",
             appDataCleared: "アプリデータをクリアしました。ページをリロードします。",
@@ -676,6 +677,7 @@
             mySetDeleted: (name) => `Set "${name}" deleted.`,
             errorSavingMySetNoName: "Set name cannot be empty.",
             errorSavingMySetEmpty: "Cannot save an empty set. Please enter original or translation text.",
+            unnamedMySet: "(Unnamed Set)",
             clearAppData: "Clear App Data",
             confirmClearAppData: "Are you sure you want to clear all app data (history, my sets, settings)? This action cannot be undone.",
             appDataCleared: "App data cleared. Reloading page.",
@@ -881,8 +883,8 @@
         toggleHistoryBtn.textContent = historyItemsContainer.classList.contains('hidden') ? t.showHistory : t.hideHistory;
     }
      function updateToggleMySetsButtonText() {
-        const mysetsContainerEl = document.getElementById('mysets-container'); // Get element inside function
-        if (mysetsContainerEl) {
+        const mysetsContainerEl = document.getElementById('mysets-container'); 
+        if (mysetsContainerEl) { // Check if element exists
             toggleMySetsBtn.textContent = mysetsContainerEl.classList.contains('hidden') ? t.showMySets : t.hideMySets;
         }
     }
@@ -957,7 +959,7 @@
 
     audioFilesInput.addEventListener('change', (event) => {
         revokePreviousAudioUrls(); 
-        const files = Array.from(event.target.files); // No sort, use user selection order
+        const files = Array.from(event.target.files); // Keep user selection order
         
         loadedAudioFiles = files.map(file => {
             const url = URL.createObjectURL(file);
@@ -1107,18 +1109,19 @@
     }
 
     function renderMySetList() {
-        const mysetsContainerEl = document.getElementById('mysets-container'); // Ensure it's defined
-        if (!mysetsContainerEl) return;
+        const mysetsContainerEl = document.getElementById('mysets-container');
+        const noMySetsMsgEl = document.getElementById('no-mysets-message'); 
+        if (!mysetsContainerEl || !noMySetsMsgEl) return;
 
         const dynamicItems = mysetsContainerEl.querySelectorAll('.myset-item');
         dynamicItems.forEach(item => item.remove());
 
         if (mySets.length === 0) {
-            noMySetsMessage.style.display = 'block';
-            noMySetsMessage.textContent = t.noMySets;
+            noMySetsMsgEl.style.display = 'block';
+            noMySetsMsgEl.textContent = t.noMySets;
             return;
         }
-        noMySetsMessage.style.display = 'none';
+        noMySetsMsgEl.style.display = 'none';
 
         const fragment = document.createDocumentFragment();
         mySets.forEach((set, index) => {
@@ -1126,9 +1129,9 @@
             setDiv.className = 'myset-item p-3 border rounded-md flex justify-between items-center';
             
             const setNamePara = document.createElement('p');
-            setNamePara.className = 'text-sm text-slate-600 break-all flex-grow mr-2';
+            setNamePara.className = 'text-sm break-all flex-grow mr-2'; 
             setNamePara.style.color = 'var(--text-primary)';
-            setNamePara.textContent = set.name;
+            setNamePara.textContent = set.name || t.unnamedMySet || "(Unnamed Set)";
             setNamePara.title = `${set.original.substring(0,50)}...\n---\n${set.translation.substring(0,50)}...`;
 
             const buttonsDiv = document.createElement('div');
@@ -1199,7 +1202,7 @@
     });
 
     toggleMySetsBtn.addEventListener('click', () => {
-        const mysetsContainerEl = document.getElementById('mysets-container'); // Get element inside function
+        const mysetsContainerEl = document.getElementById('mysets-container'); 
         if (mysetsContainerEl) {
             mysetsContainerEl.classList.toggle('hidden');
             updateToggleMySetsButtonText();
@@ -1240,9 +1243,14 @@
     }
     
     function generatePairId(original, translation) {
-        const cleanOriginal = String(original).replace(/\n/g, "__NL__").replace(/"/g, "__DQ__").replace(/'/g, "__SQ__");
-        const cleanTranslation = String(translation).replace(/\n/g, "__NL__").replace(/"/g, "__DQ__").replace(/'/g, "__SQ__");
-        return `pairid-${cleanOriginal}-${cleanTranslation}`;
+        const sanitize = (str) => String(str)
+            .replace(/\r\n|\r|\n/g, "__NL__") 
+            .replace(/"/g, "__DQ__")
+            .replace(/'/g, "__SQ__")
+            .replace(/\[/g, "__LB__") 
+            .replace(/\]/g, "__RB__")
+            .replace(/\./g, "__DT__"); 
+        return `pairid-${sanitize(original)}-${sanitize(translation)}`;
     }
 
     function renderSidebar(pairsToDisplay) {
@@ -1269,7 +1277,7 @@
                             contentWrapper.classList.remove('sidebar-open'); 
                         }
                     } else {
-                        console.warn("Target sentence pair not found for ID:", targetPairId, "with selector:", selector);
+                        console.warn("Sidebar click: Target sentence pair not found for ID:", targetPairId, "with selector:", selector);
                     }
                 });
                 sidebarSentenceList.appendChild(item);
