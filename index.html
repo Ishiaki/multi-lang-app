@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html lang="ja"> <head>
+<html lang="ja">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>多言語学習アプリ</title> <link rel="manifest" href="./manifest.json" />
-    <meta name="theme-color" content="#14b8a6" /> <script src="https://cdn.tailwindcss.com"></script>
+    <title>多言語学習アプリ</title>
+    <link rel="manifest" href="./manifest.json" />
+    <meta name="theme-color" content="#14b8a6" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -14,18 +17,18 @@
             --text-accent-strong: #0d9488; /* teal-600 */
             --container-bg: white;
             --container-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --input-border-color: #64748b; /* Renamed from --input-border to avoid conflict with CSS border property */
-            --input-focus-border: #14b8a6;
+            --input-border: #cbd5e1; /* slate-300 (adjusted for better visibility in both modes) */
+            --input-focus-border: #14b8a6; /* focus:border-teal-500 */
             --input-focus-ring: #14b8a6;
-            --history-item-bg: #f1f5f9;
-            --history-item-border-color: #e2e8f0; /* Renamed */
-            --history-item-hover-bg: #ccfbf1;
+            --history-item-bg: #f1f5f9; /* bg-slate-100 */
+            --history-item-border: #e2e8f0; /* border-slate-200 */
+            --history-item-hover-bg: #ccfbf1; /* bg-teal-100 */
             --scrollbar-thumb: #cbd5e1;
             --scrollbar-thumb-hover: #94a3b8;
             --selection-bg: #5eead4;
             --selection-text: #134e4a;
             --btn-primary-bg: #14b8a6;
-            --btn-primary-border-color: #0d9488; /* Renamed */
+            --btn-primary-border: #0d9488;
             --btn-primary-hover-bg: #0d9488;
             --btn-primary-active-bg: #0f766e;
             --btn-primary-focus-ring: rgba(45, 212, 191, 0.45);
@@ -33,49 +36,65 @@
 
             --message-error-bg: #fee2e2;
             --message-error-text: #b91c1c;
-            --message-error-border-color: #fecaca; /* Renamed */
+            --message-error-border: #fecaca;
             --message-warning-bg: #ffedd5;
             --message-warning-text: #c2410c;
-            --message-warning-border-color: #fed7aa; /* Renamed */
+            --message-warning-border: #fed7aa;
             --message-success-bg: #ccfbf1;
             --message-success-text: #0f766e;
-            --message-success-border-color: #99f6e4; /* Renamed */
+            --message-success-border: #99f6e4;
+
+            /* Learning Section Specifics */
+            --sentence-pair-bg: var(--container-bg);
+            --sentence-pair-border: var(--input-border);
+            --original-sentence-text: var(--text-primary);
+            --translation-sentence-bg: var(--history-item-bg);
+            --translation-sentence-text: var(--text-primary);
+            --translation-sentence-border: var(--input-border);
+
         }
 
         html.dark {
-            --bg-primary: #121212; /* Very dark gray (Material Design dark theme standard) */
-            --text-primary: #FFFFFF; /* Pure white */
-            --text-secondary: #a1a1aa; /* zinc-400, for less emphasized text */
+            --bg-primary: #0f172a; /* slate-900 */
+            --text-primary: #e2e8f0; /* slate-200 */
+            --text-secondary: #94a3b8; /* slate-400 */
             --text-accent: #2dd4bf; /* teal-400 */
             --text-accent-strong: #14b8a6; /* teal-500 */
-            --container-bg: #18181b; /* zinc-900, very dark, slightly lighter than body */
-            --container-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.15); /* Darker, more subtle shadow */
-            --input-border-color: #3f3f46; /* zinc-700 */
-            --input-focus-border: var(--text-accent);
-            --input-focus-ring: var(--text-accent);
-            --history-item-bg: #27272a; /* zinc-800, for translation box, distinct but dark */
-            --history-item-border-color: #3f3f46; /* zinc-700 */
-            --history-item-hover-bg: #3f3f46; /* zinc-700 for hover, slightly lighter */
+            --container-bg: #1e293b; /* slate-800 */
+            --container-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.07);
+            --input-border: #475569; /* slate-600 (adjusted for better visibility in both modes) */
+            --input-focus-border: #2dd4bf; /* teal-400 */
+            --input-focus-ring: #2dd4bf;
+            --history-item-bg: #334155; /* slate-700 */
+            --history-item-border: #475569; /* slate-600 */
+            --history-item-hover-bg: #0f766e; /* teal-700 */
             --scrollbar-thumb: #475569;
             --scrollbar-thumb-hover: #64748b;
             --selection-bg: #14b8a6;
             --selection-text: #f0fdfa;
-            --btn-primary-bg: #14b8a6; /* Teal 500 */
-            --btn-primary-border-color: #0d9488; /* Teal 600 */
+            --btn-primary-bg: #14b8a6;
+            --btn-primary-border: #0d9488;
             --btn-primary-hover-bg: #0d9488;
             --btn-primary-active-bg: #0f766e;
             --btn-primary-focus-ring: rgba(45, 212, 191, 0.45);
-            --btn-text-color: white; /* Default for primary buttons */
+            
+            --message-error-bg: #5f2120; 
+            --message-error-text: #fca5a5;
+            --message-error-border: #b91c1c;
+            --message-warning-bg: #62300a; 
+            --message-warning-text: #fdba74;
+            --message-warning-border: #c2410c;
+            --message-success-bg: #0c4a4a; 
+            --message-success-text: #5eead4;
+            --message-success-border: #0f766e;
 
-            --message-error-bg: #3f2222; /* Darker red */
-            --message-error-text: #fca5a5; /* Light red text */
-            --message-error-border-color: #7f1d1d;
-            --message-warning-bg: #452f11; /* Darker orange/amber */
-            --message-warning-text: #fdba74; /* Light orange text */
-            --message-warning-border-color: #92400e;
-            --message-success-bg: #103c30; /* Darker green/teal */
-            --message-success-text: #5eead4; /* Light teal text */
-            --message-success-border-color: #0f766e;
+            /* Learning Section Specifics for Dark Mode */
+            --sentence-pair-bg: var(--container-bg); 
+            --sentence-pair-border: var(--input-border);
+            --original-sentence-text: var(--text-primary);
+            --translation-sentence-bg: var(--history-item-bg); 
+            --translation-sentence-text: var(--text-primary);
+            --translation-sentence-border: var(--input-border);
         }
 
         body {
@@ -89,16 +108,16 @@
         .main-container {
             background-color: var(--container-bg);
             box-shadow: var(--container-shadow);
-            border-radius: 0.75rem;
-            margin-left: auto;
-            margin-right: auto;
+            border-radius: 0.75rem; 
+            margin-left: auto; 
+            margin-right: auto; 
         }
         #input-section textarea {
             min-height: 100px;
             border-width: 2px;
-            border-color: var(--input-border-color);
-            background-color: var(--container-bg);
-            color: var(--text-primary);
+            border-color: var(--input-border);
+            background-color: var(--container-bg); 
+            color: var(--text-primary); 
         }
         #input-section textarea::placeholder {
             color: var(--text-secondary);
@@ -110,7 +129,7 @@
         #learning-section textarea.user-answer-input {
             min-height: 60px;
             border-width: 1px;
-            border-color: var(--input-border-color);
+            border-color: var(--input-border); 
             background-color: var(--container-bg);
             color: var(--text-primary);
         }
@@ -123,156 +142,167 @@
         }
 
         .message {
-            padding: 0.75rem 1rem; margin-bottom: 1rem; border-radius: 0.375rem;
-            font-weight: 500; transition: opacity 0.3s ease-in-out;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0.375rem; 
+            font-weight: 500;
+            transition: opacity 0.3s ease-in-out;
         }
-        .message-error { background-color: var(--message-error-bg); color: var(--message-error-text); border: 1px solid var(--message-error-border-color); }
-        .message-warning { background-color: var(--message-warning-bg); color: var(--message-warning-text); border: 1px solid var(--message-warning-border-color); }
-        .message-success { background-color: var(--message-success-bg); color: var(--message-success-text); border: 1px solid var(--message-success-border-color); }
+        .message-error { background-color: var(--message-error-bg); color: var(--message-error-text); border: 1px solid var(--message-error-border); }
+        .message-warning { background-color: var(--message-warning-bg); color: var(--message-warning-text); border: 1px solid var(--message-warning-border); }
+        .message-success { background-color: var(--message-success-bg); color: var(--message-success-text); border: 1px solid var(--message-success-border); }
 
         .btn {
-            font-weight: 600; padding: 0.5rem 1rem; border-radius: 0.375rem;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
             transition-property: background-color, border-color, color, box-shadow, transform;
-            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms;
-            font-size: 0.875rem; line-height: 1.25rem;
-            border: 1px solid var(--input-border-color); /* Use variable for base border */
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            cursor: pointer; display: inline-block; text-align: center;
-            color: var(--btn-text-color);
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            border: 1px solid var(--input-border); 
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); 
+            cursor: pointer;
+            display: inline-block;
+            text-align: center;
+            color: var(--btn-text-color); 
         }
-        html.dark .btn { /* Adjust base button border for dark mode */
-             border-color: #52525b; /* zinc-600, slightly lighter than input border for buttons */
+        .btn:hover {
+            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
-
-        .btn:hover { box-shadow: 0 2px 4px -1px rgba(0,0,0,0.06), 0 2px 4px -1px rgba(0,0,0,0.06); }
-        .btn:active { box-shadow: inset 0 1px 2px 0 rgba(0,0,0,0.05); }
-        .btn:focus { outline: 2px solid transparent; outline-offset: 2px; }
-
+        .btn:active {
+            box-shadow: inset 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        .btn:focus {
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+        }
         .btn-primary {
             background-color: var(--btn-primary-bg);
-            border-color: var(--btn-primary-border-color);
+            border-color: var(--btn-primary-border);
         }
         .btn-primary:hover { background-color: var(--btn-primary-hover-bg); }
         .btn-primary:active { background-color: var(--btn-primary-active-bg); }
         .btn-primary:focus { box-shadow: 0 0 0 3px var(--btn-primary-focus-ring); }
 
         .btn-toggle-original-first {
-            background-color: var(--btn-primary-bg);
-            border-color: var(--btn-primary-border-color);
+            background-color: var(--btn-primary-bg); 
+            border-color: var(--btn-primary-border);
             padding: 0.75rem 1.5rem; font-size: 1rem; line-height: 1.5rem;
         }
         .btn-toggle-original-first:hover { background-color: var(--btn-primary-hover-bg); }
         .btn-toggle-original-first:active { background-color: var(--btn-primary-active-bg); }
         .btn-toggle-original-first:focus { box-shadow: 0 0 0 3px var(--btn-primary-focus-ring); }
 
-        .btn-toggle-translation-first {
-            background-color: #8b5cf6; border-color: #7c3aed; color: white;
+        .btn-toggle-translation-first { 
+            background-color: #8b5cf6; border-color: #7c3aed;
             padding: 0.75rem 1.5rem; font-size: 1rem; line-height: 1.5rem;
         }
         .btn-toggle-translation-first:hover { background-color: #7c3aed; }
         .btn-toggle-translation-first:active { background-color: #6d28d9; }
         .btn-toggle-translation-first:focus { box-shadow: 0 0 0 3px rgba(192, 132, 252, 0.45); }
         html.dark .btn-toggle-translation-first {
-            background-color: #7c3aed; border-color: #6d28d9; color: var(--text-primary);
+            background-color: #a78bfa; border-color: #8b5cf6; 
         }
-        html.dark .btn-toggle-translation-first:hover { background-color: #6d28d9; }
+        html.dark .btn-toggle-translation-first:hover { background-color: #8b5cf6; }
 
 
-        .btn-display-priority-original {
-            background-color: #6366f1; border-color: #4f46e5; color: white;
+        .btn-display-priority-original { 
+            background-color: #6366f1; border-color: #4f46e5;
             padding: 0.625rem 1.25rem; font-size: 0.875rem;
         }
         .btn-display-priority-original:hover { background-color: #4f46e5; }
         .btn-display-priority-original:active { background-color: #4338ca; }
         .btn-display-priority-original:focus { box-shadow: 0 0 0 3px rgba(165, 180, 252, 0.45); }
         html.dark .btn-display-priority-original {
-             background-color: #4f46e5; border-color: #4338ca; color: var(--text-primary);
+             background-color: #818cf8; border-color: #6366f1; 
         }
-        html.dark .btn-display-priority-original:hover { background-color: #4338ca; }
+        html.dark .btn-display-priority-original:hover { background-color: #6366f1; }
 
 
-        .btn-display-priority-translation {
-            background-color: #f97316; border-color: #ea580c; color: white;
+        .btn-display-priority-translation { 
+            background-color: #f97316; border-color: #ea580c;
             padding: 0.625rem 1.25rem; font-size: 0.875rem;
         }
         .btn-display-priority-translation:hover { background-color: #ea580c; }
         .btn-display-priority-translation:active { background-color: #c2410c; }
         .btn-display-priority-translation:focus { box-shadow: 0 0 0 3px rgba(253, 186, 116, 0.45); }
         html.dark .btn-display-priority-translation {
-            background-color: #ea580c; border-color: #c2410c; color: var(--text-primary);
+            background-color: #fb923c; border-color: #f97316; 
         }
-        html.dark .btn-display-priority-translation:hover { background-color: #c2410c; }
+        html.dark .btn-display-priority-translation:hover { background-color: #f97316; }
 
 
-        .btn-secondary { background-color: #64748b; border-color: #475569; color: white; }
+        .btn-secondary {
+            background-color: #64748b; border-color: #475569; color: white;
+        }
         .btn-secondary:hover { background-color: #475569; }
         .btn-secondary:active { background-color: #334155; }
         .btn-secondary:focus { box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.45); }
         html.dark .btn-secondary {
-            background-color: #3f3f46; border-color: #27272a; color: var(--text-primary); /* Zinc 700/800 */
+            background-color: #475569; border-color: #334155; color: #e2e8f0;
         }
-        html.dark .btn-secondary:hover { background-color: #27272a; }
+        html.dark .btn-secondary:hover { background-color: #334155; }
 
 
-        .btn-warning { background-color: #f59e0b; border-color: #d97706; color: white; }
+        .btn-warning { background-color: #f59e0b; border-color: #d97706; }
         .btn-warning:hover { background-color: #d97706; }
         .btn-warning:active { background-color: #b45309; }
         .btn-warning:focus { box-shadow: 0 0 0 3px rgba(252, 211, 77, 0.45); }
-        html.dark .btn-warning { background-color: #d97706; border-color: #b45309; color: var(--text-primary); }
-        html.dark .btn-warning:hover { background-color: #b45309; }
+        html.dark .btn-warning { background-color: #facc15; border-color: #eab308; color: #422006;}
+        html.dark .btn-warning:hover { background-color: #eab308; }
 
 
-        .btn-info { background-color: #38bdf8; border-color: #0ea5e9; color: white; }
+        .btn-info { background-color: #38bdf8; border-color: #0ea5e9; }
         .btn-info:hover { background-color: #0ea5e9; }
         .btn-info:active { background-color: #0284c7; }
         .btn-info:focus { box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.45); }
-        html.dark .btn-info { background-color: #0ea5e9; border-color: #0284c7; color: var(--text-primary); }
-        html.dark .btn-info:hover { background-color: #0284c7; }
+        html.dark .btn-info { background-color: #7dd3fc; border-color: #38bdf8; color: #075985;}
+        html.dark .btn-info:hover { background-color: #38bdf8; }
 
 
-        .btn-success { background-color: #22c55e; border-color: #16a34a; color: white; }
+        .btn-success { background-color: #22c55e; border-color: #16a34a; }
         .btn-success:hover { background-color: #16a34a; }
         .btn-success:active { background-color: #15803d; }
         .btn-success:focus { box-shadow: 0 0 0 3px rgba(134, 239, 172, 0.45); }
-        html.dark .btn-success { background-color: #16a34a; border-color: #15803d; color: var(--text-primary); }
-        html.dark .btn-success:hover { background-color: #15803d; }
+        html.dark .btn-success { background-color: #4ade80; border-color: #22c55e; color: #14532d;}
+        html.dark .btn-success:hover { background-color: #22c55e; }
 
 
-        .btn-danger { background-color: #f43f5e; border-color: #e11d48; color: white; }
+        .btn-danger { background-color: #f43f5e; border-color: #e11d48; }
         .btn-danger:hover { background-color: #e11d48; }
         .btn-danger:active { background-color: #be123c; }
         .btn-danger:focus { box-shadow: 0 0 0 3px rgba(253, 164, 175, 0.45); }
-        html.dark .btn-danger { background-color: #e11d48; border-color: #be123c; color: var(--text-primary); }
-        html.dark .btn-danger:hover { background-color: #be123c; }
+        html.dark .btn-danger { background-color: #fb7185; border-color: #f43f5e; color: #7f1d1d;}
+        html.dark .btn-danger:hover { background-color: #f43f5e; }
 
 
-        .btn-small { padding: 0.25rem 0.75rem; font-size: 0.75rem; line-height: 1rem; }
-
+        .btn-small {
+            padding: 0.25rem 0.75rem; font-size: 0.75rem; line-height: 1rem;
+        }
         .btn:disabled {
-            opacity: 0.5; cursor: not-allowed; box-shadow: none;
-            border-color: #e2e8f0; background-color: #f1f5f9; color: #94a3b8;
+            opacity: 0.6; cursor: not-allowed; box-shadow: none;
+            border-color: var(--input-border); 
+            background-color: var(--history-item-bg); 
+            color: var(--text-secondary); 
         }
-        html.dark .btn:disabled {
-            border-color: #27272a; background-color: #18181b; color: #52525b; opacity: 0.4;
-        }
-        .btn:disabled:hover { box-shadow: none; background-color: #f1f5f9; }
-        html.dark .btn:disabled:hover { background-color: #18181b; }
 
         ::selection { background-color: var(--selection-bg); color: var(--selection-text); }
         ::-moz-selection { background-color: var(--selection-bg); color: var(--selection-text); }
 
         #history-items-container {
             background-color: var(--history-item-bg);
-            border: 1px solid var(--history-item-border-color);
-            border-radius: 0.375rem;
+            border: 1px solid var(--history-item-border); 
+            border-radius: 0.375rem; 
         }
         #history-items-container::-webkit-scrollbar { width: 8px; }
         #history-items-container::-webkit-scrollbar-track { background: transparent; }
         #history-items-container::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 4px; }
         #history-items-container::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
         .history-item {
-            background-color: var(--container-bg);
-            border: 1px solid var(--input-border-color); /* Use themed border for items */
+            background-color: var(--container-bg); 
+            border-color: var(--input-border); 
         }
         .history-item:hover { background-color: var(--history-item-hover-bg); }
         html.dark .history-item .text-teal-600 { color: var(--text-accent); }
@@ -282,26 +312,25 @@
         .answer-incorrect { color: #ef4444; } html.dark .answer-incorrect { color: #f87171; }
         .audio-player { width: 100%; margin-top: 0.5rem; }
         html.dark .audio-player {
-            filter: invert(100%) hue-rotate(180deg) contrast(0.8); /* Adjusted for better visibility on dark bg */
+            filter: invert(90%) hue-rotate(180deg); 
         }
 
         #app-menu-bar {
             background-color: var(--container-bg);
             color: var(--text-primary);
             padding: 0.5rem 1rem;
-            border-bottom: 1px solid var(--input-border-color);
-            box-shadow: var(--container-shadow); /* Use variable for consistency */
+            border-bottom: 1px solid var(--input-border);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
-        /* html.dark #app-menu-bar shadow is handled by var(--container-shadow) in html.dark */
+        html.dark #app-menu-bar {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
         #app-menu-bar select, #app-menu-bar button {
-            background-color: var(--bg-primary); /* Should be slightly different from menu bar's bg */
+            background-color: var(--bg-primary);
             color: var(--text-primary);
-            border: 1px solid var(--input-border-color);
+            border: 1px solid var(--input-border);
             border-radius: 0.375rem;
             padding: 0.25rem 0.5rem;
-        }
-        html.dark #app-menu-bar select, html.dark #app-menu-bar button {
-             background-color: var(--history-item-bg); /* e.g. zinc-800 */
         }
         #app-menu-bar select:focus, #app-menu-bar button:focus {
             outline: 2px solid transparent;
@@ -310,34 +339,41 @@
             box-shadow: 0 0 0 2px var(--input-focus-ring);
         }
         .menu-label {
-            font-size: 0.875rem; font-weight: 500;
+            font-size: 0.875rem; 
+            font-weight: 500; 
         }
+        
         .sentence-pair {
-            background-color: var(--container-bg);
-            border: 1px solid var(--input-border-color); /* Use themed border */
+            background-color: var(--sentence-pair-bg);
+            border: 1px solid var(--sentence-pair-border);
+            padding: 1.25rem; /* p-5 */
+            border-radius: 0.5rem; /* rounded-lg */
+            transition: box-shadow 0.3s;
         }
-        .original-sentence { color: var(--text-primary); }
+        .sentence-pair:hover {
+             box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05); /* hover:shadow-lg */
+        }
+        .original-sentence {
+            color: var(--original-sentence-text);
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 600; /* font-semibold */
+            margin-bottom: 0.5rem; /* mb-2 */
+            word-break: break-word;
+        }
         .translation-sentence {
-            background-color: var(--history-item-bg);
-            border: 1px solid var(--input-border-color); /* Use themed border */
-            color: var(--text-primary);
+            background-color: var(--translation-sentence-bg);
+            color: var(--translation-sentence-text);
+            border: 1px solid var(--translation-sentence-border);
+            font-size: 1.125rem; /* text-lg */
+            padding: 0.75rem; /* p-3 */
+            border-radius: 0.375rem; /* rounded-md */
+            margin-top: 0.5rem; /* mt-2 */
+            word-break: break-word;
         }
-        /* General text color overrides for dark mode if Tailwind classes are too specific */
-        html.dark .text-slate-800,
-        html.dark .text-slate-700 { color: var(--text-primary); }
-        html.dark .text-slate-500,
-        html.dark .text-slate-400 { color: var(--text-secondary); }
-        html.dark .text-teal-600 { color: var(--text-accent-strong); }
 
-        /* Border color overrides for dark mode */
-        html.dark .border-slate-200,
-        html.dark .border-slate-300,
-        html.dark .border-teal-200 { border-color: var(--input-border-color); }
-
-        /* File input button styling in dark mode */
-        html.dark .file\:bg-teal-50 { background-color: #3f3f46; } /* zinc-700 */
-        html.dark .file\:text-teal-700 { color: var(--text-primary); }
-        html.dark .hover\:file\:bg-teal-100 { background-color: #52525b; } /* zinc-600 */
+        html.dark .file\:bg-teal-50 { background-color: #1f2937; } 
+        html.dark .file\:text-teal-700 { color: #9ca3af; } 
+        html.dark .hover\:file\:bg-teal-100 { background-color: #374151; } 
 
     </style>
 </head>
@@ -382,7 +418,7 @@
 
             <div id="audio-input-container" class="hidden mb-4">
                 <label for="audio-files-input" id="audio-files-label" class="block text-sm font-medium mb-1" style="color: var(--text-primary);">音声ファイル (学習開始前に選択):</label>
-                <input type="file" id="audio-files-input" multiple accept="audio/*" class="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold" style="color: var(--text-secondary);">
+                <input type="file" id="audio-files-input" multiple accept=".mp3,audio/mpeg,.m4a,audio/x-m4a,audio/aac,audio/mp4" class="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100" style="color: var(--text-secondary);">
             </div>
 
             <div class="flex flex-col sm:flex-row gap-2 mb-4">
@@ -391,7 +427,7 @@
                 <button id="export-csv-btn" class="btn btn-success w-full sm:w-auto text-base">CSVへ出力</button>
             </div>
 
-            <div class="mt-2 mb-6 space-y-2 border-t border-b py-4" style="border-top-color: var(--input-border-color); border-bottom-color: var(--input-border-color);">
+            <div class="mt-2 mb-6 space-y-2 border-t border-b py-4" style="border-color: var(--input-border);">
                 <div class="flex flex-col sm:flex-row gap-2 items-center justify-between">
                     <h3 id="history-section-title" class="text-lg font-medium self-start sm:self-center" style="color: var(--text-primary);">入力履歴</h3>
                     <div class="flex gap-2 self-end sm:self-center">
@@ -429,6 +465,7 @@
             <div class="flex flex-wrap justify-between items-center mb-4 gap-2">
                 <button id="undo-merge-btn" class="btn btn-danger" disabled>元に戻す</button>
                 <button id="shuffle-pairs-btn" class="btn btn-info">ペアをシャッフル</button>
+                <button id="filter-incorrect-btn" class="btn btn-warning" disabled>間違えたペアを絞り込む</button>
                 <button id="toggle-all-translations-btn" class="btn btn-info hidden">訳文を一括表示</button>
                 <button id="back-to-input-btn" class="btn btn-secondary">入力に戻る</button>
             </div>
@@ -437,7 +474,7 @@
         </main>
 
         <footer class="mt-10 text-center text-sm" style="color: var(--text-secondary);">
-            <p id="footer-text">&copy; 2025 Multilingual Learning App</p>
+            <p id="footer-text">&copy; 2025 siomiso</p>
         </footer>
     </div>
 
@@ -445,10 +482,10 @@
     // --- Global Variables & State Management ---
     let currentPairedSentences = [];
     let undoHistory = [];
-    let redoHistory = []; // Though not currently used for redo, structure is there
+    let redoHistory = []; 
     const MAX_UNDO_HISTORY = 10;
 
-    let currentSelectedLang = 'ja'; // Default language
+    let currentSelectedLang = 'ja'; 
     let displayPriority = 'originalFirst';
     let textInputHistory = [];
     const MAX_TEXT_HISTORY_ITEMS = 20;
@@ -458,8 +495,14 @@
 
     let currentMode = 'memorization';
     let loadedAudioFiles = [];
-    let audioObjectUrls = []; // To keep track of URLs for revocation
+    let audioObjectUrls = []; 
     let allTranslationsManuallyToggled = false;
+
+    let incorrectlyAnsweredPairs = new Set(); 
+    let isFilteringIncorrect = false; 
+    let lastOriginalTextForIncorrectTracking = ""; 
+    let lastTranslationTextForIncorrectTracking = ""; 
+
 
     // --- i18n (Internationalization) Data ---
     const i18nData = {
@@ -533,7 +576,10 @@
             hideTranslationAudio: "訳文非表示",
             showAllTranslations: "訳文を一括表示",
             hideAllTranslations: "訳文を一括非表示",
-            footerText: "&copy; 2025 多言語学習アプリ",
+            filterIncorrect: "間違えたペアを絞り込む", 
+            showAllPairs: "すべてのペアを表示", 
+            noIncorrectPairsToFilter: "絞り込む間違えたペアはありません。", 
+            footerText: "&copy; 2025 siomiso", 
             languageSelectLabel: "言語:",
             themeSelectLabel: "テーマ:",
             themeLightOption: "ライト",
@@ -612,7 +658,10 @@
             hideTranslationAudio: "Hide Translation",
             showAllTranslations: "Show All Translations",
             hideAllTranslations: "Hide All Translations",
-            footerText: "&copy; 2025 Multilingual Learning App",
+            filterIncorrect: "Filter Incorrect Pairs", 
+            showAllPairs: "Show All Pairs", 
+            noIncorrectPairsToFilter: "No incorrect pairs to filter.", 
+            footerText: "&copy; 2025 siomiso", 
             languageSelectLabel: "Language:",
             themeSelectLabel: "Theme:",
             themeLightOption: "Light",
@@ -622,8 +671,9 @@
             audioFilesSelected: (count) => `Selected ${count} audio file(s).`,
         }
     };
-    let t = i18nData[currentSelectedLang];
+    let t = i18nData[currentSelectedLang]; 
 
+    // --- DOM Element Retrieval ---
     const originalTextInput = document.getElementById('original-text');
     const translationTextInput = document.getElementById('translation-text');
     const startLearningBtn = document.getElementById('start-learning-btn');
@@ -650,9 +700,11 @@
     const audioFilesInput = document.getElementById('audio-files-input');
     const shufflePairsBtn = document.getElementById('shuffle-pairs-btn');
     const toggleAllTranslationsBtn = document.getElementById('toggle-all-translations-btn');
+    const filterIncorrectBtn = document.getElementById('filter-incorrect-btn'); 
     const languageSelect = document.getElementById('language-select');
     const themeSelect = document.getElementById('theme-select');
 
+    // --- Theme Management ---
     function applyTheme(theme) {
         if (theme === 'dark') {
             document.documentElement.classList.add('dark');
@@ -661,7 +713,7 @@
         }
         const themeColorMeta = document.querySelector('meta[name="theme-color"]');
         if (themeColorMeta) {
-            themeColorMeta.content = theme === 'dark' ? 'var(--bg-primary)' : '#14b8a6'; // Use CSS var for dark
+            themeColorMeta.content = theme === 'dark' ? '#0f172a' : '#14b8a6';
         }
     }
 
@@ -695,6 +747,7 @@
         }
     });
 
+    // --- Language Management ---
     function setLanguage(lang) {
         if (i18nData[lang]) {
             currentSelectedLang = lang;
@@ -706,6 +759,7 @@
                 renderSentences();
             }
             renderTextInputHistoryList();
+            updateFilterIncorrectButtonState(); 
         }
     }
 
@@ -719,8 +773,14 @@
         setLanguage(savedLang);
     }
 
+
+    // --- Undo/Redo Helper Functions ---
     function saveStateForUndo() {
-        undoHistory.push(JSON.parse(JSON.stringify(currentPairedSentences.map(p => ({id: p.id, original: p.original, translation: p.translation, audioSrc: p.audioSrc})))));
+        const stateToSave = {
+            pairs: JSON.parse(JSON.stringify(currentPairedSentences)), // Store full pair objects including their current IDs
+            incorrectIds: Array.from(incorrectlyAnsweredPairs) 
+        };
+        undoHistory.push(stateToSave);
         if (undoHistory.length > MAX_UNDO_HISTORY) {
             undoHistory.shift();
         }
@@ -738,6 +798,7 @@
         updateUndoRedoButtonStates();
     }
 
+    // --- UI Update Functions ---
     function updateUIText() {
         document.title = t.appTitle;
         document.getElementById('app-title').textContent = t.appTitle;
@@ -773,7 +834,7 @@
         modeAudioBtn.textContent = t.audioMode;
         document.getElementById('audio-files-label').textContent = t.audioFilesLabel;
         shufflePairsBtn.textContent = t.shufflePairs;
-        document.getElementById('footer-text').innerHTML = t.footerText;
+        document.getElementById('footer-text').innerHTML = t.footerText; 
 
         document.getElementById('language-select-label').textContent = t.languageSelectLabel;
         document.getElementById('theme-select-label').textContent = t.themeSelectLabel;
@@ -784,6 +845,7 @@
         if (toggleAllTranslationsBtn && !toggleAllTranslationsBtn.classList.contains('hidden')) {
              toggleAllTranslationsBtn.textContent = allTranslationsManuallyToggled ? t.hideAllTranslations : t.showAllTranslations;
         }
+        updateFilterIncorrectButtonState(); 
     }
 
     function updateToggleHistoryButtonText() {
@@ -792,8 +854,13 @@
 
     function updateModeSelectionUI() {
         modeButtons.forEach(btn => {
-            btn.classList.toggle('btn-primary', btn.dataset.mode === currentMode);
-            btn.classList.toggle('btn-secondary', btn.dataset.mode !== currentMode);
+            if (btn.dataset.mode === currentMode) {
+                btn.classList.remove('btn-secondary');
+                btn.classList.add('btn-primary');
+            } else {
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-secondary');
+            }
         });
         audioInputContainer.classList.toggle('hidden', currentMode !== 'audio');
         toggleAllTranslationsBtn.classList.toggle('hidden', currentMode !== 'memorization' || currentPairedSentences.length === 0);
@@ -802,25 +869,31 @@
         }
 
         if (!learningSection.classList.contains('hidden') && currentPairedSentences.length > 0) {
-            renderSentences();
+            renderSentences(); 
         }
+        updateFilterIncorrectButtonState(); 
     }
 
+    // --- Message Display Function ---
     function showMessage(textOrKey, type = 'error', isKey = false, duration = 3000) {
-        messageArea.innerHTML = '';
+        messageArea.innerHTML = ''; 
         const messageDiv = document.createElement('div');
         let messageText = textOrKey;
 
         if (isKey) {
             const translation = t[textOrKey];
-            messageText = typeof translation === 'function' ? textOrKey : (translation || textOrKey);
+            if (typeof translation === 'function') {
+                messageText = textOrKey; 
+            } else {
+                messageText = translation || textOrKey; 
+            }
         }
         
-        messageDiv.textContent = messageText;
+        messageDiv.textContent = messageText; 
         messageDiv.className = `message message-${type}`;
         messageArea.appendChild(messageDiv);
 
-        if (type === 'success' || type === 'warning') {
+        if (type === 'success' || type === 'warning' || type === 'info') { 
             setTimeout(() => {
                 if (messageArea.contains(messageDiv)) {
                     messageArea.removeChild(messageDiv);
@@ -829,24 +902,27 @@
         }
     }
 
+
+    // --- Text Splitting Function ---
     function splitTextIntoSentences(text) {
         if (!text || !text.trim()) return [];
         const delimiterRegex = i18nData[currentSelectedLang].delimiterRegex || i18nData.ja.delimiterRegex;
         return text.split(delimiterRegex)
-                   .map(s => s.trim())
-                   .filter(s => s.length > 0);
+                  .map(s => s.trim())
+                  .filter(s => s.length > 0);
     }
 
+    // --- Audio File Handling ---
     function revokePreviousAudioUrls() {
         audioObjectUrls.forEach(url => URL.revokeObjectURL(url));
         audioObjectUrls = [];
     }
 
     audioFilesInput.addEventListener('change', (event) => {
-        revokePreviousAudioUrls();
+        revokePreviousAudioUrls(); 
         loadedAudioFiles = Array.from(event.target.files).map(file => {
             const url = URL.createObjectURL(file);
-            audioObjectUrls.push(url);
+            audioObjectUrls.push(url); 
             return { file, url };
         });
         if (loadedAudioFiles.length > 0) {
@@ -854,8 +930,10 @@
             const messageText = typeof t[messageKey] === 'function' ? t[messageKey](loadedAudioFiles.length) : `${loadedAudioFiles.length} audio file(s) selected.`;
             showMessage(messageText, "success");
         }
+         event.target.value = null; 
     });
     
+    // --- Text Input History Functions ---
     function loadTextInputHistoryFromStorage() {
         const storedHistory = localStorage.getItem(TEXT_HISTORY_STORAGE_KEY);
         if (storedHistory) {
@@ -886,7 +964,7 @@
             id: `hist-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
             original: original,
             translation: translation,
-            source: newSource,
+            source: newSource, 
             timestamp: new Date().toISOString()
         };
         textInputHistory.unshift(newEntry);
@@ -903,7 +981,7 @@
 
         if (textInputHistory.length === 0) {
             noHistoryMessage.style.display = 'block';
-            noHistoryMessage.textContent = t.noHistory;
+            noHistoryMessage.textContent = t.noHistory; 
             clearHistoryBtn.disabled = true;
             return;
         }
@@ -914,9 +992,6 @@
         textInputHistory.forEach(entry => {
             const historyEntryDiv = document.createElement('div');
             historyEntryDiv.className = 'history-item p-3 border rounded-md cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-opacity-75';
-            // Specific classes for light/dark are handled by CSS variables now
-            // historyEntryDiv.classList.add('border-slate-300', 'hover:bg-teal-50', 'focus:ring-teal-500');
-
             historyEntryDiv.setAttribute('role', 'button');
             historyEntryDiv.tabIndex = 0;
             historyEntryDiv.dataset.historyId = entry.id;
@@ -931,9 +1006,9 @@
             historyEntryDiv.innerHTML = `
                 <p class="text-xs" style="color: var(--text-secondary);">${new Date(entry.timestamp).toLocaleString(localeForDate)}</p>
                 <p class="font-medium text-sm" style="color: var(--text-accent-strong);">${sourceDisplay}</p>
-                <p class="text-sm break-all" style="color: var(--text-secondary);" title="${entry.original.substring(0,200)}...">${snippet}</p>
+                <p class="text-sm break-all" style="color: var(--text-primary);" title="${entry.original.substring(0,200)}...">${snippet}</p>
             `;
-            
+
             historyEntryDiv.addEventListener('click', () => loadTextInputHistoryEntry(entry.id));
             historyEntryDiv.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -951,12 +1026,20 @@
         if (entry) {
             originalTextInput.value = entry.original;
             translationTextInput.value = entry.translation;
+            
+            lastOriginalTextForIncorrectTracking = entry.original; 
+            lastTranslationTextForIncorrectTracking = entry.translation; 
+            incorrectlyAnsweredPairs.clear(); 
+            isFilteringIncorrect = false;
+
             showMessage(t.loadedFromHistory, "success", true);
             
-            currentPairedSentences = [];
+            currentPairedSentences = []; 
             clearUndoRedoHistory();
             sentenceContainer.innerHTML = '';
             updateUndoRedoButtonStates();
+            updateFilterIncorrectButtonState();
+
 
             if (!learningSection.classList.contains('hidden')) {
                 learningSection.classList.add('hidden');
@@ -966,14 +1049,46 @@
         }
     }
     
+    // --- Filter Incorrect Pairs Feature ---
+    function updateFilterIncorrectButtonState() {
+        if (!filterIncorrectBtn) return;
+
+        if (incorrectlyAnsweredPairs.size === 0) {
+            filterIncorrectBtn.disabled = true;
+            filterIncorrectBtn.textContent = t.filterIncorrect; 
+            if(isFilteringIncorrect) { 
+                isFilteringIncorrect = false; 
+                renderSentences(); 
+            }
+        } else {
+            filterIncorrectBtn.disabled = false;
+            if (isFilteringIncorrect) {
+                filterIncorrectBtn.textContent = t.showAllPairs;
+            } else {
+                filterIncorrectBtn.textContent = `${t.filterIncorrect} (${incorrectlyAnsweredPairs.size})`;
+            }
+        }
+    }
+
+
+    // --- Learning Content Rendering Function ---
     function normalizeAnswerForComparison(answer) {
         let normalized = String(answer || '').trim();
         if (normalized.endsWith('。') || normalized.endsWith('.') || normalized.endsWith('！') || normalized.endsWith('？') || normalized.endsWith('!') || normalized.endsWith('?')) {
             normalized = normalized.slice(0, -1);
         }
-        normalized = normalized.replace(/\s+/g, '').replace(/　+/g, '');
-        return normalized.trim().toLowerCase();
+        normalized = normalized.replace(/\s+/g, '').replace(/　+/g, ''); 
+        return normalized.trim().toLowerCase(); 
     }
+    
+    // Function to generate a consistent ID for a pair based on its content
+    function generatePairId(original, translation) {
+        // Simple concatenation. For very long texts, a hash might be better,
+        // but this is simpler and should work for typical sentence lengths.
+        // Using a separator that's unlikely to appear naturally in sentences.
+        return `pairid-${original}-${translation}`;
+    }
+
 
     function renderSentences() {
         sentenceContainer.innerHTML = '';
@@ -981,27 +1096,40 @@
             toggleAllTranslationsBtn.classList.toggle('hidden', currentMode !== 'memorization' || currentPairedSentences.length === 0);
         }
 
-        if (currentPairedSentences.length === 0) {
-            showMessage("noPairsToDisplay", "warning", true);
-            updateUndoRedoButtonStates();
-            return;
+        let pairsToRender = currentPairedSentences;
+        if (isFilteringIncorrect && incorrectlyAnsweredPairs.size > 0) {
+            pairsToRender = currentPairedSentences.filter(pair => incorrectlyAnsweredPairs.has(pair.id));
+            if (pairsToRender.length === 0 && currentPairedSentences.length > 0) { 
+                showMessage(t.noIncorrectPairsToFilter, "info", true, 4000);
+            }
+        }
+
+
+        if (pairsToRender.length === 0) { 
+            if (isFilteringIncorrect && currentPairedSentences.length > 0) {
+            } else if (!isFilteringIncorrect && currentPairedSentences.length === 0) {
+                 showMessage("noPairsToDisplay", "warning", true);
+            }
+             updateUndoRedoButtonStates();
+             updateFilterIncorrectButtonState(); 
+             return;
         }
         
         if (currentMode === 'memorization' && toggleAllTranslationsBtn) {
             toggleAllTranslationsBtn.textContent = allTranslationsManuallyToggled ? t.hideAllTranslations : t.showAllTranslations;
         }
 
-        currentPairedSentences.forEach((sentenceData, index) => {
+        pairsToRender.forEach((sentenceData) => { 
             const pairDiv = document.createElement('div');
-            pairDiv.className = 'sentence-pair p-5 border rounded-lg hover:shadow-lg transition-shadow duration-300';
+            pairDiv.className = 'sentence-pair'; 
             pairDiv.dataset.id = sentenceData.id; 
 
             const originalPara = document.createElement('p');
-            originalPara.className = 'original-sentence text-xl font-semibold mb-2 break-words';
+            originalPara.className = 'original-sentence'; 
             originalPara.textContent = sentenceData.original;
 
             const translationPara = document.createElement('p');
-            translationPara.className = 'translation-sentence text-lg p-3 border rounded-md mt-2 break-words';
+            translationPara.className = 'translation-sentence'; 
             translationPara.textContent = sentenceData.translation;
 
             if (currentMode === 'memorization') {
@@ -1029,16 +1157,12 @@
                     }
                     
                     let allCurrentlyEffectivelyShown = true;
-                    document.querySelectorAll('.sentence-pair .individual-toggle-btn').forEach(btnEl => {
-                        const parentPairDiv = btnEl.closest('.sentence-pair');
-                        if (displayPriority === 'originalFirst') {
-                            if (parentPairDiv.querySelector('.translation-sentence').classList.contains('hidden')) {
-                                allCurrentlyEffectivelyShown = false;
-                            }
-                        } else {
-                            if (parentPairDiv.querySelector('.original-sentence').classList.contains('hidden')) {
-                                allCurrentlyEffectivelyShown = false;
-                            }
+                    document.querySelectorAll('#sentence-container .sentence-pair').forEach(renderedPairDiv => {
+                        const targetElement = displayPriority === 'originalFirst' 
+                            ? renderedPairDiv.querySelector('.translation-sentence') 
+                            : renderedPairDiv.querySelector('.original-sentence');
+                        if (targetElement && targetElement.classList.contains('hidden')) {
+                             allCurrentlyEffectivelyShown = false;
                         }
                     });
                     allTranslationsManuallyToggled = allCurrentlyEffectivelyShown;
@@ -1056,22 +1180,60 @@
                     pairDiv.appendChild(toggleBtn);
                     pairDiv.appendChild(originalPara);
                 }
-            } else if (currentMode === 'test') {
-                originalPara.classList.remove('hidden');
-                translationPara.classList.add('hidden');
+            } else if (currentMode === 'test' || currentMode === 'audio') { 
+                originalPara.classList.remove('hidden'); 
+                translationPara.classList.add('hidden'); 
+
+                if (currentMode === 'audio') { 
+                    originalPara.classList.add('hidden'); 
+                    const audioControlsDiv = document.createElement('div');
+                    audioControlsDiv.className = 'audio-controls my-3 space-y-2';
+                    if (sentenceData.audioSrc) { 
+                        const audioPlayer = document.createElement('audio');
+                        audioPlayer.className = 'audio-player';
+                        audioPlayer.controls = true;
+                        audioPlayer.src = sentenceData.audioSrc;
+                        audioControlsDiv.appendChild(audioPlayer);
+                    } else { 
+                        const noAudioMsg = document.createElement('p');
+                        noAudioMsg.className = 'text-sm'; 
+                        noAudioMsg.style.color = 'var(--text-secondary)';
+                        noAudioMsg.textContent = t.noAudioForThisPair;
+                        audioControlsDiv.appendChild(noAudioMsg);
+                    }
+                    const buttonContainer = document.createElement('div');
+                    buttonContainer.className = 'flex flex-wrap gap-2 mt-2';
+                    const showOriginalBtn = document.createElement('button');
+                    showOriginalBtn.className = 'btn btn-secondary btn-small';
+                    showOriginalBtn.textContent = t.showOriginalAudio;
+                    showOriginalBtn.addEventListener('click', () => {
+                        originalPara.classList.toggle('hidden');
+                        showOriginalBtn.textContent = originalPara.classList.contains('hidden') ? t.showOriginalAudio : t.hideOriginalAudio;
+                    });
+                    const showTranslationBtn = document.createElement('button');
+                    showTranslationBtn.className = 'btn btn-secondary btn-small';
+                    showTranslationBtn.textContent = t.showTranslationAudio;
+                    showTranslationBtn.addEventListener('click', () => {
+                        translationPara.classList.toggle('hidden');
+                        showTranslationBtn.textContent = translationPara.classList.contains('hidden') ? t.showTranslationAudio : t.hideTranslationAudio;
+                    });
+                    buttonContainer.appendChild(showOriginalBtn);
+                    buttonContainer.appendChild(showTranslationBtn);
+                    audioControlsDiv.appendChild(buttonContainer);
+                    pairDiv.appendChild(audioControlsDiv);
+                }
+                
+                pairDiv.appendChild(originalPara); 
 
                 const testArea = document.createElement('div');
                 testArea.className = 'test-area mt-3 space-y-2';
-
                 const userAnswerInput = document.createElement('textarea');
                 userAnswerInput.className = 'user-answer-input w-full p-2 border rounded-md resize-y';
                 userAnswerInput.rows = 2;
                 userAnswerInput.placeholder = t.enterYourAnswerPlaceholder;
-
                 const checkAnswerBtn = document.createElement('button');
                 checkAnswerBtn.className = 'check-answer-btn btn btn-primary btn-small';
                 checkAnswerBtn.textContent = t.checkAnswer;
-
                 const answerResultDiv = document.createElement('div');
                 answerResultDiv.className = 'answer-result text-lg font-bold mt-1';
 
@@ -1084,96 +1246,21 @@
                     if (normalizedUserAnswer === normalizedCorrectAnswer) {
                         answerResultDiv.textContent = `${t.correctAnswerSymbol} ${t.answerCorrect}`;
                         answerResultDiv.className = 'answer-result text-lg font-bold mt-1 answer-correct';
+                        incorrectlyAnsweredPairs.delete(sentenceData.id); 
                     } else {
                         answerResultDiv.textContent = `${t.incorrectAnswerSymbol} ${t.answerIncorrect}`;
                         answerResultDiv.className = 'answer-result text-lg font-bold mt-1 answer-incorrect';
-                    }
-                    translationPara.classList.remove('hidden');
-                    checkAnswerBtn.disabled = true;
-                });
-
-                pairDiv.appendChild(originalPara);
-                testArea.appendChild(userAnswerInput);
-                testArea.appendChild(checkAnswerBtn);
-                testArea.appendChild(answerResultDiv);
-                pairDiv.appendChild(testArea);
-                pairDiv.appendChild(translationPara); 
-            } else if (currentMode === 'audio') {
-                originalPara.classList.add('hidden'); 
-                translationPara.classList.add('hidden');
-
-                const audioControlsDiv = document.createElement('div');
-                audioControlsDiv.className = 'audio-controls my-3 space-y-2';
-
-                if (sentenceData.audioSrc) { 
-                    const audioPlayer = document.createElement('audio');
-                    audioPlayer.className = 'audio-player';
-                    audioPlayer.controls = true;
-                    audioPlayer.src = sentenceData.audioSrc;
-                    audioControlsDiv.appendChild(audioPlayer);
-                } else { 
-                    const noAudioMsg = document.createElement('p');
-                    noAudioMsg.className = 'text-sm'; // Rely on var(--text-secondary)
-                    noAudioMsg.style.color = 'var(--text-secondary)';
-                    noAudioMsg.textContent = t.noAudioForThisPair;
-                    audioControlsDiv.appendChild(noAudioMsg);
-                }
-
-                const buttonContainer = document.createElement('div');
-                buttonContainer.className = 'flex flex-wrap gap-2 mt-2';
-
-                const showOriginalBtn = document.createElement('button');
-                showOriginalBtn.className = 'btn btn-secondary btn-small';
-                showOriginalBtn.textContent = t.showOriginalAudio;
-                showOriginalBtn.addEventListener('click', () => {
-                    originalPara.classList.toggle('hidden');
-                    showOriginalBtn.textContent = originalPara.classList.contains('hidden') ? t.showOriginalAudio : t.hideOriginalAudio;
-                });
-
-                const showTranslationBtn = document.createElement('button');
-                showTranslationBtn.className = 'btn btn-secondary btn-small';
-                showTranslationBtn.textContent = t.showTranslationAudio;
-                showTranslationBtn.addEventListener('click', () => {
-                    translationPara.classList.toggle('hidden');
-                    showTranslationBtn.textContent = translationPara.classList.contains('hidden') ? t.showTranslationAudio : t.hideTranslationAudio;
-                });
-                
-                buttonContainer.appendChild(showOriginalBtn);
-                buttonContainer.appendChild(showTranslationBtn);
-                audioControlsDiv.appendChild(buttonContainer);
-
-                pairDiv.appendChild(audioControlsDiv);
-                pairDiv.appendChild(originalPara); 
-
-                const testArea = document.createElement('div');
-                testArea.className = 'test-area mt-3 space-y-2';
-                const userAnswerInput = document.createElement('textarea');
-                userAnswerInput.className = 'user-answer-input w-full p-2 border rounded-md resize-y';
-                userAnswerInput.rows = 2;
-                userAnswerInput.placeholder = t.enterYourAnswerPlaceholder; 
-                const checkAnswerBtn = document.createElement('button');
-                checkAnswerBtn.className = 'check-answer-btn btn btn-primary btn-small';
-                checkAnswerBtn.textContent = t.checkAnswer;
-                const answerResultDiv = document.createElement('div');
-                answerResultDiv.className = 'answer-result text-lg font-bold mt-1';
-
-                checkAnswerBtn.addEventListener('click', () => {
-                    const userAnswer = userAnswerInput.value; 
-                    const correctAnswer = sentenceData.translation; 
-                    const normalizedUserAnswer = normalizeAnswerForComparison(userAnswer);
-                    const normalizedCorrectAnswer = normalizeAnswerForComparison(correctAnswer);
-
-                    if (normalizedUserAnswer === normalizedCorrectAnswer) {
-                        answerResultDiv.textContent = `${t.correctAnswerSymbol} ${t.answerCorrect}`;
-                        answerResultDiv.className = 'answer-result text-lg font-bold mt-1 answer-correct';
-                    } else {
-                        answerResultDiv.textContent = `${t.incorrectAnswerSymbol} ${t.answerIncorrect}`;
-                        answerResultDiv.className = 'answer-result text-lg font-bold mt-1 answer-incorrect';
+                        incorrectlyAnsweredPairs.add(sentenceData.id); 
                     }
                     translationPara.classList.remove('hidden'); 
-                    showTranslationBtn.textContent = t.hideTranslationAudio; 
-                    checkAnswerBtn.disabled = true;
+                    if (currentMode === 'audio') { 
+                         const showTranslationBtnAudio = pairDiv.querySelector('.audio-controls .btn-secondary:nth-child(2)'); 
+                         if(showTranslationBtnAudio) showTranslationBtnAudio.textContent = t.hideTranslationAudio;
+                    }
+                    checkAnswerBtn.disabled = true; 
+                    updateFilterIncorrectButtonState(); 
                 });
+                
                 testArea.appendChild(userAnswerInput);
                 testArea.appendChild(checkAnswerBtn);
                 testArea.appendChild(answerResultDiv);
@@ -1181,29 +1268,30 @@
                 pairDiv.appendChild(translationPara); 
             }
 
-            if (index > 0) {
+            const originalFullListIndex = currentPairedSentences.findIndex(p => p.id === sentenceData.id);
+            if (originalFullListIndex > 0) { 
                 const mergeButtonContainer = document.createElement('div');
                 mergeButtonContainer.className = 'mt-3 border-t pt-3 flex flex-wrap gap-2 justify-start';
-                mergeButtonContainer.style.borderColor = 'var(--input-border-color)';
+                mergeButtonContainer.style.borderColor = 'var(--input-border)'; 
 
                 const mergeOriginalBtn = document.createElement('button');
                 mergeOriginalBtn.className = 'btn btn-warning btn-small';
                 mergeOriginalBtn.textContent = t.mergeWithPreviousOriginal;
-                mergeOriginalBtn.dataset.index = index;
+                mergeOriginalBtn.dataset.index = originalFullListIndex; 
                 mergeOriginalBtn.dataset.type = 'original';
                 mergeOriginalBtn.addEventListener('click', handleMergeWithPrevious);
 
                 const mergeTranslationBtn = document.createElement('button');
                 mergeTranslationBtn.className = 'btn btn-warning btn-small';
                 mergeTranslationBtn.textContent = t.mergeWithPreviousTranslation;
-                mergeTranslationBtn.dataset.index = index;
+                mergeTranslationBtn.dataset.index = originalFullListIndex; 
                 mergeTranslationBtn.dataset.type = 'translation';
                 mergeTranslationBtn.addEventListener('click', handleMergeWithPrevious);
 
                 const mergePairBtn = document.createElement('button');
                 mergePairBtn.className = 'btn btn-info btn-small';
                 mergePairBtn.textContent = t.mergePairWithPrevious;
-                mergePairBtn.dataset.index = index;
+                mergePairBtn.dataset.index = originalFullListIndex; 
                 mergePairBtn.dataset.type = 'full_pair';
                 mergePairBtn.addEventListener('click', handleMergeWithPrevious);
 
@@ -1215,59 +1303,84 @@
             sentenceContainer.appendChild(pairDiv);
         });
         updateUndoRedoButtonStates();
+        updateFilterIncorrectButtonState(); 
     }
     
+
+    // --- Event Listeners ---
     modeButtons.forEach(button => {
         button.addEventListener('click', () => {
             currentMode = button.dataset.mode;
             allTranslationsManuallyToggled = false; 
-            updateModeSelectionUI();
+            updateModeSelectionUI(); 
         });
     });
+
+    filterIncorrectBtn.addEventListener('click', () => {
+        if (incorrectlyAnsweredPairs.size > 0 || isFilteringIncorrect) { 
+            isFilteringIncorrect = !isFilteringIncorrect;
+        } else {
+            isFilteringIncorrect = false; 
+        }
+        renderSentences();
+        updateFilterIncorrectButtonState();
+    });
+
 
     toggleDisplayPriorityBtn.addEventListener('click', () => {
         displayPriority = displayPriority === 'originalFirst' ? 'translationFirst' : 'originalFirst';
         allTranslationsManuallyToggled = false; 
-        updateUIText();
+        updateUIText(); 
         if (!learningSection.classList.contains('hidden') && currentPairedSentences.length > 0 && currentMode === 'memorization') {
-            renderSentences();
+            renderSentences(); 
         }
     });
 
     startLearningBtn.addEventListener('click', () => {
         messageArea.innerHTML = '';
-        const originalText = originalTextInput.value;
-        const translationText = translationTextInput.value;
+        const currentOriginalText = originalTextInput.value;
+        const currentTranslationText = translationTextInput.value;
 
-        if (!originalText.trim() && !translationText.trim()) {
-             showMessage(t.errorBothTextsRequired, "error", true); // isKey true
-            return;
-        }
-         if (!originalText.trim() || !translationText.trim()) { // one is empty
-             showMessage(t.errorBothTextsRequired, "error", true); // isKey true
+        if (!currentOriginalText.trim() && !currentTranslationText.trim()) {
+            if (!currentOriginalText.trim() && currentTranslationText.trim() || currentOriginalText.trim() && !currentTranslationText.trim()) {
+                 showMessage(t.errorBothTextsRequired, "error"); 
+            } else { 
+                 showMessage(t.errorBothTextsRequired, "error");
+            }
             return;
         }
         
-        addEntryToTextInputHistory(originalText, translationText, null);
+        if (currentOriginalText !== lastOriginalTextForIncorrectTracking ||
+            currentTranslationText !== lastTranslationTextForIncorrectTracking) {
+            incorrectlyAnsweredPairs.clear();
+            isFilteringIncorrect = false;
+            // console.log("Text changed, incorrect pairs cleared.");
+        } else {
+            // console.log("Text NOT changed, incorrect pairs preserved.");
+        }
+        lastOriginalTextForIncorrectTracking = currentOriginalText;
+        lastTranslationTextForIncorrectTracking = currentTranslationText;
 
-        const originalSentences = splitTextIntoSentences(originalText);
-        const translationSentences = splitTextIntoSentences(translationText);
+        addEntryToTextInputHistory(currentOriginalText, currentTranslationText, null); 
+
+        const originalSentences = splitTextIntoSentences(currentOriginalText);
+        const translationSentences = splitTextIntoSentences(currentTranslationText);
 
         if (originalSentences.length === 0 || translationSentences.length === 0) {
             showMessage("errorNoValidSentences", "error", true);
             return;
         }
         
-        currentPairedSentences = [];
-        clearUndoRedoHistory();
+        currentPairedSentences = []; 
+        clearUndoRedoHistory(); 
         allTranslationsManuallyToggled = false; 
 
         const pairCount = Math.min(originalSentences.length, translationSentences.length);
 
         if (originalSentences.length !== translationSentences.length) {
-            showMessage(t.warningSentenceCountMismatch(originalSentences.length, translationSentences.length, pairCount), "warning", false); // isKey false as it's already processed
+            showMessage(t.warningSentenceCountMismatch(originalSentences.length, translationSentences.length, pairCount), "warning");
         } else {
-            showMessage(t.successPairsCreated(pairCount), "success", false); // isKey false
+            showMessage(t.successPairsCreated(pairCount), "success");
         }
 
         let audioAssignedCount = 0;
@@ -1278,7 +1391,7 @@
                 audioAssignedCount++;
             }
             currentPairedSentences.push({
-                id: `s-${Date.now()}-${i}`,
+                id: generatePairId(originalSentences[i], translationSentences[i]), // Use content-based ID
                 original: originalSentences[i],
                 translation: translationSentences[i],
                 audioSrc: audioSrc
@@ -1295,21 +1408,28 @@
         
         inputSection.classList.add('hidden');
         learningSection.classList.remove('hidden'); 
-        updateModeSelectionUI();
+        updateModeSelectionUI(); 
         
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
     function handleMergeWithPrevious(event) {
-        const currentIndex = parseInt(event.target.dataset.index, 10);
+        const currentIndex = parseInt(event.target.dataset.index, 10); 
         const type = event.target.dataset.type;
 
         if (currentIndex > 0 && currentIndex < currentPairedSentences.length) {
-            saveStateForUndo();
+            saveStateForUndo(); 
 
             const previousPair = currentPairedSentences[currentIndex - 1];
             const currentMergingPair = currentPairedSentences[currentIndex];
             let messageKey = "";
+
+            incorrectlyAnsweredPairs.delete(currentMergingPair.id);
+            // The ID of previousPair will change due to content change, so its incorrect status needs re-evaluation or clearing.
+            // For simplicity, if previousPair was incorrect, remove its old ID from the set.
+            // The new merged pair (if incorrect later) will get a new ID added.
+            incorrectlyAnsweredPairs.delete(previousPair.id); 
+
 
             if (type === 'original') {
                 previousPair.original = (previousPair.original + " " + currentMergingPair.original).trim();
@@ -1335,32 +1455,45 @@
                 if (!previousPair.audioSrc && currentMergingPair.audioSrc) {
                     previousPair.audioSrc = currentMergingPair.audioSrc;
                 }
-                currentPairedSentences.splice(currentIndex, 1);
+                currentPairedSentences.splice(currentIndex, 1); 
                 messageKey = "successPairMerged";
             }
             
+            // Update ID of the merged pair (previousPair) as its content changed
+            if (previousPair) { // Ensure previousPair still exists (not the case if full_pair merge removed it)
+                 previousPair.id = generatePairId(previousPair.original, previousPair.translation);
+            }
+
+
             if (type === 'original' || type === 'translation') {
                 if (currentPairedSentences.length > 0) {
                     const lastPairIndex = currentPairedSentences.length - 1;
                     if (currentPairedSentences[lastPairIndex].original === "" && currentPairedSentences[lastPairIndex].translation === "") {
+                        incorrectlyAnsweredPairs.delete(currentPairedSentences[lastPairIndex].id); 
                         currentPairedSentences.splice(lastPairIndex, 1);
                     }
                 }
             }
             
-            allTranslationsManuallyToggled = false;
+            allTranslationsManuallyToggled = false; 
             renderSentences();
             showMessage(messageKey, "success", true);
+            updateFilterIncorrectButtonState(); 
         }
     }
     
     undoMergeBtn.addEventListener('click', () => {
         if (undoHistory.length > 0) {
-            currentPairedSentences = undoHistory.pop();
+            const previousState = undoHistory.pop();
+            currentPairedSentences = previousState.pairs;
+            incorrectlyAnsweredPairs = new Set(previousState.incorrectIds); 
+            isFilteringIncorrect = false; 
+
             allTranslationsManuallyToggled = false; 
             renderSentences();
             showMessage("successUndo", "success", true);
-            updateUndoRedoButtonStates();
+            updateUndoRedoButtonStates(); 
+            updateFilterIncorrectButtonState();
         } else {
             showMessage("errorNoUndoState", "warning", true);
         }
@@ -1368,7 +1501,7 @@
 
     shufflePairsBtn.addEventListener('click', () => {
         if (currentPairedSentences.length > 1) {
-            saveStateForUndo();
+            saveStateForUndo(); 
             for (let i = currentPairedSentences.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [currentPairedSentences[i], currentPairedSentences[j]] = [currentPairedSentences[j], currentPairedSentences[i]];
@@ -1384,9 +1517,11 @@
 
         allTranslationsManuallyToggled = !allTranslationsManuallyToggled; 
 
-        currentPairedSentences.forEach(pair => {
+        let pairsToConsider = isFilteringIncorrect ? currentPairedSentences.filter(p => incorrectlyAnsweredPairs.has(p.id)) : currentPairedSentences;
+
+        pairsToConsider.forEach(pair => { 
             const pairDiv = sentenceContainer.querySelector(`.sentence-pair[data-id="${pair.id}"]`);
-            if (!pairDiv) return;
+            if (!pairDiv) return; 
 
             const originalEl = pairDiv.querySelector('.original-sentence');
             const translationEl = pairDiv.querySelector('.translation-sentence');
@@ -1405,49 +1540,56 @@
         }
     });
 
+
     resetAllBtn.addEventListener('click', () => {
         originalTextInput.value = '';
         translationTextInput.value = '';
         currentPairedSentences = [];
         clearUndoRedoHistory();
-        revokePreviousAudioUrls();
-        loadedAudioFiles = [];
-        audioFilesInput.value = '';
+        revokePreviousAudioUrls(); 
+        loadedAudioFiles = [];     
+        audioFilesInput.value = ''; 
         sentenceContainer.innerHTML = '';
-        if (!learningSection.classList.contains('hidden')) {
+        incorrectlyAnsweredPairs.clear(); 
+        isFilteringIncorrect = false;
+        lastOriginalTextForIncorrectTracking = ""; 
+        lastTranslationTextForIncorrectTracking = ""; 
+
+        if (!learningSection.classList.contains('hidden')) { 
             learningSection.classList.add('hidden');
             inputSection.classList.remove('hidden');
         }
         messageArea.innerHTML = '';
         allTranslationsManuallyToggled = false;
         showMessage("successReset", "success", true);
+        updateFilterIncorrectButtonState(); 
         originalTextInput.focus();
     });
 
     backToInputBtn.addEventListener('click', () => {
         learningSection.classList.add('hidden');
         inputSection.classList.remove('hidden');
-        messageArea.innerHTML = '';
+        messageArea.innerHTML = ''; 
         allTranslationsManuallyToggled = false; 
         originalTextInput.focus();
     });
     
     toggleHistoryBtn.addEventListener('click', () => {
         historyItemsContainer.classList.toggle('hidden');
-        updateToggleHistoryButtonText();
+        updateToggleHistoryButtonText(); 
     });
 
     clearHistoryBtn.addEventListener('click', () => {
         if (textInputHistory.length > 0 && confirm(t.confirmClearHistory)) {
             textInputHistory = [];
             saveTextInputHistoryToStorage();
-            renderTextInputHistoryList();
+            renderTextInputHistoryList(); 
             showMessage(t.historyCleared, "success", true);
         }
     });
 
     importCsvBtn.addEventListener('click', () => {
-        csvFileInput.click();
+        csvFileInput.click(); 
     });
 
     function parseCSVText_custom(csvText) {
@@ -1463,41 +1605,42 @@
                 if (char === '"') {
                     if (i + 1 < normalizedText.length && normalizedText[i + 1] === '"') {
                         currentField += '"';
-                        i++;
+                        i++; 
                     } else {
-                        inQuotes = false;
+                        inQuotes = false; 
                     }
                 } else {
-                    currentField += char;
+                    currentField += char; 
                 }
-            } else {
+            } else { 
                 if (char === '"') {
                     if (currentField.length === 0) {
                         inQuotes = true;
                     } else {
-                         currentField += char;
+                         currentField += char; 
                     }
                 } else if (char === ',') {
                     currentRecord.push(currentField);
                     currentField = "";
                 } else if (char === '\n') {
-                    currentRecord.push(currentField);
-                    records.push([...currentRecord]);
-                    currentRecord = [];
+                    currentRecord.push(currentField); 
+                    records.push([...currentRecord]); 
+                    currentRecord = []; 
                     currentField = "";
                 } else {
-                    currentField += char;
+                    currentField += char; 
                 }
             }
         }
         currentRecord.push(currentField);
         if (currentRecord.some(f => f.trim().length > 0) || (records.length === 0 && currentRecord.length > 0)) {
-             if (!(records.length === 0 && currentRecord.length === 1 && currentRecord[0].trim() === "")) {
-                records.push([...currentRecord]);
+             if (!(records.length === 0 && currentRecord.length === 1 && currentRecord[0].trim() === "")) { 
+                 records.push([...currentRecord]);
              }
         }
         return records.filter(record => record.length > 0 && record.some(field => field.trim() !== ""));
     }
+
 
     csvFileInput.addEventListener('change', (event) => {
         const file = event.target.files[0];
@@ -1507,44 +1650,44 @@
                 const csvText = e.target.result;
                 try {
                     const parsedRows = parseCSVText_custom(csvText);
-                    
-                    if (parsedRows.length > 0 && parsedRows.some(row => row.length >=1 && (row[0] || "").trim() !== "")) {
+                    if (parsedRows.length > 0 && parsedRows.some(row => row.length >=1 && row[0].trim() !== "")) { 
                         let originalTextParts = [];
                         let translationTextParts = [];
-
                         parsedRows.forEach(rowCells => {
                             let cellA = String(rowCells.length > 0 ? rowCells[0] : "").trim();
                             let cellB = String(rowCells.length > 1 ? rowCells[1] : "").trim();
                             cellA = cellA.replace(/\\n/g, '\n');
                             cellB = cellB.replace(/\\n/g, '\n');
-
-                            if (cellA) {
+                            if (cellA) { 
                                 originalTextParts.push(cellA);
                                 translationTextParts.push(cellB);
                             }
                         });
-                        
                         const finalOriginalText = originalTextParts
-                            .map(p => p.replace(/[.。？！]$/, "") + (/[一-龠ぁ-んァ-ヶ]/.test(p) ? "。" : "."))
-                            .join(" ");
-
+                            .map(p => p.replace(/[.。？！]$/, "") + (/[一-龠ぁ-んァ-ヶ]/.test(p) ? "。" : ".")) 
+                            .join(" "); 
                         const finalTranslationText = translationTextParts
                             .map(p => {
-                                if (!p) return ".";
+                                if (!p) return "."; 
                                 return p.replace(/[.。？！]$/, "") + (/[一-龠ぁ-んァ-ヶ]/.test(p) ? "。" : ".");
                             })
                             .join(" ")
-                            .replace(/\s+\.\s*/g, ". ")
+                            .replace(/\s+\.\s*/g, ". ") 
                             .trim();
-
                         originalTextInput.value = finalOriginalText;
                         translationTextInput.value = finalTranslationText;
+                        
+                        lastOriginalTextForIncorrectTracking = finalOriginalText; 
+                        lastTranslationTextForIncorrectTracking = finalTranslationText; 
+                        incorrectlyAnsweredPairs.clear(); 
+                        isFilteringIncorrect = false;
 
                         if (finalOriginalText || finalTranslationText) {
                             showMessage("successCsvImported", "success", true);
                             addEntryToTextInputHistory(finalOriginalText, finalTranslationText, file.name);
-                            clearUndoRedoHistory();
+                            clearUndoRedoHistory(); 
                             updateUndoRedoButtonStates();
+                            updateFilterIncorrectButtonState();
                         } else {
                             showMessage(t.errorCsvFormat, "error", true);
                         }
@@ -1556,8 +1699,8 @@
                     console.error("CSV Parse Error:", err);
                 }
             };
-            reader.readAsText(file, 'UTF-8');
-            csvFileInput.value = '';
+            reader.readAsText(file, 'UTF-8'); 
+            csvFileInput.value = ''; 
         }
     });
 
@@ -1575,7 +1718,7 @@
 
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
-        if (link.download !== undefined) {
+        if (link.download !== undefined) { 
             const url = URL.createObjectURL(blob);
             link.setAttribute("href", url);
             link.setAttribute("download", "learned_pairs.csv");
@@ -1583,28 +1726,32 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            URL.revokeObjectURL(url);
+            URL.revokeObjectURL(url); 
         } else {
             showMessage(t.csvExportNotSupported, "warning", true);
         }
     });
 
+    // --- Initialization ---
     document.addEventListener('DOMContentLoaded', () => {
-        loadAndApplyTheme();
-        loadAndApplyLanguage();
+        loadAndApplyTheme(); 
+        loadAndApplyLanguage(); 
         loadTextInputHistoryFromStorage();
         updateUndoRedoButtonStates();
         renderTextInputHistoryList();
-        updateModeSelectionUI();
+        updateModeSelectionUI(); 
+        updateFilterIncorrectButtonState(); 
     });
 
+    // Cleanup audio object URLs on page leave
     window.addEventListener('beforeunload', () => {
         revokePreviousAudioUrls();
     });
 
+    // PWA Service Worker Registration
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./sw.js')
+            navigator.serviceWorker.register('./sw.js') 
             .then(reg => console.log('Service Worker registered:', reg.scope))
             .catch(err => console.error('Service Worker registration failed:', err));
         });
