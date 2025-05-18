@@ -466,7 +466,7 @@
     let textInputHistory = [];
     const MAX_TEXT_HISTORY_ITEMS = 20;
     const TEXT_HISTORY_STORAGE_KEY = 'multiLangAppHistory_v2';
-    const MY_SETS_STORAGE_KEY = 'multiLangAppMySets_v1'; // New key for My Sets
+    const MY_SETS_STORAGE_KEY = 'multiLangAppMySets_v1'; 
     const THEME_STORAGE_KEY = 'multiLangAppTheme_v1';
     const LANGUAGE_STORAGE_KEY = 'multiLangAppLanguage_v1';
 
@@ -481,7 +481,7 @@
     let lastTranslationTextForIncorrectTracking = ""; 
 
     let activeSidebarItemId = null; 
-    let mySets = []; // For My Sets feature
+    let mySets = []; 
 
 
     // --- i18n (Internationalization) Data ---
@@ -718,7 +718,7 @@
     const sidebarToggleBtn = document.getElementById('sidebar-toggle-btn');
     const contentWrapper = document.querySelector('.content-wrapper');
     const saveMySetBtn = document.getElementById('save-myset-btn');
-    const mySetsContainer = document.getElementById('mysets-container');
+    const mysetsContainer = document.getElementById('mysets-container');
     const noMySetsMessage = document.getElementById('no-mysets-message');
     const toggleMySetsBtn = document.getElementById('toggle-mysets-btn');
     const clearAppDataBtn = document.getElementById('clear-app-data-btn');
@@ -779,7 +779,7 @@
                 renderSentences(); 
             }
             renderTextInputHistoryList();
-            renderMySetList(); // Update My Sets list on language change
+            renderMySetList(); 
             updateFilterIncorrectButtonState(); 
         }
     }
@@ -881,7 +881,10 @@
         toggleHistoryBtn.textContent = historyItemsContainer.classList.contains('hidden') ? t.showHistory : t.hideHistory;
     }
      function updateToggleMySetsButtonText() {
-        toggleMySetsBtn.textContent = mysetsContainer.classList.contains('hidden') ? t.showMySets : t.hideMySets;
+        const mysetsContainerEl = document.getElementById('mysets-container'); // Get element inside function
+        if (mysetsContainerEl) {
+            toggleMySetsBtn.textContent = mysetsContainerEl.classList.contains('hidden') ? t.showMySets : t.hideMySets;
+        }
     }
 
 
@@ -954,7 +957,7 @@
 
     audioFilesInput.addEventListener('change', (event) => {
         revokePreviousAudioUrls(); 
-        const files = Array.from(event.target.files).sort((a, b) => a.name.localeCompare(b.name));
+        const files = Array.from(event.target.files); // No sort, use user selection order
         
         loadedAudioFiles = files.map(file => {
             const url = URL.createObjectURL(file);
@@ -1104,7 +1107,10 @@
     }
 
     function renderMySetList() {
-        const dynamicItems = mysetsContainer.querySelectorAll('.myset-item');
+        const mysetsContainerEl = document.getElementById('mysets-container'); // Ensure it's defined
+        if (!mysetsContainerEl) return;
+
+        const dynamicItems = mysetsContainerEl.querySelectorAll('.myset-item');
         dynamicItems.forEach(item => item.remove());
 
         if (mySets.length === 0) {
@@ -1130,7 +1136,7 @@
 
             const loadBtn = document.createElement('button');
             loadBtn.className = 'btn btn-info btn-small';
-            loadBtn.textContent = "読込"; // Simple text, can be i18n'd
+            loadBtn.textContent = "読込"; 
             loadBtn.addEventListener('click', () => {
                 originalTextInput.value = set.original;
                 translationTextInput.value = set.translation;
@@ -1139,15 +1145,15 @@
                 incorrectlyAnsweredPairs.clear();
                 isFilteringIncorrect = false;
                 showMessage(t.mySetLoaded(set.name), "success", false);
-                if (!mysetsContainer.classList.contains('hidden')) {
-                    mysetsContainer.classList.add('hidden');
+                if (!mysetsContainerEl.classList.contains('hidden')) {
+                    mysetsContainerEl.classList.add('hidden');
                     updateToggleMySetsButtonText();
                 }
             });
 
             const deleteBtn = document.createElement('button');
             deleteBtn.className = 'btn btn-danger btn-small';
-            deleteBtn.textContent = "削除"; // Simple text, can be i18n'd
+            deleteBtn.textContent = "削除"; 
             deleteBtn.addEventListener('click', () => {
                 if (confirm(t.confirmDeleteMySet(set.name))) {
                     mySets.splice(index, 1);
@@ -1163,7 +1169,7 @@
             setDiv.appendChild(buttonsDiv);
             fragment.appendChild(setDiv);
         });
-        mysetsContainer.appendChild(fragment);
+        mysetsContainerEl.appendChild(fragment);
     }
     
     saveMySetBtn.addEventListener('click', () => {
@@ -1176,7 +1182,7 @@
         }
 
         let setName = prompt(t.enterMySetName, original.substring(0, 20) + "...");
-        if (setName === null) return; // User cancelled
+        if (setName === null) return; 
         setName = setName.trim();
         if (!setName) {
              showMessage(t.errorSavingMySetNoName, "error", false);
@@ -1184,7 +1190,7 @@
         }
 
         mySets.unshift({ name, original, translation });
-        if(mySets.length > MAX_TEXT_HISTORY_ITEMS) { // Reuse history limit for sets for now
+        if(mySets.length > MAX_TEXT_HISTORY_ITEMS) { 
             mySets.pop();
         }
         saveMySetsToStorage();
@@ -1193,8 +1199,11 @@
     });
 
     toggleMySetsBtn.addEventListener('click', () => {
-        mysetsContainer.classList.toggle('hidden');
-        updateToggleMySetsButtonText();
+        const mysetsContainerEl = document.getElementById('mysets-container'); // Get element inside function
+        if (mysetsContainerEl) {
+            mysetsContainerEl.classList.toggle('hidden');
+            updateToggleMySetsButtonText();
+        }
     });
 
 
@@ -1918,7 +1927,7 @@
             localStorage.removeItem(THEME_STORAGE_KEY);
             localStorage.removeItem(LANGUAGE_STORAGE_KEY);
             showMessage(t.appDataCleared, "success", false, 4000);
-            setTimeout(() => window.location.reload(), 1500); // Reload after a short delay
+            setTimeout(() => window.location.reload(), 1500); 
         }
     });
 
@@ -1988,10 +1997,10 @@
         loadAndApplyTheme(); 
         loadAndApplyLanguage(); 
         loadTextInputHistoryFromStorage();
-        loadMySetsFromStorage(); // Load My Sets
+        loadMySetsFromStorage(); 
         updateUndoRedoButtonStates();
         renderTextInputHistoryList();
-        renderMySetList(); // Render My Sets
+        renderMySetList(); 
         updateModeSelectionUI(); 
         updateFilterIncorrectButtonState(); 
         updateSidebarVisibility(); 
