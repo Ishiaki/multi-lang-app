@@ -36,10 +36,12 @@
             --btn-text-color: white;
 
             --sidebar-bg: rgba(255, 255, 255, 0.95);
-            --sidebar-border: #e5e7eb;
+            --sidebar-border: #e5e7eb; /* gray-200 */
             --sidebar-text: var(--text-primary);
-            --sidebar-item-hover-bg: #f0fdfa;
-            --sidebar-item-active-bg: #ccfbf1;
+            --sidebar-item-hover-bg: #f0fdfa; /* teal-50 */
+            --sidebar-item-active-bg: #ccfbf1; /* teal-100 */
+            --sidebar-item-active-text: var(--text-accent-strong);
+            --sidebar-item-active-border: var(--text-accent-strong);
             --sidebar-shadow: 0 0 20px rgba(0,0,0,0.1);
             --sidebar-width: 280px;
         }
@@ -74,6 +76,8 @@
             --sidebar-text: var(--text-primary);
             --sidebar-item-hover-bg: #1f2937; /* gray-800 */
             --sidebar-item-active-bg: #0f766e; /* teal-700 */
+            --sidebar-item-active-text: #f0fdfa; /* teal-50 for dark active text */
+            --sidebar-item-active-border: var(--text-accent);
             --sidebar-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
 
@@ -92,7 +96,7 @@
             display: flex;
             width: 100%;
             flex-grow: 1;
-            position: relative; /* For absolute positioning of sidebar toggle on mobile */
+            position: relative; 
         }
 
         #app-sidebar {
@@ -108,7 +112,7 @@
             overflow-y: auto;
             transition: transform 0.3s ease-in-out;
             box-shadow: var(--sidebar-shadow);
-            transform: translateX(calc(-1 * var(--sidebar-width))); /* Initially hidden */
+            transform: translateX(calc(-1 * var(--sidebar-width))); 
         }
         #app-sidebar.open {
             transform: translateX(0);
@@ -126,33 +130,40 @@
         #sidebar-sentence-list {
             display: flex;
             flex-direction: column;
-            gap: 0.25rem; 
+            gap: 0.1rem; 
         }
         .sidebar-item {
-            padding: 0.75rem 1rem; 
+            padding: 0.6rem 1rem; 
             border-radius: 0.375rem; 
             cursor: pointer;
             font-size: 0.875rem; 
             color: var(--sidebar-text);
-            transition: background-color 0.2s;
+            transition: background-color 0.2s, border-color 0.2s, color 0.2s;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            border-bottom: 1px solid var(--sidebar-border); 
+        }
+        .sidebar-item:last-child {
+            border-bottom: none;
         }
         .sidebar-item:hover {
             background-color: var(--sidebar-item-hover-bg);
         }
         .sidebar-item.active {
             background-color: var(--sidebar-item-active-bg);
-            color: var(--btn-text-color);
+            color: var(--sidebar-item-active-text);
             font-weight: 600;
+            border-left: 4px solid var(--sidebar-item-active-border);
+            padding-left: calc(1rem - 4px); 
+            border-bottom-color: transparent; 
         }
         #sidebar-toggle-btn {
             background-color: var(--container-bg);
             border: 1px solid var(--input-border);
             padding: 0.5rem;
             border-radius: 0.375rem;
-            z-index: 50; /* Ensure it's above other nav elements if overlapping could occur */
+            z-index: 50; 
         }
 
         .content-wrapper {
@@ -162,12 +173,11 @@
             min-height: 100vh; 
             margin-left: 0; 
             transition: margin-left 0.3s ease-in-out;
-            width: 100%; /* Ensure it takes full width initially */
+            width: 100%; 
         }
         .content-wrapper.sidebar-open {
-            /* Only apply margin-left if sidebar is open AND screen is wide enough for fixed sidebar */
         }
-         @media (min-width: 769px) { /* Desktop and larger tablets */
+         @media (min-width: 769px) { 
             .content-wrapper.sidebar-open {
                  margin-left: var(--sidebar-width);
             }
@@ -319,7 +329,7 @@
         <div class="content-wrapper">
             <nav id="app-menu-bar" class="w-full">
                 <div class="max-w-3xl mx-auto flex items-center justify-between gap-x-4 py-2 px-2">
-                    <button id="sidebar-toggle-btn" aria-label="Toggle sidebar" class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <button id="sidebar-toggle-btn" aria-label="Toggle sidebar" class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 hidden">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                         </svg>
@@ -346,15 +356,14 @@
             </nav>
 
             <div class="w-full max-w-3xl main-container p-6 md:p-8">
-                <header class="mb-6">
-                    <div class="flex justify-between items-center mb-4">
+                <header class="mb-4"> 
+                    <div class="flex justify-between items-center mb-2"> 
                         <h1 id="app-title" class="text-3xl md:text-4xl font-bold" style="color: var(--text-accent-strong);">多言語学習アプリ</h1>
                     </div>
-                    <p id="app-subtitle" class="text-center mt-2" style="color: var(--text-secondary);">長文を入力し、文ごとに学習しましょう。</p>
                 </header>
 
-                <div id="input-section" class="space-y-6 mb-8">
-                    <div id="mode-selection" class="mb-4">
+                <div id="input-section" class="space-y-4 mb-6"> 
+                    <div id="mode-selection" class="mb-3"> 
                         <h3 id="mode-select-label" class="text-lg font-medium mb-2" style="color: var(--text-primary);">学習モード:</h3>
                         <div class="flex flex-wrap gap-2">
                             <button id="mode-memorization-btn" data-mode="memorization" class="mode-btn btn btn-sm">暗記</button>
@@ -363,18 +372,18 @@
                         </div>
                     </div>
 
-                    <div id="audio-input-container" class="hidden mb-4">
+                    <div id="audio-input-container" class="hidden mb-3"> 
                         <label for="audio-files-input" id="audio-files-label" class="block text-sm font-medium mb-1" style="color: var(--text-primary);">音声ファイル (学習開始前に選択):</label>
                         <input type="file" id="audio-files-input" multiple accept=".mp3,audio/mpeg,.m4a,audio/x-m4a,audio/aac,audio/mp4" class="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100" style="color: var(--text-secondary);">
                     </div>
 
-                    <div class="flex flex-col sm:flex-row gap-2 mb-4">
+                    <div class="flex flex-col sm:flex-row gap-2 mb-3"> 
                         <input type="file" id="csv-file-input" accept=".csv" class="hidden">
                         <button id="import-csv-btn" class="btn btn-success w-full sm:w-auto text-base">CSVから入力</button>
                         <button id="export-csv-btn" class="btn btn-success w-full sm:w-auto text-base">CSVへ出力</button>
                     </div>
 
-                    <div class="mt-2 mb-6 space-y-2 border-t border-b py-4" style="border-color: var(--input-border);">
+                    <div class="mt-2 mb-4 space-y-2 border-t border-b py-3" style="border-color: var(--input-border);"> 
                         <div class="flex flex-col sm:flex-row gap-2 items-center justify-between">
                             <h3 id="history-section-title" class="text-lg font-medium self-start sm:self-center" style="color: var(--text-primary);">入力履歴</h3>
                             <div class="flex gap-2 self-end sm:self-center">
@@ -401,7 +410,7 @@
                         <span id="display-priority-label" class="text-sm" style="color: var(--text-secondary);">初期表示 (暗記モード):</span>
                         <button id="toggle-display-priority-btn" class="btn">原文を隠す</button>
                     </div>
-                    <div id="message-area" class="mt-4" aria-live="polite"></div>
+                    <div id="message-area" class="mt-3" aria-live="polite"></div> 
                     <div class="flex flex-col sm:flex-row gap-4">
                         <button id="start-learning-btn" class="btn btn-primary w-full sm:w-auto text-base">学習開始</button>
                         <button id="reset-all-btn" class="btn btn-secondary w-full sm:w-auto text-base">リセット</button>
@@ -420,7 +429,7 @@
                         </div>
                 </main>
 
-                <footer class="mt-10 text-center text-sm" style="color: var(--text-secondary);">
+                <footer class="mt-8 text-center text-sm" style="color: var(--text-secondary);"> 
                     <p id="footer-text">&copy; 2025 siomiso</p>
                 </footer>
             </div>
@@ -458,7 +467,7 @@
     const i18nData = {
         ja: {
             appTitle: "多言語学習アプリ",
-            appSubtitle: "長文を入力し、文ごとに学習しましょう。",
+            // appSubtitle: "長文を入力し、文ごとに学習しましょう。", // Removed
             originalTextLabel: "原文 (中国語・英語・日本語):",
             translationTextLabel: "訳文 (中国語・英語・日本語):",
             originalPlaceholder: "ここに原文の長文テキストを入力してください。文の区切りは「.」「?」「!」「。」「？」「！」です。",
@@ -541,7 +550,7 @@
         },
         en: {
             appTitle: "Multilingual Learning App",
-            appSubtitle: "Input long texts and learn sentence by sentence.",
+            // appSubtitle: "Input long texts and learn sentence by sentence.", // Removed
             originalTextLabel: "Original Text (Chinese/English/Japanese):",
             translationTextLabel: "Translated Text (Chinese/English/Japanese):",
             originalPlaceholder: "Enter the original long text here. Sentences are delimited by '.', '?', '!', '。', '？', '！'.",
@@ -759,7 +768,7 @@
     function updateUIText() {
         document.title = t.appTitle;
         document.getElementById('app-title').textContent = t.appTitle;
-        document.getElementById('app-subtitle').textContent = t.appSubtitle;
+        // document.getElementById('app-subtitle').textContent = t.appSubtitle; // Removed
         document.getElementById('original-text-label').textContent = t.originalTextLabel;
         document.getElementById('translation-text-label').textContent = t.translationTextLabel;
         originalTextInput.placeholder = t.originalPlaceholder;
@@ -1057,10 +1066,11 @@
                     item.classList.add('active');
                 }
                 item.addEventListener('click', () => {
-                    const targetSentencePair = document.querySelector(`.sentence-pair[data-id="${pair.id}"]`);
+                    const targetPairId = item.dataset.pairId; 
+                    const targetSentencePair = document.querySelector(`.sentence-pair[data-id="${targetPairId}"]`);
                     if (targetSentencePair) {
-                        targetSentencePair.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        setActiveSidebarItem(pair.id);
+                        targetSentencePair.scrollIntoView({ behavior: 'smooth', block: 'start' }); // Changed to 'start'
+                        setActiveSidebarItem(targetPairId);
                         if (window.innerWidth <= 768 && appSidebar.classList.contains('open')) { 
                             appSidebar.classList.remove('open');
                             contentWrapper.classList.remove('sidebar-open'); 
@@ -1500,27 +1510,25 @@
 
         allTranslationsManuallyToggled = !allTranslationsManuallyToggled; 
 
-        let pairsToConsider = isFilteringIncorrect ? currentPairedSentences.filter(p => incorrectlyAnsweredPairs.has(p.id)) : currentPairedSentences;
+        const renderedPairDivs = sentenceContainer.querySelectorAll('.sentence-pair');
 
-        pairsToConsider.forEach(pair => { 
-            const pairDiv = sentenceContainer.querySelector(`.sentence-pair[data-id="${pair.id}"]`);
-            if (!pairDiv) return; 
-
+        renderedPairDivs.forEach(pairDiv => {
             const originalEl = pairDiv.querySelector('.original-sentence');
             const translationEl = pairDiv.querySelector('.translation-sentence');
             const individualToggleBtn = pairDiv.querySelector('.individual-toggle-btn');
 
+            if (!originalEl || !translationEl || !individualToggleBtn) return;
+
             if (displayPriority === 'originalFirst') {
                 translationEl.classList.toggle('hidden', !allTranslationsManuallyToggled);
-                if (individualToggleBtn) individualToggleBtn.textContent = allTranslationsManuallyToggled ? t.hideTranslation : t.showTranslation;
+                individualToggleBtn.textContent = allTranslationsManuallyToggled ? t.hideTranslation : t.showTranslation;
             } else { 
                 originalEl.classList.toggle('hidden', !allTranslationsManuallyToggled);
-                if (individualToggleBtn) individualToggleBtn.textContent = allTranslationsManuallyToggled ? t.hideOriginal : t.showOriginal;
+                individualToggleBtn.textContent = allTranslationsManuallyToggled ? t.hideOriginal : t.showOriginal;
             }
         });
-        if (toggleAllTranslationsBtn) {
-            toggleAllTranslationsBtn.textContent = allTranslationsManuallyToggled ? t.hideAllTranslations : t.showAllTranslations;
-        }
+        
+        toggleAllTranslationsBtn.textContent = allTranslationsManuallyToggled ? t.hideAllTranslations : t.showAllTranslations;
     });
 
 
@@ -1723,24 +1731,25 @@
         const sidebarOpen = appSidebar.classList.contains('open');
 
         if (isLearning) {
-            // Show toggle button when in learning section
             sidebarToggleBtn.classList.remove('hidden'); 
             if (sidebarOpen) {
-                 contentWrapper.classList.add('sidebar-open');
+                 if(window.innerWidth > 768) { 
+                    contentWrapper.classList.add('sidebar-open');
+                 } 
             } else {
                  contentWrapper.classList.remove('sidebar-open');
             }
-        } else { // Not in learning section
-            appSidebar.classList.remove('open'); // Ensure sidebar is closed
-            contentWrapper.classList.remove('sidebar-open'); // Ensure content is not shifted
-            sidebarToggleBtn.classList.add('hidden'); // Hide toggle button
+        } else { 
+            appSidebar.classList.remove('open'); 
+            contentWrapper.classList.remove('sidebar-open'); 
+            sidebarToggleBtn.classList.add('hidden'); 
         }
     }
 
 
     sidebarToggleBtn.addEventListener('click', () => {
         appSidebar.classList.toggle('open');
-        updateSidebarVisibility(); // Call this to update content wrapper margin
+        updateSidebarVisibility(); 
     });
 
     let touchStartX = 0;
@@ -1749,10 +1758,10 @@
 
     document.body.addEventListener('touchstart', (event) => {
         if (window.innerWidth > 768) return; 
-        if (!appSidebar.classList.contains('open') && event.touches[0].clientX < 30) {
+        if ((!appSidebar.classList.contains('open') && event.touches[0].clientX < 30) || appSidebar.classList.contains('open')) {
             touchStartX = event.touches[0].clientX;
-        } else if (appSidebar.classList.contains('open')) { 
-             touchStartX = event.touches[0].clientX;
+        } else {
+            touchStartX = 0; 
         }
     }, { passive: true });
 
@@ -1765,13 +1774,12 @@
         if (window.innerWidth > 768 || touchStartX === 0) return;
         const swipeDistance = touchEndX - touchStartX;
 
-        if (!appSidebar.classList.contains('open') && swipeDistance > swipeThreshold && touchStartX < 30) {
+        if (!appSidebar.classList.contains('open') && swipeDistance > swipeThreshold && touchStartX < 30) { 
             appSidebar.classList.add('open'); 
-            contentWrapper.classList.add('sidebar-open');
         } else if (appSidebar.classList.contains('open') && swipeDistance < -swipeThreshold) {
             appSidebar.classList.remove('open'); 
-            contentWrapper.classList.remove('sidebar-open');
         }
+        updateSidebarVisibility(); 
         touchStartX = 0; 
         touchEndX = 0;   
     }, { passive: true });
