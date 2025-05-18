@@ -1051,7 +1051,12 @@
     }
     
     function generatePairId(original, translation) {
-        return `pairid-${original}-${translation}`;
+        // Replace characters problematic for querySelector if used directly in attribute value strings
+        // or if the ID itself needs to be simpler.
+        // Here, we replace newline with a specific placeholder and double quotes too.
+        const cleanOriginal = String(original).replace(/\n/g, "__NL__").replace(/"/g, "__DQ__");
+        const cleanTranslation = String(translation).replace(/\n/g, "__NL__").replace(/"/g, "__DQ__");
+        return `pairid-${cleanOriginal}-${cleanTranslation}`;
     }
 
     function renderSidebar(pairsToDisplay) {
@@ -1061,20 +1066,27 @@
                 const item = document.createElement('div');
                 item.className = 'sidebar-item';
                 item.textContent = pair.original.substring(0, 30) + (pair.original.length > 30 ? '...' : '');
-                item.dataset.pairId = pair.id;
+                item.dataset.pairId = pair.id; // This ID is already sanitized by generatePairId
                 if (pair.id === activeSidebarItemId) {
                     item.classList.add('active');
                 }
                 item.addEventListener('click', () => {
                     const targetPairId = item.dataset.pairId; 
-                    const targetSentencePair = document.querySelector(`.sentence-pair[data-id="${targetPairId}"]`);
+                    // Construct the selector with the (already sanitized) ID.
+                    // Double quotes around the attribute value are crucial if the ID could ever contain spaces or special chars
+                    // not handled by generatePairId (though current generatePairId aims to make it safe).
+                    const selector = `.sentence-pair[data-id="${targetPairId.replace(/"/g, '\\"')}"]`;
+                    const targetSentencePair = document.querySelector(selector);
+
                     if (targetSentencePair) {
-                        targetSentencePair.scrollIntoView({ behavior: 'smooth', block: 'start' }); // Changed to 'start'
+                        targetSentencePair.scrollIntoView({ behavior: 'smooth', block: 'start' }); 
                         setActiveSidebarItem(targetPairId);
                         if (window.innerWidth <= 768 && appSidebar.classList.contains('open')) { 
                             appSidebar.classList.remove('open');
                             contentWrapper.classList.remove('sidebar-open'); 
                         }
+                    } else {
+                        console.warn("Target sentence pair not found for ID:", targetPairId, "with selector:", selector);
                     }
                 });
                 sidebarSentenceList.appendChild(item);
