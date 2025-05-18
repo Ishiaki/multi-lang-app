@@ -283,14 +283,17 @@
         ::selection { background-color: var(--selection-bg); color: var(--selection-text); }
         ::-moz-selection { background-color: var(--selection-bg); color: var(--selection-text); }
 
-        #history-items-container { background-color: var(--history-item-bg); border: 1px solid var(--history-item-border); border-radius: 0.375rem; }
-        #history-items-container::-webkit-scrollbar { width: 8px; }
-        #history-items-container::-webkit-scrollbar-track { background: transparent; }
-        #history-items-container::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 4px; }
-        #history-items-container::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
-        .history-item { background-color: var(--container-bg); border-color: var(--input-border); }
-        .history-item:hover { background-color: var(--history-item-hover-bg); }
-        html.dark .history-item .text-teal-600 { color: var(--text-accent); }
+        #history-items-container, #mysets-container { background-color: var(--history-item-bg); border: 1px solid var(--history-item-border); border-radius: 0.375rem; }
+        #history-items-container::-webkit-scrollbar, #mysets-container::-webkit-scrollbar { width: 8px; }
+        #history-items-container::-webkit-scrollbar-track, #mysets-container::-webkit-scrollbar-track { background: transparent; }
+        #history-items-container::-webkit-scrollbar-thumb, #mysets-container::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 4px; }
+        #history-items-container::-webkit-scrollbar-thumb:hover, #mysets-container::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
+        
+        .history-item, .myset-item { background-color: var(--container-bg); border-color: var(--input-border); }
+        .history-item:hover, .myset-item:hover { background-color: var(--history-item-hover-bg); }
+        html.dark .history-item .text-teal-600, html.dark .myset-item .text-teal-600 { color: var(--text-accent); }
+        .myset-item-buttons button { margin-left: 0.5rem;}
+
 
         .answer-correct { color: #10b981; } html.dark .answer-correct { color: #34d399; }
         .answer-incorrect { color: #ef4444; } html.dark .answer-incorrect { color: #f87171; }
@@ -395,6 +398,18 @@
                             <p id="no-history-message" class="text-center py-2" style="color: var(--text-secondary);">履歴はありません。</p>
                         </div>
                     </div>
+                     <div id="mysets-section" class="mt-2 mb-4 space-y-2 border-t border-b py-3" style="border-color: var(--input-border);">
+                        <div class="flex flex-col sm:flex-row gap-2 items-center justify-between">
+                            <h3 id="mysets-section-title" class="text-lg font-medium self-start sm:self-center" style="color: var(--text-primary);">マイセット</h3>
+                            <div class="flex gap-2 self-end sm:self-center">
+                                <button id="toggle-mysets-btn" class="btn btn-info btn-small">マイセットを表示</button>
+                            </div>
+                        </div>
+                        <div id="mysets-container" class="hidden max-h-60 overflow-y-auto space-y-2 p-2">
+                            <p id="no-mysets-message" class="text-center py-2" style="color: var(--text-secondary);">マイセットはありません。</p>
+                        </div>
+                    </div>
+
 
                     <div>
                         <label for="original-text" id="original-text-label" class="block text-lg font-medium mb-2" style="color: var(--text-primary);">原文 (中国語・英語・日本語):</label>
@@ -410,11 +425,14 @@
                         <span id="display-priority-label" class="text-sm" style="color: var(--text-secondary);">初期表示 (暗記モード):</span>
                         <button id="toggle-display-priority-btn" class="btn">原文を隠す</button>
                     </div>
+                     <button id="save-myset-btn" class="btn btn-success w-full sm:w-auto text-base">マイセットとして保存</button>
+
                     <div id="message-area" class="mt-3" aria-live="polite"></div> 
                     <div class="flex flex-col sm:flex-row gap-4">
                         <button id="start-learning-btn" class="btn btn-primary w-full sm:w-auto text-base">学習開始</button>
                         <button id="reset-all-btn" class="btn btn-secondary w-full sm:w-auto text-base">リセット</button>
                     </div>
+                     <button id="clear-app-data-btn" class="btn btn-danger w-full sm:w-auto text-base mt-4">アプリデータをクリア</button>
                 </div>
 
                 <main id="learning-section" class="hidden">
@@ -448,6 +466,7 @@
     let textInputHistory = [];
     const MAX_TEXT_HISTORY_ITEMS = 20;
     const TEXT_HISTORY_STORAGE_KEY = 'multiLangAppHistory_v2';
+    const MY_SETS_STORAGE_KEY = 'multiLangAppMySets_v1'; // New key for My Sets
     const THEME_STORAGE_KEY = 'multiLangAppTheme_v1';
     const LANGUAGE_STORAGE_KEY = 'multiLangAppLanguage_v1';
 
@@ -462,12 +481,13 @@
     let lastTranslationTextForIncorrectTracking = ""; 
 
     let activeSidebarItemId = null; 
+    let mySets = []; // For My Sets feature
+
 
     // --- i18n (Internationalization) Data ---
     const i18nData = {
         ja: {
             appTitle: "多言語学習アプリ",
-            // appSubtitle: "長文を入力し、文ごとに学習しましょう。", // Removed
             originalTextLabel: "原文 (中国語・英語・日本語):",
             translationTextLabel: "訳文 (中国語・英語・日本語):",
             originalPlaceholder: "ここに原文の長文テキストを入力してください。文の区切りは「.」「?」「!」「。」「？」「！」です。",
@@ -547,10 +567,24 @@
             themeSystemOption: "システム",
             csvExportNotSupported: "このブラウザではCSVエクスポートが完全にはサポートされていない可能性があります。",
             audioFilesSelected: (count) => `${count}件の音声ファイルを選択しました。`,
+            mySetsSectionTitle: "マイセット",
+            showMySets: "マイセットを表示",
+            hideMySets: "マイセットを隠す",
+            saveMySet: "マイセットとして保存",
+            noMySets: "マイセットはありません。",
+            enterMySetName: "マイセットの名前を入力してください:",
+            mySetSaved: (name) => `「${name}」をマイセットに保存しました。`,
+            mySetLoaded: (name) => `マイセット「${name}」を読み込みました。`,
+            confirmDeleteMySet: (name) => `マイセット「${name}」を本当に削除しますか？`,
+            mySetDeleted: (name) => `マイセット「${name}」を削除しました。`,
+            errorSavingMySetNoName: "セット名が入力されていません。",
+            errorSavingMySetEmpty: "原文または訳文が空のため、マイセットとして保存できません。",
+            clearAppData: "アプリデータをクリア",
+            confirmClearAppData: "アプリの全データ（履歴、マイセット、設定）をクリアしますか？この操作は元に戻せません。",
+            appDataCleared: "アプリデータをクリアしました。ページをリロードします。",
         },
         en: {
             appTitle: "Multilingual Learning App",
-            // appSubtitle: "Input long texts and learn sentence by sentence.", // Removed
             originalTextLabel: "Original Text (Chinese/English/Japanese):",
             translationTextLabel: "Translated Text (Chinese/English/Japanese):",
             originalPlaceholder: "Enter the original long text here. Sentences are delimited by '.', '?', '!', '。', '？', '！'.",
@@ -630,6 +664,21 @@
             themeSystemOption: "System",
             csvExportNotSupported: "CSV export might not be fully supported on this browser.",
             audioFilesSelected: (count) => `Selected ${count} audio file(s).`,
+            mySetsSectionTitle: "My Sets",
+            showMySets: "Show My Sets",
+            hideMySets: "Hide My Sets",
+            saveMySet: "Save as My Set",
+            noMySets: "No sets saved yet.",
+            enterMySetName: "Enter a name for this set:",
+            mySetSaved: (name) => `Set "${name}" saved.`,
+            mySetLoaded: (name) => `Loaded set "${name}".`,
+            confirmDeleteMySet: (name) => `Are you sure you want to delete the set "${name}"?`,
+            mySetDeleted: (name) => `Set "${name}" deleted.`,
+            errorSavingMySetNoName: "Set name cannot be empty.",
+            errorSavingMySetEmpty: "Cannot save an empty set. Please enter original or translation text.",
+            clearAppData: "Clear App Data",
+            confirmClearAppData: "Are you sure you want to clear all app data (history, my sets, settings)? This action cannot be undone.",
+            appDataCleared: "App data cleared. Reloading page.",
         }
     };
     let t = i18nData[currentSelectedLang]; 
@@ -668,6 +717,11 @@
     const sidebarSentenceList = document.getElementById('sidebar-sentence-list');
     const sidebarToggleBtn = document.getElementById('sidebar-toggle-btn');
     const contentWrapper = document.querySelector('.content-wrapper');
+    const saveMySetBtn = document.getElementById('save-myset-btn');
+    const mySetsContainer = document.getElementById('mysets-container');
+    const noMySetsMessage = document.getElementById('no-mysets-message');
+    const toggleMySetsBtn = document.getElementById('toggle-mysets-btn');
+    const clearAppDataBtn = document.getElementById('clear-app-data-btn');
 
 
     // --- Theme Management ---
@@ -725,6 +779,7 @@
                 renderSentences(); 
             }
             renderTextInputHistoryList();
+            renderMySetList(); // Update My Sets list on language change
             updateFilterIncorrectButtonState(); 
         }
     }
@@ -768,7 +823,6 @@
     function updateUIText() {
         document.title = t.appTitle;
         document.getElementById('app-title').textContent = t.appTitle;
-        // document.getElementById('app-subtitle').textContent = t.appSubtitle; // Removed
         document.getElementById('original-text-label').textContent = t.originalTextLabel;
         document.getElementById('translation-text-label').textContent = t.translationTextLabel;
         originalTextInput.placeholder = t.originalPlaceholder;
@@ -794,6 +848,12 @@
         noHistoryMessage.textContent = t.noHistory;
         updateToggleHistoryButtonText();
 
+        document.getElementById('mysets-section-title').textContent = t.mySetsSectionTitle;
+        noMySetsMessage.textContent = t.noMySets;
+        updateToggleMySetsButtonText();
+        saveMySetBtn.textContent = t.saveMySet;
+
+
         document.getElementById('mode-select-label').textContent = t.modeSelectLabel;
         modeMemorizationBtn.textContent = t.memorizationMode;
         modeTestBtn.textContent = t.testMode;
@@ -802,6 +862,8 @@
         shufflePairsBtn.textContent = t.shufflePairs;
         document.getElementById('sidebar-title').textContent = t.sidebarTitle;
         document.getElementById('footer-text').innerHTML = t.footerText; 
+        clearAppDataBtn.textContent = t.clearAppData;
+
 
         document.getElementById('language-select-label').textContent = t.languageSelectLabel;
         document.getElementById('theme-select-label').textContent = t.themeSelectLabel;
@@ -818,6 +880,10 @@
     function updateToggleHistoryButtonText() {
         toggleHistoryBtn.textContent = historyItemsContainer.classList.contains('hidden') ? t.showHistory : t.hideHistory;
     }
+     function updateToggleMySetsButtonText() {
+        toggleMySetsBtn.textContent = mysetsContainer.classList.contains('hidden') ? t.showMySets : t.hideMySets;
+    }
+
 
     function updateModeSelectionUI() {
         modeButtons.forEach(btn => {
@@ -888,7 +954,9 @@
 
     audioFilesInput.addEventListener('change', (event) => {
         revokePreviousAudioUrls(); 
-        loadedAudioFiles = Array.from(event.target.files).map(file => {
+        const files = Array.from(event.target.files).sort((a, b) => a.name.localeCompare(b.name));
+        
+        loadedAudioFiles = files.map(file => {
             const url = URL.createObjectURL(file);
             audioObjectUrls.push(url); 
             return { file, url };
@@ -1018,6 +1086,118 @@
         }
     }
     
+    // --- My Sets Feature ---
+    function loadMySetsFromStorage() {
+        const storedMySets = localStorage.getItem(MY_SETS_STORAGE_KEY);
+        if (storedMySets) {
+            try {
+                mySets = JSON.parse(storedMySets);
+            } catch (e) {
+                console.error("Error parsing My Sets from localStorage:", e);
+                mySets = [];
+            }
+        }
+    }
+
+    function saveMySetsToStorage() {
+        localStorage.setItem(MY_SETS_STORAGE_KEY, JSON.stringify(mySets));
+    }
+
+    function renderMySetList() {
+        const dynamicItems = mysetsContainer.querySelectorAll('.myset-item');
+        dynamicItems.forEach(item => item.remove());
+
+        if (mySets.length === 0) {
+            noMySetsMessage.style.display = 'block';
+            noMySetsMessage.textContent = t.noMySets;
+            return;
+        }
+        noMySetsMessage.style.display = 'none';
+
+        const fragment = document.createDocumentFragment();
+        mySets.forEach((set, index) => {
+            const setDiv = document.createElement('div');
+            setDiv.className = 'myset-item p-3 border rounded-md flex justify-between items-center';
+            
+            const setNamePara = document.createElement('p');
+            setNamePara.className = 'text-sm text-slate-600 break-all flex-grow mr-2';
+            setNamePara.style.color = 'var(--text-primary)';
+            setNamePara.textContent = set.name;
+            setNamePara.title = `${set.original.substring(0,50)}...\n---\n${set.translation.substring(0,50)}...`;
+
+            const buttonsDiv = document.createElement('div');
+            buttonsDiv.className = 'myset-item-buttons flex-shrink-0';
+
+            const loadBtn = document.createElement('button');
+            loadBtn.className = 'btn btn-info btn-small';
+            loadBtn.textContent = "読込"; // Simple text, can be i18n'd
+            loadBtn.addEventListener('click', () => {
+                originalTextInput.value = set.original;
+                translationTextInput.value = set.translation;
+                lastOriginalTextForIncorrectTracking = set.original;
+                lastTranslationTextForIncorrectTracking = set.translation;
+                incorrectlyAnsweredPairs.clear();
+                isFilteringIncorrect = false;
+                showMessage(t.mySetLoaded(set.name), "success", false);
+                if (!mysetsContainer.classList.contains('hidden')) {
+                    mysetsContainer.classList.add('hidden');
+                    updateToggleMySetsButtonText();
+                }
+            });
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'btn btn-danger btn-small';
+            deleteBtn.textContent = "削除"; // Simple text, can be i18n'd
+            deleteBtn.addEventListener('click', () => {
+                if (confirm(t.confirmDeleteMySet(set.name))) {
+                    mySets.splice(index, 1);
+                    saveMySetsToStorage();
+                    renderMySetList();
+                    showMessage(t.mySetDeleted(set.name), "success", false);
+                }
+            });
+            
+            buttonsDiv.appendChild(loadBtn);
+            buttonsDiv.appendChild(deleteBtn);
+            setDiv.appendChild(setNamePara);
+            setDiv.appendChild(buttonsDiv);
+            fragment.appendChild(setDiv);
+        });
+        mysetsContainer.appendChild(fragment);
+    }
+    
+    saveMySetBtn.addEventListener('click', () => {
+        const original = originalTextInput.value.trim();
+        const translation = translationTextInput.value.trim();
+
+        if (!original && !translation) {
+            showMessage(t.errorSavingMySetEmpty, "error", false);
+            return;
+        }
+
+        let setName = prompt(t.enterMySetName, original.substring(0, 20) + "...");
+        if (setName === null) return; // User cancelled
+        setName = setName.trim();
+        if (!setName) {
+             showMessage(t.errorSavingMySetNoName, "error", false);
+            return;
+        }
+
+        mySets.unshift({ name, original, translation });
+        if(mySets.length > MAX_TEXT_HISTORY_ITEMS) { // Reuse history limit for sets for now
+            mySets.pop();
+        }
+        saveMySetsToStorage();
+        renderMySetList();
+        showMessage(t.mySetSaved(setName), "success", false);
+    });
+
+    toggleMySetsBtn.addEventListener('click', () => {
+        mysetsContainer.classList.toggle('hidden');
+        updateToggleMySetsButtonText();
+    });
+
+
     // --- Filter Incorrect Pairs Feature ---
     function updateFilterIncorrectButtonState() {
         if (!filterIncorrectBtn) return;
@@ -1051,11 +1231,8 @@
     }
     
     function generatePairId(original, translation) {
-        // Replace characters problematic for querySelector if used directly in attribute value strings
-        // or if the ID itself needs to be simpler.
-        // Here, we replace newline with a specific placeholder and double quotes too.
-        const cleanOriginal = String(original).replace(/\n/g, "__NL__").replace(/"/g, "__DQ__");
-        const cleanTranslation = String(translation).replace(/\n/g, "__NL__").replace(/"/g, "__DQ__");
+        const cleanOriginal = String(original).replace(/\n/g, "__NL__").replace(/"/g, "__DQ__").replace(/'/g, "__SQ__");
+        const cleanTranslation = String(translation).replace(/\n/g, "__NL__").replace(/"/g, "__DQ__").replace(/'/g, "__SQ__");
         return `pairid-${cleanOriginal}-${cleanTranslation}`;
     }
 
@@ -1066,16 +1243,13 @@
                 const item = document.createElement('div');
                 item.className = 'sidebar-item';
                 item.textContent = pair.original.substring(0, 30) + (pair.original.length > 30 ? '...' : '');
-                item.dataset.pairId = pair.id; // This ID is already sanitized by generatePairId
+                item.dataset.pairId = pair.id; 
                 if (pair.id === activeSidebarItemId) {
                     item.classList.add('active');
                 }
                 item.addEventListener('click', () => {
                     const targetPairId = item.dataset.pairId; 
-                    // Construct the selector with the (already sanitized) ID.
-                    // Double quotes around the attribute value are crucial if the ID could ever contain spaces or special chars
-                    // not handled by generatePairId (though current generatePairId aims to make it safe).
-                    const selector = `.sentence-pair[data-id="${targetPairId.replace(/"/g, '\\"')}"]`;
+                    const selector = `.sentence-pair[data-id="${CSS.escape(targetPairId)}"]`; 
                     const targetSentencePair = document.querySelector(selector);
 
                     if (targetSentencePair) {
@@ -1737,6 +1911,18 @@
         }
     });
 
+    clearAppDataBtn.addEventListener('click', () => {
+        if (confirm(t.confirmClearAppData)) {
+            localStorage.removeItem(TEXT_HISTORY_STORAGE_KEY);
+            localStorage.removeItem(MY_SETS_STORAGE_KEY);
+            localStorage.removeItem(THEME_STORAGE_KEY);
+            localStorage.removeItem(LANGUAGE_STORAGE_KEY);
+            showMessage(t.appDataCleared, "success", false, 4000);
+            setTimeout(() => window.location.reload(), 1500); // Reload after a short delay
+        }
+    });
+
+
     // --- Sidebar Logic ---
     function updateSidebarVisibility() {
         const isLearning = !learningSection.classList.contains('hidden');
@@ -1802,8 +1988,10 @@
         loadAndApplyTheme(); 
         loadAndApplyLanguage(); 
         loadTextInputHistoryFromStorage();
+        loadMySetsFromStorage(); // Load My Sets
         updateUndoRedoButtonStates();
         renderTextInputHistoryList();
+        renderMySetList(); // Render My Sets
         updateModeSelectionUI(); 
         updateFilterIncorrectButtonState(); 
         updateSidebarVisibility(); 
