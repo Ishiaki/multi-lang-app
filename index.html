@@ -437,9 +437,9 @@
 
                     <div id="audio-input-container" class="hidden mb-3"> 
                         <label for="audio-files-input" id="audio-files-label" class="block text-sm font-medium mb-1" style="color: var(--text-primary);">音声ファイル (学習開始前に選択):</label>
-                        <div class="flex items-center gap-x-2"> {/* Added flex container */}
-                            <input type="file" id="audio-files-input" multiple accept=".mp3,audio/mpeg,.m4a,audio/x-m4a,audio/aac,audio/mp4" class="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100 flex-grow" style="color: var(--text-secondary);"> {/* Added flex-grow */}
-                            <span id="audio-file-names-display" class="text-xs" style="color: var(--text-secondary);">ファイル未選択</span> {/* Default text */}
+                        <div class="flex items-center gap-x-2">
+                            <input type="file" id="audio-files-input" multiple accept=".mp3,audio/mpeg,.m4a,audio/x-m4a,audio/aac,audio/mp4" class="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100 flex-grow" style="color: var(--text-secondary);">
+                            <span id="audio-file-names-display" class="text-xs" style="color: var(--text-secondary);">ファイル未選択</span>
                         </div>
                     </div>
 
@@ -927,6 +927,17 @@
         modeTestBtn.textContent = t.testMode;
         modeAudioBtn.textContent = t.audioMode;
         document.getElementById('audio-files-label').textContent = t.audioFilesLabel;
+        // Update audio file names display text based on current language and selection state
+        if (audioFileNamesDisplay) { // Check if the element exists
+            if (loadedAudioFiles.length > 0) {
+                const messageKey = 'audioFilesSelected';
+                audioFileNamesDisplay.textContent = typeof t[messageKey] === 'function'
+                    ? t[messageKey](loadedAudioFiles.length)
+                    : `${loadedAudioFiles.length} ${currentSelectedLang === 'ja' ? '件の音声ファイルを選択しました' : 'audio file(s) selected'}`;
+            } else {
+                audioFileNamesDisplay.textContent = t.noAudioFileSelectedDefaultText || (currentSelectedLang === 'ja' ? 'ファイル未選択' : 'No file selected');
+            }
+        }
         shufflePairsBtn.textContent = t.shufflePairs;
         document.getElementById('sidebar-title').textContent = t.sidebarTitle;
         document.getElementById('footer-text').innerHTML = t.footerText; 
