@@ -437,8 +437,10 @@
 
                     <div id="audio-input-container" class="hidden mb-3"> 
                         <label for="audio-files-input" id="audio-files-label" class="block text-sm font-medium mb-1" style="color: var(--text-primary);">音声ファイル (学習開始前に選択):</label>
-                        <input type="file" id="audio-files-input" multiple accept=".mp3,audio/mpeg,.m4a,audio/x-m4a,audio/aac,audio/mp4" class="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100" style="color: var(--text-secondary);">
-                        <span id="audio-file-names-display" class="block text-xs mt-1" style="color: var(--text-secondary);"></span>
+                        <div class="flex items-center gap-x-2"> {/* Added flex container */}
+                            <input type="file" id="audio-files-input" multiple accept=".mp3,audio/mpeg,.m4a,audio/x-m4a,audio/aac,audio/mp4" class="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100 flex-grow" style="color: var(--text-secondary);"> {/* Added flex-grow */}
+                            <span id="audio-file-names-display" class="text-xs" style="color: var(--text-secondary);">ファイル未選択</span> {/* Default text */}
+                        </div>
                     </div>
 
                     <div class="flex flex-col sm:flex-row gap-2 mb-3"> 
@@ -644,6 +646,7 @@
             clearAppData: "アプリデータをクリア",
             confirmClearAppData: "アプリの全データ（履歴、マイセット、設定）をクリアしますか？この操作は元に戻せません。",
             appDataCleared: "アプリデータをクリアしました。ページをリロードします。",
+            noAudioFileSelectedDefaultText: "ファイル未選択" // Added for default text
         },
         en: {
             appTitle: "Multilingual Learning App",
@@ -742,6 +745,7 @@
             clearAppData: "Clear App Data",
             confirmClearAppData: "Are you sure you want to clear all app data (history, my sets, settings)? This action cannot be undone.",
             appDataCleared: "App data cleared. Reloading page.",
+            noAudioFileSelectedDefaultText: "No file selected" // Added for default text
         }
     };
     let t = i18nData[currentSelectedLang]; 
@@ -1041,17 +1045,16 @@
             audioObjectUrls.push(url); // Keep track of URLs to revoke later
             return { file, url }; // Store file and its URL
         });
-        // Display a message about how many files were selected
+        
+        // Update the file names display next to the button
         if (loadedAudioFiles.length > 0) {
             const messageKey = 'audioFilesSelected';
-            // Check if the translation for 'audioFilesSelected' is a function (for dynamic count)
             const messageText = typeof t[messageKey] === 'function' 
                 ? t[messageKey](loadedAudioFiles.length) 
                 : `${loadedAudioFiles.length}件の音声ファイルを選択しました。`; // Fallback
-            showMessage(messageText, "success");
-            audioFileNamesDisplay.textContent = messageText; // Added
+            audioFileNamesDisplay.textContent = messageText;
         } else {
-            audioFileNamesDisplay.textContent = ''; // Added: Clear display if no files selected
+            audioFileNamesDisplay.textContent = t['noAudioFileSelectedDefaultText'] || 'ファイル未選択'; // Use translated default or fallback
         }
         event.target.value = null; // Reset file input to allow selecting the same file(s) again
     });
