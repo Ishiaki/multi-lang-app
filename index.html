@@ -438,6 +438,7 @@
                     <div id="audio-input-container" class="hidden mb-3"> 
                         <label for="audio-files-input" id="audio-files-label" class="block text-sm font-medium mb-1" style="color: var(--text-primary);">音声ファイル (学習開始前に選択):</label>
                         <input type="file" id="audio-files-input" multiple accept=".mp3,audio/mpeg,.m4a,audio/x-m4a,audio/aac,audio/mp4" class="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100" style="color: var(--text-secondary);">
+                        <span id="audio-file-names-display" class="block text-xs mt-1" style="color: var(--text-secondary);"></span>
                     </div>
 
                     <div class="flex flex-col sm:flex-row gap-2 mb-3"> 
@@ -770,6 +771,7 @@
     const modeButtons = [modeMemorizationBtn, modeTestBtn, modeAudioBtn];
     const audioInputContainer = document.getElementById('audio-input-container');
     const audioFilesInput = document.getElementById('audio-files-input');
+    const audioFileNamesDisplay = document.getElementById('audio-file-names-display'); // Added
     const shufflePairsBtn = document.getElementById('shuffle-pairs-btn');
     const toggleAllTranslationsBtn = document.getElementById('toggle-all-translations-btn');
     const filterIncorrectBtn = document.getElementById('filter-incorrect-btn'); 
@@ -1047,6 +1049,9 @@
                 ? t[messageKey](loadedAudioFiles.length) 
                 : `${loadedAudioFiles.length}件の音声ファイルを選択しました。`; // Fallback
             showMessage(messageText, "success");
+            audioFileNamesDisplay.textContent = messageText; // Added
+        } else {
+            audioFileNamesDisplay.textContent = ''; // Added: Clear display if no files selected
         }
         event.target.value = null; // Reset file input to allow selecting the same file(s) again
     });
