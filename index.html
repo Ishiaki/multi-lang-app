@@ -958,20 +958,25 @@
     }
 
     audioFilesInput.addEventListener('change', (event) => {
-        revokePreviousAudioUrls(); 
-        const files = Array.from(event.target.files); // Keep user selection order
-        
+        revokePreviousAudioUrls(); // 既存 URL を解放
+        // FileList → Array 化し，自然順 (numeric:true) でソート
+        const files = Array.from(event.target.files)
+            .sort((a, b) =>
+                a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' })
+            );
+        // URL を作成し，並んだ順に格納
         loadedAudioFiles = files.map(file => {
             const url = URL.createObjectURL(file);
-            audioObjectUrls.push(url); 
+            audioObjectUrls.push(url);
             return { file, url };
         });
+        // メッセージ表示
         if (loadedAudioFiles.length > 0) {
             const messageKey = 'audioFilesSelected';
-            const messageText = typeof t[messageKey] === 'function' ? t[messageKey](loadedAudioFiles.length) : `${loadedAudioFiles.length} audio file(s) selected.`;
+            const messageText = typeof t[messageKey] === 'function' ? t[messageKey](loadedAudioFiles.length) : `${loadedAudioFiles.length} 件の音声ファイルを選択しました。`;
             showMessage(messageText, "success");
         }
-         event.target.value = null; 
+        event.target.value = null; // 同じ input を再利用するためリセット
     });
     
     // --- Text Input History Functions ---
@@ -1585,13 +1590,14 @@
 
         let audioAssignedCount = 0;
         for (let i = 0; i < pairCount; i++) {
-            let audioSrc = null;
-            if (currentMode === 'audio' && loadedAudioFiles[i]) {
-                audioSrc = loadedAudioFiles[i].url;
-                audioAssignedCount++;
-            }
+            // files.length < pairCount の場合は null が入る
+            const audioSrc =
+                currentMode === 'audio' && loadedAudioFiles[i]
+                    ? loadedAudioFiles[i].url
+                    : null;
+            if (audioSrc) audioAssignedCount++;
             currentPairedSentences.push({
-                id: generatePairId(originalSentences[i], translationSentences[i]), 
+                id: generatePairId(originalSentences[i], translationSentences[i]),
                 original: originalSentences[i],
                 translation: translationSentences[i],
                 audioSrc: audioSrc
