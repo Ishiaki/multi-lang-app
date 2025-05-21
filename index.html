@@ -135,7 +135,7 @@
             min-height: 100vh;
             overflow-x: hidden; 
         }
-        
+       
         .app-wrapper {
             display: flex;
             width: 100%;
@@ -346,7 +346,7 @@
         #history-items-container::-webkit-scrollbar-track, #mysets-container::-webkit-scrollbar-track { background: transparent; }
         #history-items-container::-webkit-scrollbar-thumb, #mysets-container::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 4px; }
         #history-items-container::-webkit-scrollbar-thumb:hover, #mysets-container::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
-        
+       
         .history-item, .myset-item { background-color: var(--container-bg); border-color: var(--input-border); }
         .history-item:hover, .myset-item:hover { background-color: var(--history-item-hover-bg); }
         html.dark .history-item .text-teal-600, html.dark .myset-item .text-teal-600 { color: var(--text-accent); }
@@ -361,22 +361,19 @@
         #app-menu-bar { background-color: var(--container-bg); color: var(--text-primary); padding: 0.5rem 1rem; border-bottom: 1px solid var(--input-border); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         html.dark #app-menu-bar { box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
         #app-menu-bar select, #app-menu-bar button:not(#sidebar-toggle-btn) { 
-             background-color: var(--bg-primary-light); /* Changed from --bg-primary */
+             background-color: var(--bg-primary-light); 
              color: var(--text-primary); border: 1px solid var(--input-border); border-radius: 0.375rem; padding: 0.25rem 0.5rem; 
         }
         #app-menu-bar select:focus, #app-menu-bar button:not(#sidebar-toggle-btn):focus { outline: 2px solid transparent; outline-offset: 2px; border-color: var(--input-focus-border); box-shadow: 0 0 0 2px var(--input-focus-ring); }
         .menu-label { font-size: 0.875rem; font-weight: 500; }
-        
+       
         .sentence-pair { background-color: var(--sentence-pair-bg); border: 1px solid var(--sentence-pair-border); padding: 1.25rem; border-radius: 0.5rem; transition: box-shadow 0.3s; }
         .sentence-pair:hover { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05); }
         html.dark .sentence-pair:hover { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.2), 0 4px 6px -2px rgba(0,0,0,0.15); }
         .original-sentence { color: var(--original-sentence-text); font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; word-break: break-word; }
         .translation-sentence { background-color: var(--translation-sentence-bg); color: var(--translation-sentence-text); border: 1px solid var(--translation-sentence-border); font-size: 1.125rem; padding: 0.75rem; border-radius: 0.375rem; margin-top: 0.5rem; word-break: break-word; }
 
-        html.dark .file\:bg-teal-50 { background-color: #1f2937; } 
-        html.dark .file\:text-teal-700 { color: #9ca3af; } 
-        html.dark .hover\:file\:bg-teal-100 { background-color: #374151; } 
-
+        /* Removed previous file input specific dark mode styles as they are part of the new structure */
     </style>
 </head>
 <body class="flex flex-col items-center min-h-screen p-0">
@@ -397,7 +394,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                         </svg>
                     </button>
-                    
+                   
                     <div class="flex items-center space-x-4 ml-auto"> 
                         <div class="flex items-center space-x-2">
                             <label for="language-select" class="menu-label" id="language-select-label">Language:</label>
@@ -437,9 +434,25 @@
 
                     <div id="audio-input-container" class="hidden mb-3">
                         <label for="audio-files-input" id="audio-files-label" class="block text-sm font-medium mb-1" style="color: var(--text-primary);">音声ファイル (学習開始前に選択):</label>
-                        <div class="flex items-center gap-x-2">
-                            <input type="file" id="audio-files-input" multiple accept=".mp3,audio/mpeg,.m4a,audio/x-m4a,audio/aac,audio/mp4" class="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100 flex-grow" style="color: var(--text-secondary);">
-                            <span id="audio-file-names-display" class="text-xs" style="color: var(--text-secondary);">ファイル未選択</span>
+                        <div class="relative border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-700 rounded-md flex items-center overflow-hidden focus-within:ring-1 focus-within:ring-teal-500 focus-within:border-teal-500 h-10 shadow-sm">
+                            <input type="file" id="audio-files-input" multiple
+                                   accept=".mp3,audio/mpeg,.m4a,audio/x-m4a,audio/aac,audio/mp4"
+                                   class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
+                                   aria-labelledby="audio-files-label">
+
+                            <label for="audio-files-input" class="flex-shrink-0 h-full flex items-center justify-center cursor-pointer 
+                                                                  py-2 px-3 border-r border-gray-300 dark:border-gray-500
+                                                                  text-sm font-semibold 
+                                                                  bg-teal-50 text-teal-700 hover:bg-teal-100
+                                                                  dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500 transition-colors duration-150">
+                                <span id="audio-select-button-text">ファイル選択</span>
+                            </label>
+
+                            <span id="audio-file-names-display"
+                                  class="text-xs px-3 flex-grow truncate self-center leading-tight" 
+                                  style="color: var(--text-secondary);">
+                                  ファイル未選択
+                            </span>
                         </div>
                     </div>
 
@@ -600,6 +613,7 @@
             testMode: "確認",
             audioMode: "音声",
             audioFilesLabel: "音声ファイル (学習開始前に選択):",
+            audioSelectButtonText: "ファイル選択", // New i18n key
             shufflePairs: "ペアをシャッフル",
             successShuffled: "ペアの順番をシャッフルしました。",
             enterYourAnswerPlaceholder: "ここに訳文を入力してください",
@@ -642,11 +656,11 @@
             mySetDeleted: (name) => `マイセット「${name}」を削除しました。`,
             errorSavingMySetNoName: "セット名が入力されていません。",
             errorSavingMySetEmpty: "原文または訳文が空のため、マイセットとして保存できません。",
-            unnamedMySet: "(無名のセット)", // For My Sets
+            unnamedMySet: "(無名のセット)", 
             clearAppData: "アプリデータをクリア",
             confirmClearAppData: "アプリの全データ（履歴、マイセット、設定）をクリアしますか？この操作は元に戻せません。",
             appDataCleared: "アプリデータをクリアしました。ページをリロードします。",
-            noAudioFileSelectedDefaultText: "ファイル未選択" // Added for default text
+            noAudioFileSelectedDefaultText: "ファイル未選択"
         },
         en: {
             appTitle: "Multilingual Learning App",
@@ -683,7 +697,7 @@
             successCsvImported: "Text imported from CSV. Press 'Start Learning'.",
             errorCsvFormat: "Incorrect CSV file format. Ensure column A has original text and column B has translations.",
             errorNoPairsToExport: "No pairs to export.",
-            delimiterRegex: /(?<=[.?!])\s*/g, // English uses different delimiters primarily
+            delimiterRegex: /(?<=[.?!])\s*/g, 
             historySectionTitle: "Input History",
             showHistory: "Show History",
             hideHistory: "Hide History",
@@ -699,6 +713,7 @@
             testMode: "Test",
             audioMode: "Audio",
             audioFilesLabel: "Audio Files (Select before starting):",
+            audioSelectButtonText: "Choose File(s)", // New i18n key
             shufflePairs: "Shuffle Pairs",
             successShuffled: "Pair order has been shuffled.",
             enterYourAnswerPlaceholder: "Enter your translation here",
@@ -745,7 +760,7 @@
             clearAppData: "Clear App Data",
             confirmClearAppData: "Are you sure you want to clear all app data (history, my sets, settings)? This action cannot be undone.",
             appDataCleared: "App data cleared. Reloading page.",
-            noAudioFileSelectedDefaultText: "No file selected" // Added for default text
+            noAudioFileSelectedDefaultText: "No file selected"
         }
     };
     let t = i18nData[currentSelectedLang]; 
@@ -775,7 +790,7 @@
     const modeButtons = [modeMemorizationBtn, modeTestBtn, modeAudioBtn];
     const audioInputContainer = document.getElementById('audio-input-container');
     const audioFilesInput = document.getElementById('audio-files-input');
-    const audioFileNamesDisplay = document.getElementById('audio-file-names-display'); // Added
+    const audioFileNamesDisplay = document.getElementById('audio-file-names-display');
     const shufflePairsBtn = document.getElementById('shuffle-pairs-btn');
     const toggleAllTranslationsBtn = document.getElementById('toggle-all-translations-btn');
     const filterIncorrectBtn = document.getElementById('filter-incorrect-btn'); 
@@ -790,7 +805,7 @@
     const noMySetsMessage = document.getElementById('no-mysets-message');
     const toggleMySetsBtn = document.getElementById('toggle-mysets-btn');
     const clearAppDataBtn = document.getElementById('clear-app-data-btn');
-
+    // Note: audioSelectButtonText span is dynamically created, so no direct const here.
 
     // --- Theme Management ---
     function applyTheme(theme) {
@@ -801,7 +816,7 @@
         }
         const themeColorMeta = document.querySelector('meta[name="theme-color"]');
         if (themeColorMeta) {
-            themeColorMeta.content = theme === 'dark' ? '#0f172a' : '#14b8a6'; // Dark theme color example: slate-900
+            themeColorMeta.content = theme === 'dark' ? '#0f172a' : '#14b8a6';
         }
     }
 
@@ -927,8 +942,14 @@
         modeTestBtn.textContent = t.testMode;
         modeAudioBtn.textContent = t.audioMode;
         document.getElementById('audio-files-label').textContent = t.audioFilesLabel;
-        // Update audio file names display text based on current language and selection state
-        if (audioFileNamesDisplay) { // Check if the element exists
+        
+        // Update custom audio button text if it exists
+        const audioSelectBtnTextEl = document.getElementById('audio-select-button-text');
+        if (audioSelectBtnTextEl) {
+            audioSelectBtnTextEl.textContent = t.audioSelectButtonText;
+        }
+
+        if (audioFileNamesDisplay) { 
             if (loadedAudioFiles.length > 0) {
                 const messageKey = 'audioFilesSelected';
                 audioFileNamesDisplay.textContent = typeof t[messageKey] === 'function'
@@ -961,7 +982,7 @@
     }
      function updateToggleMySetsButtonText() {
         const mysetsContainerEl = document.getElementById('mysets-container'); 
-        if (mysetsContainerEl) { // Check if element exists
+        if (mysetsContainerEl) { 
             toggleMySetsBtn.textContent = mysetsContainerEl.classList.contains('hidden') ? t.showMySets : t.hideMySets;
         }
     }
@@ -970,10 +991,10 @@
     function updateModeSelectionUI() {
         modeButtons.forEach(btn => {
             if (btn.dataset.mode === currentMode) {
-                btn.classList.remove('btn-secondary'); // Make sure to remove secondary if it's primary
+                btn.classList.remove('btn-secondary'); 
                 btn.classList.add('btn-primary');
             } else {
-                btn.classList.remove('btn-primary'); // Make sure to remove primary if it's secondary
+                btn.classList.remove('btn-primary'); 
                 btn.classList.add('btn-secondary');
             }
         });
@@ -992,34 +1013,26 @@
 
     // --- Message Display Function ---
     function showMessage(textOrKey, type = 'error', isKey = false, duration = 3000) {
-        messageArea.innerHTML = ''; // Clear previous messages
+        messageArea.innerHTML = ''; 
         const messageDiv = document.createElement('div');
         let messageText = textOrKey;
 
-        // If isKey is true, try to get the translation.
-        // If textOrKey is a function (like for dynamic messages), call it.
-        // Otherwise, use textOrKey as is.
         if (isKey) {
             const translation = t[textOrKey];
             if (typeof translation === 'function') {
-                // This case is tricky if the function needs arguments not passed here.
-                // For now, assume if it's a function, it's already formatted or doesn't need args here.
-                // Or, the caller should pre-format it if it's a key to a function.
-                // Let's assume the caller handles function calls directly for now.
-                messageText = translation || textOrKey; // Fallback to key if translation is undefined
+                messageText = translation || textOrKey; 
             } else {
-                messageText = translation || textOrKey; // Fallback to key
+                messageText = translation || textOrKey; 
             }
         }
-        
+       
         messageDiv.textContent = messageText; 
-        messageDiv.className = `message message-${type}`; // e.g., message message-error
+        messageDiv.className = `message message-${type}`; 
         messageArea.appendChild(messageDiv);
 
-        // Auto-hide for success, warning, info messages
         if (type === 'success' || type === 'warning' || type === 'info') { 
             setTimeout(() => {
-                if (messageArea.contains(messageDiv)) { // Check if it wasn't cleared by another message
+                if (messageArea.contains(messageDiv)) { 
                     messageArea.removeChild(messageDiv);
                 }
             }, duration);
@@ -1030,7 +1043,6 @@
     // --- Text Splitting Function ---
     function splitTextIntoSentences(text) {
         if (!text || !text.trim()) return [];
-        // Ensure 't' (translation object) is up-to-date for the current language
         const delimiterRegex = i18nData[currentSelectedLang].delimiterRegex || i18nData.ja.delimiterRegex;
         return text.split(delimiterRegex)
                    .map(s => s.trim())
@@ -1043,33 +1055,33 @@
         audioObjectUrls = [];
     }
 
+    // audioFilesInput is the hidden input. Event listener remains on it.
     audioFilesInput.addEventListener('change', (event) => {
-        revokePreviousAudioUrls(); // Clean up old URLs before creating new ones
-        // Convert FileList to Array and sort by name numerically (e.g., audio1.mp3, audio2.mp3, audio10.mp3)
+        revokePreviousAudioUrls(); 
         const files = Array.from(event.target.files)
             .sort((a, b) =>
                 a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' })
             );
-        // Create object URLs and store them along with the file object
         loadedAudioFiles = files.map(file => {
             const url = URL.createObjectURL(file);
-            audioObjectUrls.push(url); // Keep track of URLs to revoke later
-            return { file, url }; // Store file and its URL
+            audioObjectUrls.push(url); 
+            return { file, url }; 
         });
-        
-        // Update the file names display next to the button
-        if (loadedAudioFiles.length > 0) {
-            const messageKey = 'audioFilesSelected';
-            const messageText = typeof t[messageKey] === 'function' 
-                ? t[messageKey](loadedAudioFiles.length) 
-                : `${loadedAudioFiles.length}件の音声ファイルを選択しました。`; // Fallback
-            audioFileNamesDisplay.textContent = messageText;
-        } else {
-            audioFileNamesDisplay.textContent = t['noAudioFileSelectedDefaultText'] || 'ファイル未選択'; // Use translated default or fallback
+       
+        if (audioFileNamesDisplay) { // Ensure the display span exists
+            if (loadedAudioFiles.length > 0) {
+                const messageKey = 'audioFilesSelected';
+                const messageText = typeof t[messageKey] === 'function' 
+                    ? t[messageKey](loadedAudioFiles.length) 
+                    : `${loadedAudioFiles.length}件の音声ファイルを選択しました。`; 
+                audioFileNamesDisplay.textContent = messageText;
+            } else {
+                audioFileNamesDisplay.textContent = t['noAudioFileSelectedDefaultText'] || 'ファイル未選択'; 
+            }
         }
-        event.target.value = null; // Reset file input to allow selecting the same file(s) again
+        event.target.value = null; 
     });
-    
+   
     // --- Text Input History Functions ---
     function loadTextInputHistoryFromStorage() {
         const storedHistory = localStorage.getItem(TEXT_HISTORY_STORAGE_KEY);
@@ -1078,7 +1090,7 @@
                 textInputHistory = JSON.parse(storedHistory);
             } catch (e) {
                 console.error("Error parsing text input history from localStorage:", e);
-                textInputHistory = []; // Reset to empty if parsing fails
+                textInputHistory = []; 
             }
         }
     }
@@ -1088,41 +1100,38 @@
     }
 
     function addEntryToTextInputHistory(original, translation, sourceFilename) {
-        // Use translated "Manual Input" or the filename
         const newSource = sourceFilename || t.manualInputLabel; 
-        
-        // Avoid adding exact duplicates if the last entry is identical in content and source
+       
         if (textInputHistory.length > 0) {
             const lastEntry = textInputHistory[0];
             if (lastEntry.original === original &&
                 lastEntry.translation === translation &&
                 lastEntry.source === newSource) {
-                textInputHistory.shift(); // Remove the last identical entry to re-add it at the top
+                textInputHistory.shift(); 
             }
         }
         const newEntry = {
-            id: `hist-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`, // Unique ID
+            id: `hist-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`, 
             original: original,
             translation: translation,
             source: newSource, 
             timestamp: new Date().toISOString()
         };
-        textInputHistory.unshift(newEntry); // Add to the beginning
+        textInputHistory.unshift(newEntry); 
         if (textInputHistory.length > MAX_TEXT_HISTORY_ITEMS) {
-            textInputHistory.pop(); // Remove the oldest if limit exceeded
+            textInputHistory.pop(); 
         }
         saveTextInputHistoryToStorage();
         renderTextInputHistoryList();
     }
 
     function renderTextInputHistoryList() {
-        // Clear only the dynamically added history items, not the "no history" message
         const dynamicItems = historyItemsContainer.querySelectorAll('div[role="button"]');
         dynamicItems.forEach(item => item.remove());
 
         if (textInputHistory.length === 0) {
             noHistoryMessage.style.display = 'block';
-            noHistoryMessage.textContent = t.noHistory; // Ensure translated message
+            noHistoryMessage.textContent = t.noHistory; 
             clearHistoryBtn.disabled = true;
             return;
         }
@@ -1134,16 +1143,15 @@
             const historyEntryDiv = document.createElement('div');
             historyEntryDiv.className = 'history-item p-3 border rounded-md cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-opacity-75';
             historyEntryDiv.setAttribute('role', 'button');
-            historyEntryDiv.tabIndex = 0; // Make it focusable
+            historyEntryDiv.tabIndex = 0; 
             historyEntryDiv.dataset.historyId = entry.id;
 
-            // Ensure source label is translated if it's "Manual Input"
             const sourceDisplay = entry.source === i18nData.ja.manualInputLabel || entry.source === i18nData.en.manualInputLabel 
                 ? t.manualInputLabel 
                 : `${t.historyItemSourceLabel}${entry.source}`;
 
             const snippet = entry.original.substring(0, 70) + (entry.original.length > 70 ? '...' : '');
-            const localeForDate = currentSelectedLang === 'ja' ? 'ja-JP' : 'en-US'; // For date localization
+            const localeForDate = currentSelectedLang === 'ja' ? 'ja-JP' : 'en-US'; 
 
             historyEntryDiv.innerHTML = `
                 <p class="text-xs" style="color: var(--text-secondary);">${new Date(entry.timestamp).toLocaleString(localeForDate)}</p>
@@ -1153,14 +1161,14 @@
 
             historyEntryDiv.addEventListener('click', () => loadTextInputHistoryEntry(entry.id));
             historyEntryDiv.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') { // Allow activation with Space key too
-                    e.preventDefault(); // Prevent page scroll on Space
+                if (e.key === 'Enter' || e.key === ' ') { 
+                    e.preventDefault(); 
                     loadTextInputHistoryEntry(entry.id);
                 }
             });
             fragment.appendChild(historyEntryDiv);
         });
-        historyItemsContainer.appendChild(fragment); // Append all items at once
+        historyItemsContainer.appendChild(fragment); 
     }
 
     function loadTextInputHistoryEntry(entryId) {
@@ -1168,16 +1176,14 @@
         if (entry) {
             originalTextInput.value = entry.original;
             translationTextInput.value = entry.translation;
-            
-            // When loading from history, reset incorrect tracking for this specific loaded text
+           
             lastOriginalTextForIncorrectTracking = entry.original; 
             lastTranslationTextForIncorrectTracking = entry.translation; 
             incorrectlyAnsweredPairs.clear(); 
             isFilteringIncorrect = false;
 
-            showMessage(t.loadedFromHistory, "success", true); // Use translated message
-            
-            // Reset learning state if it was active
+            showMessage(t.loadedFromHistory, "success", true); 
+           
             currentPairedSentences = []; 
             clearUndoRedoHistory();
             sentenceContainer.innerHTML = '';
@@ -1193,7 +1199,7 @@
             originalTextInput.focus();
         }
     }
-    
+   
     // --- My Sets Feature ---
     function loadMySetsFromStorage() {
         const storedMySets = localStorage.getItem(MY_SETS_STORAGE_KEY);
@@ -1214,7 +1220,7 @@
     function renderMySetList() {
         const mysetsContainerEl = document.getElementById('mysets-container');
         const noMySetsMsgEl = document.getElementById('no-mysets-message'); 
-        if (!mysetsContainerEl || !noMySetsMsgEl) return; // Safety check
+        if (!mysetsContainerEl || !noMySetsMsgEl) return; 
 
         const dynamicItems = mysetsContainerEl.querySelectorAll('.myset-item');
         dynamicItems.forEach(item => item.remove());
@@ -1230,11 +1236,11 @@
         mySets.forEach((set, index) => {
             const setDiv = document.createElement('div');
             setDiv.className = 'myset-item p-3 border rounded-md flex justify-between items-center';
-            
+           
             const setNamePara = document.createElement('p');
             setNamePara.className = 'text-sm break-all flex-grow mr-2'; 
             setNamePara.style.color = 'var(--text-primary)';
-            setNamePara.textContent = set.name || t.unnamedMySet || "(Unnamed Set)"; // Use translated unnamed
+            setNamePara.textContent = set.name || t.unnamedMySet || "(Unnamed Set)"; 
             setNamePara.title = `${set.original.substring(0,50)}...\n---\n${set.translation.substring(0,50)}...`;
 
             const buttonsDiv = document.createElement('div');
@@ -1250,8 +1256,8 @@
                 lastTranslationTextForIncorrectTracking = set.translation;
                 incorrectlyAnsweredPairs.clear();
                 isFilteringIncorrect = false;
-                showMessage(t.mySetLoaded(set.name || t.unnamedMySet), "success", false); // Use set.name or translated unnamed
-                if (!mysetsContainerEl.classList.contains('hidden')) { // Close mysets list after loading
+                showMessage(t.mySetLoaded(set.name || t.unnamedMySet), "success", false); 
+                if (!mysetsContainerEl.classList.contains('hidden')) { 
                     mysetsContainerEl.classList.add('hidden');
                     updateToggleMySetsButtonText();
                 }
@@ -1261,14 +1267,14 @@
             deleteBtn.className = 'btn btn-danger btn-small';
             deleteBtn.textContent = "削除"; // TODO: i18n for "Delete"
             deleteBtn.addEventListener('click', () => {
-                if (confirm(t.confirmDeleteMySet(set.name || t.unnamedMySet))) { // Use set.name or translated unnamed
+                if (confirm(t.confirmDeleteMySet(set.name || t.unnamedMySet))) { 
                     mySets.splice(index, 1);
                     saveMySetsToStorage();
                     renderMySetList();
-                    showMessage(t.mySetDeleted(set.name || t.unnamedMySet), "success", false); // Use set.name or translated unnamed
+                    showMessage(t.mySetDeleted(set.name || t.unnamedMySet), "success", false); 
                 }
             });
-            
+           
             buttonsDiv.appendChild(loadBtn);
             buttonsDiv.appendChild(deleteBtn);
             setDiv.appendChild(setNamePara);
@@ -1277,31 +1283,31 @@
         });
         mysetsContainerEl.appendChild(fragment);
     }
-    
+   
     saveMySetBtn.addEventListener('click', () => {
         const original = originalTextInput.value.trim();
         const translation = translationTextInput.value.trim();
 
-        if (!original && !translation) { // Check if both are empty
-            showMessage(t.errorSavingMySetEmpty, "error", false); // Use translated message
+        if (!original && !translation) { 
+            showMessage(t.errorSavingMySetEmpty, "error", false); 
             return;
         }
 
-        let setName = prompt(t.enterMySetName, original.substring(0, 20) + "..."); // Use translated prompt
-        if (setName === null) return; // User cancelled prompt
+        let setName = prompt(t.enterMySetName, original.substring(0, 20) + "..."); 
+        if (setName === null) return; 
         setName = setName.trim();
         if (!setName) {
-             showMessage(t.errorSavingMySetNoName, "error", false); // Use translated message
+             showMessage(t.errorSavingMySetNoName, "error", false); 
             return;
         }
 
-        mySets.unshift({ name: setName, original, translation }); // *** CORRECTED HERE ***
-        if(mySets.length > MAX_TEXT_HISTORY_ITEMS) { // Assuming same limit as history for now
+        mySets.unshift({ name: setName, original, translation }); 
+        if(mySets.length > MAX_TEXT_HISTORY_ITEMS) { 
             mySets.pop();
         }
         saveMySetsToStorage();
         renderMySetList();
-        showMessage(t.mySetSaved(setName), "success", false); // Use translated message
+        showMessage(t.mySetSaved(setName), "success", false); 
     });
 
     toggleMySetsBtn.addEventListener('click', () => {
@@ -1338,49 +1344,43 @@
     // --- Learning Content Rendering Function ---
     function normalizeAnswerForComparison(answer) {
         let normalized = String(answer || '').trim();
-        // Remove common sentence-ending punctuation for more lenient comparison
         if (normalized.endsWith('。') || normalized.endsWith('.') || normalized.endsWith('！') || normalized.endsWith('？') || normalized.endsWith('!') || normalized.endsWith('?')) {
             normalized = normalized.slice(0, -1);
         }
-        // Remove all spaces (half-width and full-width) and convert to lowercase
         normalized = normalized.replace(/\s+/g, '').replace(/　+/g, ''); 
         return normalized.trim().toLowerCase(); 
     }
-    
+   
     function generatePairId(original, translation) {
-        // Basic way to create a somewhat unique ID from content.
-        // For more robustness, consider a hashing function if available/needed.
         const sanitize = (str) => String(str)
-            .replace(/\r\n|\r|\n/g, "__NL__") // Normalize newlines
-            .replace(/"/g, "__DQ__") // Escape double quotes
-            .replace(/'/g, "__SQ__") // Escape single quotes
-            .replace(/\[/g, "__LB__") // Escape left bracket
-            .replace(/\]/g, "__RB__") // Escape right bracket
-            .replace(/\./g, "__DT__"); // Escape dot
+            .replace(/\r\n|\r|\n/g, "__NL__") 
+            .replace(/"/g, "__DQ__") 
+            .replace(/'/g, "__SQ__") 
+            .replace(/\[/g, "__LB__") 
+            .replace(/\]/g, "__RB__") 
+            .replace(/\./g, "__DT__"); 
         return `pairid-${sanitize(original)}-${sanitize(translation)}`;
     }
 
     function renderSidebar(pairsToDisplay) {
-        sidebarSentenceList.innerHTML = ''; // Clear existing items
+        sidebarSentenceList.innerHTML = ''; 
         if (!learningSection.classList.contains('hidden') && pairsToDisplay.length > 0) {
             pairsToDisplay.forEach(pair => {
                 const item = document.createElement('div');
                 item.className = 'sidebar-item';
-                item.textContent = pair.original.substring(0, 30) + (pair.original.length > 30 ? '...' : ''); // Show a snippet
+                item.textContent = pair.original.substring(0, 30) + (pair.original.length > 30 ? '...' : ''); 
                 item.dataset.pairId = pair.id; 
                 if (pair.id === activeSidebarItemId) {
                     item.classList.add('active');
                 }
                 item.addEventListener('click', () => {
                     const targetPairId = item.dataset.pairId; 
-                    // CSS.escape is important for IDs that might contain special characters, though generatePairId tries to avoid them.
                     const selector = `.sentence-pair[data-id="${CSS.escape(targetPairId)}"]`; 
                     const targetSentencePair = document.querySelector(selector);
 
                     if (targetSentencePair) {
                         targetSentencePair.scrollIntoView({ behavior: 'smooth', block: 'start' }); 
                         setActiveSidebarItem(targetPairId);
-                        // Close sidebar on mobile after clicking an item
                         if (window.innerWidth <= 768 && appSidebar.classList.contains('open')) { 
                             appSidebar.classList.remove('open');
                             contentWrapper.classList.remove('sidebar-open'); 
@@ -1393,7 +1393,7 @@
             });
         }
     }
-    
+   
     function setActiveSidebarItem(pairId) {
         activeSidebarItemId = pairId;
         document.querySelectorAll('#sidebar-sentence-list .sidebar-item').forEach(item => {
@@ -1403,7 +1403,7 @@
 
 
     function renderSentences() {
-        sentenceContainer.innerHTML = ''; // Clear previous sentences
+        sentenceContainer.innerHTML = ''; 
         if (toggleAllTranslationsBtn) { 
             toggleAllTranslationsBtn.classList.toggle('hidden', currentMode !== 'memorization' || currentPairedSentences.length === 0);
         }
@@ -1412,7 +1412,6 @@
         if (isFilteringIncorrect && incorrectlyAnsweredPairs.size > 0) {
             pairsToRender = currentPairedSentences.filter(pair => incorrectlyAnsweredPairs.has(pair.id));
             if (pairsToRender.length === 0 && currentPairedSentences.length > 0) { 
-                // If filtering and no incorrect pairs are left to show, but there were pairs originally
                 showMessage(t.noIncorrectPairsToFilter, "info", true, 4000);
             }
         }
@@ -1420,16 +1419,15 @@
 
         if (pairsToRender.length === 0) { 
             if (isFilteringIncorrect && currentPairedSentences.length > 0) {
-                // Message already handled by the block above
+                // Message handled above
             } else if (!isFilteringIncorrect && currentPairedSentences.length === 0) {
-                 showMessage("noPairsToDisplay", "warning", true); // Use key for translation
+                 showMessage("noPairsToDisplay", "warning", true); 
             }
              updateUndoRedoButtonStates();
              updateFilterIncorrectButtonState(); 
-             return; // Nothing more to render
+             return; 
         }
-        
-        // Update "Show/Hide All Translations" button text if in memorization mode
+       
         if (currentMode === 'memorization' && toggleAllTranslationsBtn) {
             toggleAllTranslationsBtn.textContent = allTranslationsManuallyToggled ? t.hideAllTranslations : t.showAllTranslations;
         }
@@ -1450,15 +1448,15 @@
             if (currentMode === 'memorization') {
                 const toggleBtn = document.createElement('button');
                 toggleBtn.dataset.pairId = sentenceData.id; 
-                let toggleBtnClasses = 'btn mt-2 mb-3 individual-toggle-btn '; // Base classes
+                let toggleBtnClasses = 'btn mt-2 mb-3 individual-toggle-btn '; 
 
                 if (displayPriority === 'originalFirst') {
-                    toggleBtnClasses += 'btn-toggle-original-first'; // Add specific class
-                    translationPara.classList.toggle('hidden', !allTranslationsManuallyToggled); // Initial state based on global toggle
+                    toggleBtnClasses += 'btn-toggle-original-first'; 
+                    translationPara.classList.toggle('hidden', !allTranslationsManuallyToggled); 
                     toggleBtn.textContent = translationPara.classList.contains('hidden') ? t.showTranslation : t.hideTranslation;
-                } else { // translationFirst
-                    toggleBtnClasses += 'btn-toggle-translation-first'; // Add specific class
-                    originalPara.classList.toggle('hidden', !allTranslationsManuallyToggled); // Initial state
+                } else { 
+                    toggleBtnClasses += 'btn-toggle-translation-first'; 
+                    originalPara.classList.toggle('hidden', !allTranslationsManuallyToggled); 
                     toggleBtn.textContent = originalPara.classList.contains('hidden') ? t.showOriginal : t.hideOriginal;
                 }
                 toggleBtn.className = toggleBtnClasses;
@@ -1470,8 +1468,7 @@
                         originalPara.classList.toggle('hidden');
                         toggleBtn.textContent = originalPara.classList.contains('hidden') ? t.showOriginal : t.hideOriginal;
                     }
-                    
-                    // Check if all relevant parts are now shown to update the global toggle state
+                   
                     let allCurrentlyEffectivelyShown = true;
                     document.querySelectorAll('#sentence-container .sentence-pair').forEach(renderedPairDiv => {
                         const targetElement = displayPriority === 'originalFirst' 
@@ -1497,11 +1494,11 @@
                     pairDiv.appendChild(originalPara);
                 }
             } else if (currentMode === 'test' || currentMode === 'audio') { 
-                originalPara.classList.remove('hidden'); // Original is always visible as the question
-                translationPara.classList.add('hidden'); // Translation is initially hidden
+                originalPara.classList.remove('hidden'); 
+                translationPara.classList.add('hidden'); 
 
                 if (currentMode === 'audio') { 
-                    originalPara.classList.add('hidden'); // In audio mode, original text also starts hidden
+                    originalPara.classList.add('hidden'); 
                     const audioControlsDiv = document.createElement('div');
                     audioControlsDiv.className = 'audio-controls my-3 space-y-2';
                     if (sentenceData.audioSrc) { 
@@ -1538,8 +1535,8 @@
                     audioControlsDiv.appendChild(buttonContainer);
                     pairDiv.appendChild(audioControlsDiv);
                 }
-                
-                pairDiv.appendChild(originalPara); // Original text (question or hidden for audio)
+               
+                pairDiv.appendChild(originalPara); 
 
                 const testArea = document.createElement('div');
                 testArea.className = 'test-area mt-3 space-y-2';
@@ -1568,23 +1565,22 @@
                         answerResultDiv.className = 'answer-result text-lg font-bold mt-1 answer-incorrect';
                         incorrectlyAnsweredPairs.add(sentenceData.id); 
                     }
-                    translationPara.classList.remove('hidden'); // Show correct answer
+                    translationPara.classList.remove('hidden'); 
                     if (currentMode === 'audio') { 
-                         const showTranslationBtnAudio = pairDiv.querySelector('.audio-controls .btn-secondary:nth-child(2)'); // Assuming it's the second button
-                         if(showTranslationBtnAudio) showTranslationBtnAudio.textContent = t.hideTranslationAudio; // Update button text
+                         const showTranslationBtnAudio = pairDiv.querySelector('.audio-controls .btn-secondary:nth-child(2)'); 
+                         if(showTranslationBtnAudio) showTranslationBtnAudio.textContent = t.hideTranslationAudio; 
                     }
-                    checkAnswerBtn.disabled = true; // Prevent re-checking
+                    checkAnswerBtn.disabled = true; 
                     updateFilterIncorrectButtonState(); 
                 });
-                
+               
                 testArea.appendChild(userAnswerInput);
                 testArea.appendChild(checkAnswerBtn);
                 testArea.appendChild(answerResultDiv);
                 pairDiv.appendChild(testArea);
-                pairDiv.appendChild(translationPara); // Correct translation (initially hidden)
+                pairDiv.appendChild(translationPara); 
             }
 
-            // Add merge buttons if not the first item
             const originalFullListIndex = currentPairedSentences.findIndex(p => p.id === sentenceData.id);
             if (originalFullListIndex > 0) { 
                 const mergeButtonContainer = document.createElement('div');
@@ -1622,55 +1618,51 @@
         updateUndoRedoButtonStates();
         updateFilterIncorrectButtonState(); 
     }
-    
+   
 
     // --- Event Listeners ---
     modeButtons.forEach(button => {
         button.addEventListener('click', () => {
             currentMode = button.dataset.mode;
-            allTranslationsManuallyToggled = false; // Reset this when mode changes
+            allTranslationsManuallyToggled = false; 
             updateModeSelectionUI(); 
         });
     });
 
     filterIncorrectBtn.addEventListener('click', () => {
-        if (incorrectlyAnsweredPairs.size > 0 || isFilteringIncorrect) { // Allow toggling off even if set is empty but was filtering
+        if (incorrectlyAnsweredPairs.size > 0 || isFilteringIncorrect) { 
             isFilteringIncorrect = !isFilteringIncorrect;
         } else {
-            isFilteringIncorrect = false; // Ensure it's false if no incorrect pairs
+            isFilteringIncorrect = false; 
         }
-        renderSentences(); // Re-render based on new filter state
-        updateFilterIncorrectButtonState(); // Update button text/state
+        renderSentences(); 
+        updateFilterIncorrectButtonState(); 
     });
 
 
     toggleDisplayPriorityBtn.addEventListener('click', () => {
         displayPriority = displayPriority === 'originalFirst' ? 'translationFirst' : 'originalFirst';
-        allTranslationsManuallyToggled = false; // Reset this when priority changes
-        updateUIText(); // Update button text
+        allTranslationsManuallyToggled = false; 
+        updateUIText(); 
         if (!learningSection.classList.contains('hidden') && currentPairedSentences.length > 0 && currentMode === 'memorization') {
-            renderSentences(); // Re-render if in memorization mode
+            renderSentences(); 
         }
     });
 
     startLearningBtn.addEventListener('click', () => {
-        messageArea.innerHTML = ''; // Clear previous messages
+        messageArea.innerHTML = ''; 
         const currentOriginalText = originalTextInput.value;
         const currentTranslationText = translationTextInput.value;
 
-        // Basic validation: check if both text areas are empty.
-        // If one is empty and the other is not, it's an error.
-        // If both are empty, it's also an error (or at least nothing to process).
         if (!currentOriginalText.trim() && !currentTranslationText.trim()) {
-            showMessage(t.errorBothTextsRequired, "error"); // Both empty
+            showMessage(t.errorBothTextsRequired, "error"); 
             return;
         }
         if (!currentOriginalText.trim() || !currentTranslationText.trim()) {
-             showMessage(t.errorBothTextsRequired, "error"); // One is empty
+             showMessage(t.errorBothTextsRequired, "error"); 
             return;
         }
-        
-        // If text content has changed, reset the incorrect tracking
+       
         if (currentOriginalText !== lastOriginalTextForIncorrectTracking ||
             currentTranslationText !== lastTranslationTextForIncorrectTracking) {
             incorrectlyAnsweredPairs.clear();
@@ -1679,19 +1671,19 @@
         lastOriginalTextForIncorrectTracking = currentOriginalText;
         lastTranslationTextForIncorrectTracking = currentTranslationText;
 
-        addEntryToTextInputHistory(currentOriginalText, currentTranslationText, null); // Add to history (null for manual input source)
+        addEntryToTextInputHistory(currentOriginalText, currentTranslationText, null); 
 
         const originalSentences = splitTextIntoSentences(currentOriginalText);
         const translationSentences = splitTextIntoSentences(currentTranslationText);
 
         if (originalSentences.length === 0 || translationSentences.length === 0) {
-            showMessage("errorNoValidSentences", "error", true); // Use key for translation
+            showMessage("errorNoValidSentences", "error", true); 
             return;
         }
-        
-        currentPairedSentences = []; // Reset current pairs
-        clearUndoRedoHistory(); // Clear undo history for new set
-        allTranslationsManuallyToggled = false; // Reset global toggle state
+       
+        currentPairedSentences = []; 
+        clearUndoRedoHistory(); 
+        allTranslationsManuallyToggled = false; 
 
         const pairCount = Math.min(originalSentences.length, translationSentences.length);
 
@@ -1703,14 +1695,13 @@
 
         let audioAssignedCount = 0;
         for (let i = 0; i < pairCount; i++) {
-            // Assign audio source if in audio mode and a corresponding file exists
             const audioSrc =
-                currentMode === 'audio' && loadedAudioFiles[i] // Check if loadedAudioFiles[i] exists
+                currentMode === 'audio' && loadedAudioFiles[i] 
                     ? loadedAudioFiles[i].url
                     : null;
             if (audioSrc) audioAssignedCount++;
             currentPairedSentences.push({
-                id: generatePairId(originalSentences[i], translationSentences[i]), // Generate a unique ID for the pair
+                id: generatePairId(originalSentences[i], translationSentences[i]), 
                 original: originalSentences[i],
                 translation: translationSentences[i],
                 audioSrc: audioSrc
@@ -1718,21 +1709,18 @@
         }
 
         if (currentMode === 'audio') {
-            // This is where the "音声ファイル未選択" (errorNoAudioFilesSelectedForAudioMode) message is triggered.
-            // It means loadedAudioFiles is empty, but there are text pairs (pairCount > 0).
             if (loadedAudioFiles.length === 0 && pairCount > 0) { 
                 showMessage("errorNoAudioFilesSelectedForAudioMode", "warning", true, 5000);
             } else if (audioAssignedCount < pairCount && pairCount > 0 && loadedAudioFiles.length > 0) {
-                // Warn if not all pairs got an audio file (e.g., fewer audio files than text pairs)
                 showMessage(t.warningNotAllPairsHaveAudio(audioAssignedCount, pairCount), "warning", false, 5000);
             }
         }
-        
+       
         inputSection.classList.add('hidden');
         learningSection.classList.remove('hidden'); 
-        updateModeSelectionUI(); // This will call renderSentences
-        
-        window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top
+        updateModeSelectionUI(); 
+       
+        window.scrollTo({ top: 0, behavior: 'smooth' }); 
     });
 
     function handleMergeWithPrevious(event) {
@@ -1740,57 +1728,48 @@
         const type = event.target.dataset.type;
 
         if (currentIndex > 0 && currentIndex < currentPairedSentences.length) {
-            saveStateForUndo(); // Save current state before merging
+            saveStateForUndo(); 
 
             const previousPair = currentPairedSentences[currentIndex - 1];
             const currentMergingPair = currentPairedSentences[currentIndex];
             let messageKey = "";
 
-            // Remove merged items from incorrect tracking as their content changes
             incorrectlyAnsweredPairs.delete(currentMergingPair.id);
             incorrectlyAnsweredPairs.delete(previousPair.id); 
 
 
             if (type === 'original') {
                 previousPair.original = (previousPair.original + " " + currentMergingPair.original).trim();
-                // Shift subsequent original sentences up
                 for (let i = currentIndex; i < currentPairedSentences.length - 1; i++) {
                     currentPairedSentences[i].original = currentPairedSentences[i + 1].original;
                 }
-                // Clear the original text of the last pair if it was shifted from
-                if (currentPairedSentences.length > currentIndex) { // Check bounds
+                if (currentPairedSentences.length > currentIndex) { 
                      currentPairedSentences[currentPairedSentences.length -1].original = "";
                 }
                 messageKey = "successMerged";
             } else if (type === 'translation') {
                 previousPair.translation = (previousPair.translation + " " + currentMergingPair.translation).trim();
-                // Shift subsequent translation sentences up
                 for (let i = currentIndex; i < currentPairedSentences.length - 1; i++) {
                     currentPairedSentences[i].translation = currentPairedSentences[i + 1].translation;
                 }
-                // Clear the translation text of the last pair
-                if (currentPairedSentences.length > currentIndex) { // Check bounds
+                if (currentPairedSentences.length > currentIndex) { 
                     currentPairedSentences[currentPairedSentences.length -1].translation = "";
                 }
                 messageKey = "successMerged";
             } else if (type === 'full_pair') {
                 previousPair.original = (previousPair.original + " " + currentMergingPair.original).trim();
                 previousPair.translation = (previousPair.translation + " " + currentMergingPair.translation).trim();
-                // If previous pair didn't have audio but current one does, take current's audio
                 if (!previousPair.audioSrc && currentMergingPair.audioSrc) {
                     previousPair.audioSrc = currentMergingPair.audioSrc;
                 }
-                currentPairedSentences.splice(currentIndex, 1); // Remove the merged pair
+                currentPairedSentences.splice(currentIndex, 1); 
                 messageKey = "successPairMerged";
             }
-            
-            // Regenerate ID for the modified previousPair as its content changed
+           
             if (previousPair) { 
                  previousPair.id = generatePairId(previousPair.original, previousPair.translation);
             }
 
-
-            // If merging only original or translation, check if the last pair became empty and remove it
             if (type === 'original' || type === 'translation') {
                 if (currentPairedSentences.length > 0) {
                     const lastPairIndex = currentPairedSentences.length - 1;
@@ -1800,40 +1779,39 @@
                     }
                 }
             }
-            
-            allTranslationsManuallyToggled = false; // Reset visibility toggle
+           
+            allTranslationsManuallyToggled = false; 
             renderSentences();
             showMessage(messageKey, "success", true);
             updateFilterIncorrectButtonState(); 
         }
     }
-    
+   
     undoMergeBtn.addEventListener('click', () => {
         if (undoHistory.length > 0) {
             const previousState = undoHistory.pop();
             currentPairedSentences = previousState.pairs;
             incorrectlyAnsweredPairs = new Set(previousState.incorrectIds); 
-            isFilteringIncorrect = false; // Reset filter when undoing
+            isFilteringIncorrect = false; 
 
-            allTranslationsManuallyToggled = false; // Reset visibility toggle
+            allTranslationsManuallyToggled = false; 
             renderSentences();
-            showMessage("successUndo", "success", true); // Use key for translation
+            showMessage("successUndo", "success", true); 
             updateUndoRedoButtonStates(); 
             updateFilterIncorrectButtonState();
         } else {
-            showMessage("errorNoUndoState", "warning", true); // Use key for translation
+            showMessage("errorNoUndoState", "warning", true); 
         }
     });
 
     shufflePairsBtn.addEventListener('click', () => {
         if (currentPairedSentences.length > 1) {
-            saveStateForUndo(); // Save state before shuffling
-            // Fisher-Yates shuffle algorithm
+            saveStateForUndo(); 
             for (let i = currentPairedSentences.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [currentPairedSentences[i], currentPairedSentences[j]] = [currentPairedSentences[j], currentPairedSentences[i]];
             }
-            allTranslationsManuallyToggled = false; // Reset visibility toggle
+            allTranslationsManuallyToggled = false; 
             renderSentences();
             showMessage(t.successShuffled, "success", true);
         }
@@ -1851,18 +1829,17 @@
             const translationEl = pairDiv.querySelector('.translation-sentence');
             const individualToggleBtn = pairDiv.querySelector('.individual-toggle-btn');
 
-            if (!originalEl || !translationEl || !individualToggleBtn) return; // Should not happen
+            if (!originalEl || !translationEl || !individualToggleBtn) return; 
 
             if (displayPriority === 'originalFirst') {
                 translationEl.classList.toggle('hidden', !allTranslationsManuallyToggled);
                 individualToggleBtn.textContent = allTranslationsManuallyToggled ? t.hideTranslation : t.showTranslation;
-            } else { // translationFirst
+            } else { 
                 originalEl.classList.toggle('hidden', !allTranslationsManuallyToggled);
                 individualToggleBtn.textContent = allTranslationsManuallyToggled ? t.hideOriginal : t.showOriginal;
             }
         });
-        
-        // Update the main toggle button's text
+       
         toggleAllTranslationsBtn.textContent = allTranslationsManuallyToggled ? t.hideAllTranslations : t.showAllTranslations;
     });
 
@@ -1872,9 +1849,10 @@
         translationTextInput.value = '';
         currentPairedSentences = [];
         clearUndoRedoHistory();
-        revokePreviousAudioUrls(); // Clean up audio URLs
-        loadedAudioFiles = [];    // Clear loaded audio files array
-        audioFilesInput.value = ''; // Reset the file input element itself
+        revokePreviousAudioUrls(); 
+        loadedAudioFiles = [];     
+        if (audioFilesInput) audioFilesInput.value = ''; 
+        if (audioFileNamesDisplay) audioFileNamesDisplay.textContent = t.noAudioFileSelectedDefaultText; // Reset custom display
         sentenceContainer.innerHTML = '';
         incorrectlyAnsweredPairs.clear(); 
         isFilteringIncorrect = false;
@@ -1886,9 +1864,9 @@
             inputSection.classList.remove('hidden');
             updateSidebarVisibility();
         }
-        messageArea.innerHTML = ''; // Clear any messages
+        messageArea.innerHTML = ''; 
         allTranslationsManuallyToggled = false;
-        showMessage("successReset", "success", true); // Use key for translation
+        showMessage("successReset", "success", true); 
         updateFilterIncorrectButtonState(); 
         originalTextInput.focus();
     });
@@ -1897,83 +1875,75 @@
         learningSection.classList.add('hidden');
         inputSection.classList.remove('hidden');
         updateSidebarVisibility();
-        messageArea.innerHTML = ''; // Clear messages when going back
-        allTranslationsManuallyToggled = false; // Reset this state
+        messageArea.innerHTML = ''; 
+        allTranslationsManuallyToggled = false; 
         originalTextInput.focus();
     });
-    
+   
     toggleHistoryBtn.addEventListener('click', () => {
         historyItemsContainer.classList.toggle('hidden');
         updateToggleHistoryButtonText(); 
     });
 
     clearHistoryBtn.addEventListener('click', () => {
-        if (textInputHistory.length > 0 && confirm(t.confirmClearHistory)) { // Use translated confirmation
+        if (textInputHistory.length > 0 && confirm(t.confirmClearHistory)) { 
             textInputHistory = [];
             saveTextInputHistoryToStorage();
             renderTextInputHistoryList(); 
-            showMessage(t.historyCleared, "success", true); // Use translated message
+            showMessage(t.historyCleared, "success", true); 
         }
     });
 
     importCsvBtn.addEventListener('click', () => {
-        csvFileInput.click(); // Trigger hidden file input
+        csvFileInput.click(); 
     });
 
-    // Custom CSV parser to handle quotes and newlines within fields
     function parseCSVText_custom(csvText) {
         const records = [];
         let currentRecord = [];
         let currentField = "";
         let inQuotes = false;
-        // Normalize line endings to \n
         const normalizedText = csvText.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
 
         for (let i = 0; i < normalizedText.length; i++) {
             const char = normalizedText[i];
             if (inQuotes) {
                 if (char === '"') {
-                    // Check for escaped quote ("")
                     if (i + 1 < normalizedText.length && normalizedText[i + 1] === '"') {
-                        currentField += '"'; // Add a single quote
-                        i++; // Skip the next quote
+                        currentField += '"'; 
+                        i++; 
                     } else {
-                        inQuotes = false; // End of quoted field
+                        inQuotes = false; 
                     }
                 } else {
-                    currentField += char; // Character inside quoted field
+                    currentField += char; 
                 }
-            } else { // Not in quotes
+            } else { 
                 if (char === '"') {
-                    // Start of a quoted field, only if currentField is empty (to handle non-quoted fields with quotes inside)
                     if (currentField.length === 0) {
                          inQuotes = true;
                     } else {
-                         currentField += char; // Treat as a literal quote if field already has content
+                         currentField += char; 
                     }
                 } else if (char === ',') {
                     currentRecord.push(currentField);
                     currentField = "";
                 } else if (char === '\n') {
-                    currentRecord.push(currentField); // End of current field
-                    records.push([...currentRecord]); // Add completed record
-                    currentRecord = []; // Start new record
+                    currentRecord.push(currentField); 
+                    records.push([...currentRecord]); 
+                    currentRecord = []; 
                     currentField = "";
                 } else {
-                    currentField += char; // Character in non-quoted field
+                    currentField += char; 
                 }
             }
         }
-        // Add the last field and record
         currentRecord.push(currentField);
-        // Add the last record only if it has content or if it's the only record (even if empty)
         if (currentRecord.some(f => f.trim().length > 0) || (records.length === 0 && currentRecord.length > 0) ) {
-             // Avoid adding a completely empty record if it's the only one from an empty CSV or just newlines
              if (!(records.length === 0 && currentRecord.length === 1 && currentRecord[0].trim() === "")) { 
-                records.push([...currentRecord]);
+                 records.push([...currentRecord]);
              }
         }
-        // Filter out any completely empty records that might have been added due to trailing newlines
         return records.filter(record => record.length > 0 && record.some(field => field.trim() !== ""));
     }
 
@@ -1986,74 +1956,68 @@
                 const csvText = e.target.result;
                 try {
                     const parsedRows = parseCSVText_custom(csvText);
-                    if (parsedRows.length > 0 && parsedRows.some(row => row.length >=1 && row[0].trim() !== "")) { // Ensure at least one row with content in the first cell
+                    if (parsedRows.length > 0 && parsedRows.some(row => row.length >=1 && row[0].trim() !== "")) { 
                         let originalTextParts = [];
                         let translationTextParts = [];
                         parsedRows.forEach(rowCells => {
-                            // Ensure cells are treated as strings, handle undefined/null gracefully
                             let cellA = String(rowCells.length > 0 ? rowCells[0] : "").trim();
                             let cellB = String(rowCells.length > 1 ? rowCells[1] : "").trim();
-                            // Replace literal '\n' from CSV with actual newline characters
                             cellA = cellA.replace(/\\n/g, '\n');
                             cellB = cellB.replace(/\\n/g, '\n');
-                            
-                            if (cellA) { // Only add if original text (cellA) has content
+                           
+                            if (cellA) { 
                                 originalTextParts.push(cellA);
-                                translationTextParts.push(cellB); // Add translation even if it's empty, to maintain pairing
+                                translationTextParts.push(cellB); 
                             }
                         });
-                        // Join parts, ensuring each part ends with appropriate punctuation for splitting later
                         const finalOriginalText = originalTextParts
-                            .map(p => p.replace(/[.。？！]$/, "") + (/[一-龠ぁ-んァ-ヶ]/.test(p) ? "。" : ".")) // Add Japanese or English period
-                            .join(" "); // Join with space, splitTextIntoSentences will handle it
+                            .map(p => p.replace(/[.。？！]$/, "") + (/[一-龠ぁ-んァ-ヶ]/.test(p) ? "。" : ".")) 
+                            .join(" "); 
                         const finalTranslationText = translationTextParts
                             .map(p => {
-                                if (!p) return "."; // If translation is empty, use a period to maintain structure
+                                if (!p) return "."; 
                                 return p.replace(/[.。？！]$/, "") + (/[一-龠ぁ-んァ-ヶ]/.test(p) ? "。" : ".");
                             })
                             .join(" ")
-                            .replace(/\s+\.\s*/g, ". ") // Clean up cases where empty translations might lead to " . "
+                            .replace(/\s+\.\s*/g, ". ") 
                             .trim();
                         originalTextInput.value = finalOriginalText;
                         translationTextInput.value = finalTranslationText;
-                        
-                        // Reset incorrect tracking when new CSV is imported
+                       
                         lastOriginalTextForIncorrectTracking = finalOriginalText; 
                         lastTranslationTextForIncorrectTracking = finalTranslationText; 
                         incorrectlyAnsweredPairs.clear(); 
                         isFilteringIncorrect = false;
 
-                        if (finalOriginalText || finalTranslationText) { // Check if any text was actually processed
+                        if (finalOriginalText || finalTranslationText) { 
                             showMessage("successCsvImported", "success", true);
-                            addEntryToTextInputHistory(finalOriginalText, finalTranslationText, file.name); // Add to history with filename
+                            addEntryToTextInputHistory(finalOriginalText, finalTranslationText, file.name); 
                             clearUndoRedoHistory(); 
                             updateUndoRedoButtonStates();
                             updateFilterIncorrectButtonState();
                         } else {
-                             showMessage(t.errorCsvFormat, "error", true); // Likely empty or malformed CSV
+                             showMessage(t.errorCsvFormat, "error", true); 
                         }
                     } else {
-                        showMessage(t.errorCsvFormat, "error", true); // No valid rows found
+                        showMessage(t.errorCsvFormat, "error", true); 
                     }
                 } catch (err) {
-                    showMessage(t.errorCsvFormat, "error", true); // General parsing error
+                    showMessage(t.errorCsvFormat, "error", true); 
                     console.error("CSV Parse Error:", err);
                 }
             };
-            reader.readAsText(file, 'UTF-8'); // Specify UTF-8 encoding
-            csvFileInput.value = ''; // Reset file input to allow selecting the same file again
+            reader.readAsText(file, 'UTF-8'); 
+            csvFileInput.value = ''; 
         }
     });
 
     exportCsvBtn.addEventListener('click', () => {
         if (currentPairedSentences.length === 0) {
-            showMessage("errorNoPairsToExport", "warning", true); // Use key for translation
+            showMessage("errorNoPairsToExport", "warning", true); 
             return;
         }
-        // CSV Header
         let csvContent = '"Original","Translation"\n'; 
         currentPairedSentences.forEach(pair => {
-            // Escape double quotes within fields by doubling them
             const original = `"${pair.original.replace(/"/g, '""')}"`;
             const translation = `"${pair.translation.replace(/"/g, '""')}"`;
             csvContent += `${original},${translation}\n`;
@@ -2061,7 +2025,7 @@
 
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
-        if (link.download !== undefined) { // Check for browser support
+        if (link.download !== undefined) { 
             const url = URL.createObjectURL(blob);
             link.setAttribute("href", url);
             link.setAttribute("download", "learned_pairs.csv");
@@ -2069,9 +2033,9 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            URL.revokeObjectURL(url); // Release the object URL
+            URL.revokeObjectURL(url); 
         } else {
-            showMessage(t.csvExportNotSupported, "warning", true); // Fallback for older browsers
+            showMessage(t.csvExportNotSupported, "warning", true); 
         }
     });
 
@@ -2081,9 +2045,8 @@
             localStorage.removeItem(MY_SETS_STORAGE_KEY);
             localStorage.removeItem(THEME_STORAGE_KEY);
             localStorage.removeItem(LANGUAGE_STORAGE_KEY);
-            // Potentially other keys if added in the future
-            showMessage(t.appDataCleared, "success", false, 4000); // Show message for a bit longer
-            setTimeout(() => window.location.reload(), 1500); // Reload to reflect cleared state
+            showMessage(t.appDataCleared, "success", false, 4000); 
+            setTimeout(() => window.location.reload(), 1500); 
         }
     });
 
@@ -2094,61 +2057,58 @@
         const sidebarOpen = appSidebar.classList.contains('open');
 
         if (isLearning) {
-            sidebarToggleBtn.classList.remove('hidden'); // Show toggle button in learning mode
+            sidebarToggleBtn.classList.remove('hidden'); 
             if (sidebarOpen) {
-                 if(window.innerWidth > 768) { // Only push content on larger screens
+                 if(window.innerWidth > 768) { 
                     contentWrapper.classList.add('sidebar-open');
                  } 
             } else {
                  contentWrapper.classList.remove('sidebar-open');
             }
-        } else { // Not in learning mode (input section is visible)
-            appSidebar.classList.remove('open'); // Ensure sidebar is closed
-            contentWrapper.classList.remove('sidebar-open'); // Ensure content is not pushed
-            sidebarToggleBtn.classList.add('hidden'); // Hide toggle button
+        } else { 
+            appSidebar.classList.remove('open'); 
+            contentWrapper.classList.remove('sidebar-open'); 
+            sidebarToggleBtn.classList.add('hidden'); 
         }
     }
 
 
     sidebarToggleBtn.addEventListener('click', () => {
         appSidebar.classList.toggle('open');
-        updateSidebarVisibility(); // Update content margin based on new state
+        updateSidebarVisibility(); 
     });
 
     // --- Swipe gestures for mobile sidebar ---
     let touchStartX = 0;
     let touchEndX = 0;
-    const swipeThreshold = 50; // Minimum swipe distance to trigger action
+    const swipeThreshold = 50; 
 
     document.body.addEventListener('touchstart', (event) => {
-        if (window.innerWidth > 768) return; // Only for mobile
-        // Only register startX if swipe starts near the edge (for opening) or if sidebar is already open (for closing)
+        if (window.innerWidth > 768) return; 
         if ((!appSidebar.classList.contains('open') && event.touches[0].clientX < 30) || appSidebar.classList.contains('open')) {
             touchStartX = event.touches[0].clientX;
         } else {
-            touchStartX = 0; // Reset if swipe starts elsewhere
+            touchStartX = 0; 
         }
     }, { passive: true });
 
     document.body.addEventListener('touchmove', (event) => {
-        if (window.innerWidth > 768 || touchStartX === 0) return; // Only if a valid touchstart occurred
+        if (window.innerWidth > 768 || touchStartX === 0) return; 
         touchEndX = event.touches[0].clientX;
     }, { passive: true });
 
     document.body.addEventListener('touchend', () => {
-        if (window.innerWidth > 768 || touchStartX === 0) return; // Only if a valid swipe was in progress
+        if (window.innerWidth > 768 || touchStartX === 0) return; 
         const swipeDistance = touchEndX - touchStartX;
 
-        // Swipe right to open (if sidebar is closed and swipe started from left edge)
         if (!appSidebar.classList.contains('open') && swipeDistance > swipeThreshold && touchStartX < 30) { 
             appSidebar.classList.add('open'); 
-        // Swipe left to close (if sidebar is open)
         } else if (appSidebar.classList.contains('open') && swipeDistance < -swipeThreshold) {
             appSidebar.classList.remove('open'); 
         }
-        updateSidebarVisibility(); // Update content margin
-        touchStartX = 0; // Reset for next swipe
-        touchEndX = 0;    
+        updateSidebarVisibility(); 
+        touchStartX = 0; 
+        touchEndX = 0;   
     }, { passive: true });
 
 
@@ -2166,15 +2126,13 @@
         updateSidebarVisibility(); 
     });
 
-    // Cleanup audio object URLs on page leave to prevent memory leaks
     window.addEventListener('beforeunload', () => {
         revokePreviousAudioUrls();
     });
 
-    // PWA Service Worker Registration
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./sw.js') // Ensure sw.js is in the correct path
+            navigator.serviceWorker.register('./sw.js') 
             .then(reg => console.log('Service Worker registered:', reg.scope))
             .catch(err => console.error('Service Worker registration failed:', err));
         });
