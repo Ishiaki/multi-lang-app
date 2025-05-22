@@ -548,13 +548,14 @@
 
     let currentMode = 'memorization'; // 'memorization', 'test', 'audio'
     let loadedAudioFiles = []; // Stores { file: File, url: string }
-    let audioObjectUrls = []; // Stores blob URLs to be revoked
-    let allTranslationsManuallyToggled = false; // For memorization mode's "Toggle All Translations"
+    let audioObjectUrls = []; // To keep track of Object URLs for revocation
 
-    let incorrectlyAnsweredPairs = new Set(); // Stores IDs of incorrectly answered pairs in test mode
-    let isFilteringIncorrect = false; // Flag to indicate if we are currently filtering by incorrect answers
-    let lastOriginalTextForIncorrectTracking = ""; // To reset incorrect tracking if input changes
-    let lastTranslationTextForIncorrectTracking = ""; // To reset incorrect tracking if input changes
+    let allTranslationsManuallyToggled = false; // For memorization mode's "toggle all"
+
+    let incorrectlyAnsweredPairs = new Set(); // Stores IDs of incorrectly answered pairs
+    let isFilteringIncorrect = false; // Flag to indicate if filtering is active
+    let lastOriginalTextForIncorrectTracking = ""; // To reset incorrect set if input changes
+    let lastTranslationTextForIncorrectTracking = ""; // To reset incorrect set if input changes
 
     let activeSidebarItemId = null; 
     let mySets = []; 
@@ -581,7 +582,7 @@
             mergeWithPreviousTranslation: "前の訳文と結合",
             mergePairWithPrevious: "ペアごと前と結合",
             backToInput: "入力に戻る",
-            displayPriorityLabel: "初期表示:", // Simplified label
+            displayPriorityLabel: "初期表示:", // Changed for all modes
             toggleDisplayPriorityOriginalFirst: "訳文を隠す (原文優先)",
             toggleDisplayPriorityTranslationFirst: "原文を隠す (訳文優先)",
             errorBothTextsRequired: "原文と訳文の両方を入力してください。",
@@ -627,11 +628,10 @@
             errorAudioFileAssignment: "音声ファイルの割り当てに問題が発生しました。ペアの数とファイル数が一致しないか、ファイルが選択されていません。",
             warningNotAllPairsHaveAudio: (assignedCount, totalPairs) => `音声ファイル ${assignedCount}件を ${totalPairs}件のペアに割り当てました。一部のペアには音声がない可能性があります。`,
             errorNoAudioFilesSelectedForAudioMode: "音声モードが選択されていますが、音声ファイルが読み込まれていません。「入力に戻る」からファイルを選択してください。",
-            showOriginalAudio: "原文表示",
-            hideOriginalAudio: "原文非表示",
-            showTranslationAudio: "訳文表示",
-            hideTranslationAudio: "訳文非表示",
-            showTextsAudio: "両方表示", // New
+            showOriginalAudio: "原文表示", // For Audio mode button
+            hideOriginalAudio: "原文非表示", // For Audio mode button
+            showTranslationAudio: "訳文表示", // For Audio mode button
+            hideTranslationAudio: "訳文非表示", // For Audio mode button
             showAllTranslations: "訳文を一括表示",
             hideAllTranslations: "訳文を一括非表示",
             filterIncorrect: "間違えたペアを絞り込む", 
@@ -683,7 +683,7 @@
             mergeWithPreviousTranslation: "Merge with Previous Translation",
             mergePairWithPrevious: "Merge Pair with Previous",
             backToInput: "Back to Input",
-            displayPriorityLabel: "Initial Display:", // Simplified label
+            displayPriorityLabel: "Initial Display:", // Changed for all modes
             toggleDisplayPriorityOriginalFirst: "Hide Translation (Original First)",
             toggleDisplayPriorityTranslationFirst: "Hide Original (Translation First)",
             errorBothTextsRequired: "Please enter both original and translated texts.",
@@ -719,7 +719,7 @@
             shufflePairs: "Shuffle Pairs",
             successShuffled: "Pair order has been shuffled.",
             enterYourAnswerPlaceholder: "Enter your translation here",
-            enterYourOriginalPlaceholder: "Enter your original text here", // New
+            enterYourOriginalPlaceholder: "Enter original text here", // New
             checkAnswer: "Check",
             correctAnswerSymbol: "✓",
             incorrectAnswerSymbol: "✗",
@@ -729,11 +729,10 @@
             errorAudioFileAssignment: "Problem assigning audio files. Number of files might not match pairs, or no files selected.",
             warningNotAllPairsHaveAudio: (assignedCount, totalPairs) => `Assigned ${assignedCount} audio files to ${totalPairs} pairs. Some pairs may not have audio.`,
             errorNoAudioFilesSelectedForAudioMode: "Audio mode is selected, but no audio files are loaded. Please go 'Back to Input' to select files.",
-            showOriginalAudio: "Show Original",
-            hideOriginalAudio: "Hide Original",
-            showTranslationAudio: "Show Translation",
-            hideTranslationAudio: "Hide Translation",
-            showTextsAudio: "Show Both Texts", // New
+            showOriginalAudio: "Show Original", // For Audio mode button
+            hideOriginalAudio: "Hide Original", // For Audio mode button
+            showTranslationAudio: "Show Translation", // For Audio mode button
+            hideTranslationAudio: "Hide Translation", // For Audio mode button
             showAllTranslations: "Show All Translations",
             hideAllTranslations: "Hide All Translations",
             filterIncorrect: "Filter Incorrect Pairs", 
@@ -922,13 +921,15 @@
         backToInputBtn.textContent = t.backToInput;
         document.getElementById('display-priority-label').textContent = t.displayPriorityLabel;
 
+        // Update display priority button text and style
         toggleDisplayPriorityBtn.textContent = displayPriority === 'originalFirst' ? t.toggleDisplayPriorityOriginalFirst : t.toggleDisplayPriorityTranslationFirst;
-        toggleDisplayPriorityBtn.classList.remove('btn-display-priority-original', 'btn-display-priority-translation');
+        toggleDisplayPriorityBtn.classList.remove('btn-display-priority-original', 'btn-display-priority-translation', 'btn-toggle-original-first', 'btn-toggle-translation-first');
         if (displayPriority === 'originalFirst') {
-            toggleDisplayPriorityBtn.classList.add('btn-display-priority-original');
+             toggleDisplayPriorityBtn.classList.add(currentMode === 'memorization' ? 'btn-toggle-original-first' : 'btn-display-priority-original');
         } else {
-            toggleDisplayPriorityBtn.classList.add('btn-display-priority-translation');
+             toggleDisplayPriorityBtn.classList.add(currentMode === 'memorization' ? 'btn-toggle-translation-first' : 'btn-display-priority-translation');
         }
+
 
         document.getElementById('history-section-title').textContent = t.historySectionTitle;
         clearHistoryBtn.textContent = t.clearHistory;
@@ -1004,9 +1005,9 @@
         });
         audioInputContainer.classList.toggle('hidden', currentMode !== 'audio');
         toggleAllTranslationsBtn.classList.toggle('hidden', currentMode !== 'memorization' || currentPairedSentences.length === 0);
-        if (toggleAllTranslationsBtn && currentMode === 'memorization' && currentPairedSentences.length > 0) {
-            toggleAllTranslationsBtn.textContent = allTranslationsManuallyToggled ? t.hideAllTranslations : t.showAllTranslations;
-        }
+        
+        // Update display priority button style based on mode
+        updateUIText(); // Recalculates button style based on currentMode and displayPriority
 
         if (!learningSection.classList.contains('hidden') && currentPairedSentences.length > 0) {
             renderSentences(); 
@@ -1024,12 +1025,12 @@
         if (isKey) {
             const translation = t[textOrKey];
             if (typeof translation === 'function') {
-                // If the translation is a function (e.g., for dynamic messages), call it.
-                // This assumes the function doesn't need arguments or they are handled elsewhere.
-                // For parameterized messages, they should be formatted before calling showMessage.
-                messageText = translation() || textOrKey; // Fallback to key if function returns nothing
+                // If the i18n value is a function, call it (e.g., for dynamic messages)
+                // This part needs arguments if the function expects them.
+                // For now, assuming simple key or direct text.
+                messageText = translation() || textOrKey; 
             } else {
-                messageText = translation || textOrKey; // Fallback to key if translation not found
+                messageText = translation || textOrKey; 
             }
         }
        
@@ -1050,7 +1051,7 @@
     // --- Text Splitting Function ---
     function splitTextIntoSentences(text) {
         if (!text || !text.trim()) return [];
-        // Use the delimiter regex from the current language, fallback to Japanese if not defined
+        // Use the delimiter regex from the currently selected language's i18n data
         const delimiterRegex = i18nData[currentSelectedLang].delimiterRegex || i18nData.ja.delimiterRegex;
         return text.split(delimiterRegex)
                    .map(s => s.trim())
@@ -1069,10 +1070,10 @@
         const files = Array.from(event.target.files)
             .sort((a, b) =>
                 a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' })
-            ); // Sort files numerically by name
+            ); // Sort files by name numerically
         loadedAudioFiles = files.map(file => {
             const url = URL.createObjectURL(file);
-            audioObjectUrls.push(url); // Keep track to revoke later
+            audioObjectUrls.push(url); 
             return { file, url }; 
         });
        
@@ -1087,7 +1088,7 @@
                 audioFileNamesDisplay.textContent = t['noAudioFileSelectedDefaultText'] || 'ファイル未選択'; 
             }
         }
-        event.target.value = null; // Reset file input to allow re-selection of the same file
+        event.target.value = null; // Reset file input to allow re-selection of same files
     });
    
     // --- Text Input History Functions ---
@@ -1110,14 +1111,13 @@
     function addEntryToTextInputHistory(original, translation, sourceFilename) {
         const newSource = sourceFilename || t.manualInputLabel; 
        
-        // Avoid adding exact duplicates if it's the most recent entry
+        // Avoid adding exact duplicates if they are the most recent entry
         if (textInputHistory.length > 0) {
             const lastEntry = textInputHistory[0];
             if (lastEntry.original === original &&
                 lastEntry.translation === translation &&
                 lastEntry.source === newSource) {
-                // It's a duplicate of the most recent, remove the old one before adding new
-                textInputHistory.shift(); 
+                textInputHistory.shift(); // Remove the last entry to re-add it at the top (updates timestamp)
             }
         }
         const newEntry = {
@@ -1129,7 +1129,7 @@
         };
         textInputHistory.unshift(newEntry); // Add to the beginning
         if (textInputHistory.length > MAX_TEXT_HISTORY_ITEMS) {
-            textInputHistory.pop(); // Remove the oldest if limit exceeded
+            textInputHistory.pop(); // Remove the oldest if exceeds max
         }
         saveTextInputHistoryToStorage();
         renderTextInputHistoryList();
@@ -1157,7 +1157,7 @@
             historyEntryDiv.tabIndex = 0; 
             historyEntryDiv.dataset.historyId = entry.id;
 
-            // Ensure source label is translated if it's the "Manual Input" key
+            // Ensure source is translated if it's the "manual input" label
             const sourceDisplay = entry.source === i18nData.ja.manualInputLabel || entry.source === i18nData.en.manualInputLabel 
                 ? t.manualInputLabel 
                 : `${t.historyItemSourceLabel}${entry.source}`;
@@ -1197,7 +1197,7 @@
 
             showMessage(t.loadedFromHistory, "success", true); 
            
-            // Clear current learning state
+            // Clear learning state as new text is loaded
             currentPairedSentences = []; 
             clearUndoRedoHistory();
             sentenceContainer.innerHTML = '';
@@ -1205,7 +1205,7 @@
             updateFilterIncorrectButtonState();
 
 
-            // Switch back to input section if currently in learning section
+            // Switch back to input view if in learning view
             if (!learningSection.classList.contains('hidden')) {
                 learningSection.classList.add('hidden');
                 inputSection.classList.remove('hidden');
@@ -1263,7 +1263,7 @@
 
             const loadBtn = document.createElement('button');
             loadBtn.className = 'btn btn-info btn-small';
-            loadBtn.textContent = currentSelectedLang === 'ja' ? "読込" : "Load"; // Basic i18n
+            loadBtn.textContent = currentSelectedLang === 'ja' ? "読込" : "Load"; 
             loadBtn.addEventListener('click', () => {
                 originalTextInput.value = set.original;
                 translationTextInput.value = set.translation;
@@ -1280,7 +1280,7 @@
 
             const deleteBtn = document.createElement('button');
             deleteBtn.className = 'btn btn-danger btn-small';
-            deleteBtn.textContent = currentSelectedLang === 'ja' ? "削除" : "Delete"; // Basic i18n
+            deleteBtn.textContent = currentSelectedLang === 'ja' ? "削除" : "Delete"; 
             deleteBtn.addEventListener('click', () => {
                 if (confirm(t.confirmDeleteMySet(set.name || t.unnamedMySet))) { 
                     mySets.splice(index, 1);
@@ -1317,7 +1317,7 @@
         }
 
         mySets.unshift({ name: setName, original, translation }); 
-        if(mySets.length > MAX_TEXT_HISTORY_ITEMS) { // Reuse same limit as history for now
+        if(mySets.length > MAX_TEXT_HISTORY_ITEMS) { // Reuse history item limit for sets too
             mySets.pop();
         }
         saveMySetsToStorage();
@@ -1365,18 +1365,18 @@
         }
         // Remove all spaces (half-width and full-width)
         normalized = normalized.replace(/\s+/g, '').replace(/　+/g, ''); 
-        return normalized.trim().toLowerCase(); // Also convert to lowercase for case-insensitive comparison
+        return normalized.trim().toLowerCase(); // Case-insensitive
     }
    
     function generatePairId(original, translation) {
-        // Simple ID generation, consider a more robust hashing if needed for very large datasets or complex strings
+        // Simple ID generation, could be improved for very long texts or special chars
         const sanitize = (str) => String(str)
-            .replace(/\r\n|\r|\n/g, "__NL__") // Normalize newlines
-            .replace(/"/g, "__DQ__") // Escape double quotes
-            .replace(/'/g, "__SQ__") // Escape single quotes
-            .replace(/\[/g, "__LB__") // Escape left bracket
-            .replace(/\]/g, "__RB__") // Escape right bracket
-            .replace(/\./g, "__DT__"); // Escape dot
+            .replace(/\r\n|\r|\n/g, "__NL__") 
+            .replace(/"/g, "__DQ__") 
+            .replace(/'/g, "__SQ__") 
+            .replace(/\[/g, "__LB__") 
+            .replace(/\]/g, "__RB__") 
+            .replace(/\./g, "__DT__"); 
         return `pairid-${sanitize(original)}-${sanitize(translation)}`;
     }
 
@@ -1472,7 +1472,7 @@
                     toggleBtnClasses += 'btn-toggle-original-first'; 
                     translationPara.classList.toggle('hidden', !allTranslationsManuallyToggled); 
                     toggleBtn.textContent = translationPara.classList.contains('hidden') ? t.showTranslation : t.hideTranslation;
-                } else { // translationFirst
+                } else { 
                     toggleBtnClasses += 'btn-toggle-translation-first'; 
                     originalPara.classList.toggle('hidden', !allTranslationsManuallyToggled); 
                     toggleBtn.textContent = originalPara.classList.contains('hidden') ? t.showOriginal : t.hideOriginal;
@@ -1487,7 +1487,7 @@
                         toggleBtn.textContent = originalPara.classList.contains('hidden') ? t.showOriginal : t.hideOriginal;
                     }
                    
-                    // Update allTranslationsManuallyToggled state
+                    // Check if all are now effectively shown or hidden to update the master toggle button
                     let allCurrentlyEffectivelyShown = true;
                     document.querySelectorAll('#sentence-container .sentence-pair').forEach(renderedPairDiv => {
                         const targetElement = displayPriority === 'originalFirst' 
@@ -1512,123 +1512,129 @@
                     pairDiv.appendChild(toggleBtn);
                     pairDiv.appendChild(originalPara);
                 }
-            } else if (currentMode === 'test') {
-                const isOriginalFirstTest = displayPriority === 'originalFirst';
-                const questionPara = isOriginalFirstTest ? originalPara : translationPara;
-                const answerPara = isOriginalFirstTest ? translationPara : originalPara;
-                const placeholderText = isOriginalFirstTest ? t.enterYourAnswerPlaceholder : t.enterYourOriginalPlaceholder;
-                const correctAnswerValue = isOriginalFirstTest ? sentenceData.translation : sentenceData.original;
+            } else if (currentMode === 'test' || currentMode === 'audio') {
+                let questionParaDOM, answerParaDOM, questionTextKey, answerTextKey, placeholderKey, correctAnswerKeyValue;
 
-                questionPara.classList.remove('hidden');
-                answerPara.classList.add('hidden');
+                if (displayPriority === 'originalFirst') {
+                    questionParaDOM = originalPara;
+                    answerParaDOM = translationPara;
+                    questionTextKey = 'original';
+                    answerTextKey = 'translation';
+                    placeholderKey = 'enterYourAnswerPlaceholder'; // User inputs translation
+                    correctAnswerKeyValue = sentenceData.translation;
+                } else { // translationFirst
+                    questionParaDOM = translationPara;
+                    answerParaDOM = originalPara;
+                    questionTextKey = 'translation';
+                    answerTextKey = 'original';
+                    placeholderKey = 'enterYourOriginalPlaceholder'; // User inputs original
+                    correctAnswerKeyValue = sentenceData.original;
+                }
+
+                answerParaDOM.classList.add('hidden'); // Answer is initially hidden
 
                 const testArea = document.createElement('div');
                 testArea.className = 'test-area mt-3 space-y-2';
                 const userAnswerInput = document.createElement('textarea');
                 userAnswerInput.className = 'user-answer-input w-full p-2 border rounded-md resize-y';
                 userAnswerInput.rows = 2;
-                userAnswerInput.placeholder = placeholderText;
+                userAnswerInput.placeholder = t[placeholderKey] || (placeholderKey === 'enterYourOriginalPlaceholder' ? (currentSelectedLang === 'ja' ? "ここに原文を入力してください" : "Enter original text here") : t.enterYourAnswerPlaceholder);
+
                 const checkAnswerBtn = document.createElement('button');
                 checkAnswerBtn.className = 'check-answer-btn btn btn-primary btn-small';
                 checkAnswerBtn.textContent = t.checkAnswer;
+
                 const answerResultDiv = document.createElement('div');
                 answerResultDiv.className = 'answer-result text-lg font-bold mt-1';
 
-                checkAnswerBtn.addEventListener('click', () => {
-                    const userAnswer = userAnswerInput.value; 
-                    const normalizedUserAnswer = normalizeAnswerForComparison(userAnswer);
-                    const normalizedCorrectAnswer = normalizeAnswerForComparison(correctAnswerValue);
+                if (currentMode === 'audio') {
+                    questionParaDOM.classList.add('hidden'); // In Audio mode, question text is initially hidden
 
-                    if (normalizedUserAnswer === normalizedCorrectAnswer) {
-                        answerResultDiv.textContent = `${t.correctAnswerSymbol} ${t.answerCorrect}`;
-                        answerResultDiv.className = 'answer-result text-lg font-bold mt-1 answer-correct';
-                        incorrectlyAnsweredPairs.delete(sentenceData.id); 
+                    const audioControlsDiv = document.createElement('div');
+                    audioControlsDiv.className = 'audio-controls my-3 space-y-2';
+                    if (sentenceData.audioSrc) {
+                        const audioPlayer = document.createElement('audio');
+                        audioPlayer.className = 'audio-player';
+                        audioPlayer.controls = true;
+                        audioPlayer.src = sentenceData.audioSrc;
+                        audioControlsDiv.appendChild(audioPlayer);
                     } else {
-                        answerResultDiv.textContent = `${t.incorrectAnswerSymbol} ${t.answerIncorrect}`;
-                        answerResultDiv.className = 'answer-result text-lg font-bold mt-1 answer-incorrect';
-                        incorrectlyAnsweredPairs.add(sentenceData.id); 
+                        const noAudioMsg = document.createElement('p');
+                        noAudioMsg.className = 'text-sm';
+                        noAudioMsg.style.color = 'var(--text-secondary)';
+                        noAudioMsg.textContent = t.noAudioForThisPair;
+                        audioControlsDiv.appendChild(noAudioMsg);
                     }
-                    answerPara.classList.remove('hidden'); 
-                    checkAnswerBtn.disabled = true; 
-                    updateFilterIncorrectButtonState(); 
-                });
-               
+
+                    const buttonContainer = document.createElement('div');
+                    buttonContainer.className = 'flex flex-wrap gap-2 mt-2';
+
+                    const toggleQuestionBtn = document.createElement('button');
+                    toggleQuestionBtn.className = 'btn btn-secondary btn-small audio-toggle-question';
+                    let questionBtnShowText = questionTextKey === 'original' ? t.showOriginalAudio : t.showTranslationAudio;
+                    let questionBtnHideText = questionTextKey === 'original' ? t.hideOriginalAudio : t.hideTranslationAudio;
+                    toggleQuestionBtn.textContent = questionParaDOM.classList.contains('hidden') ? questionBtnShowText : questionBtnHideText;
+                    toggleQuestionBtn.addEventListener('click', () => {
+                        questionParaDOM.classList.toggle('hidden');
+                        toggleQuestionBtn.textContent = questionParaDOM.classList.contains('hidden') ? questionBtnShowText : questionBtnHideText;
+                    });
+
+                    const toggleAnswerBtn = document.createElement('button'); // This button toggles the *actual* answer text
+                    toggleAnswerBtn.className = 'btn btn-secondary btn-small audio-toggle-answer';
+                    let answerBtnShowText = answerTextKey === 'original' ? t.showOriginalAudio : t.showTranslationAudio;
+                    let answerBtnHideText = answerTextKey === 'original' ? t.hideOriginalAudio : t.hideTranslationAudio;
+                    toggleAnswerBtn.textContent = answerParaDOM.classList.contains('hidden') ? answerBtnShowText : answerBtnHideText;
+                    toggleAnswerBtn.addEventListener('click', () => {
+                        answerParaDOM.classList.toggle('hidden');
+                        toggleAnswerBtn.textContent = answerParaDOM.classList.contains('hidden') ? answerBtnShowText : answerBtnHideText;
+                    });
+
+                    buttonContainer.appendChild(toggleQuestionBtn);
+                    buttonContainer.appendChild(toggleAnswerBtn);
+                    audioControlsDiv.appendChild(buttonContainer);
+                    pairDiv.appendChild(audioControlsDiv);
+                } else { // Test mode
+                    questionParaDOM.classList.remove('hidden'); // Question text is visible
+                }
+
+                pairDiv.appendChild(questionParaDOM);
+                pairDiv.appendChild(testArea);
+                pairDiv.appendChild(answerParaDOM);
+
                 testArea.appendChild(userAnswerInput);
                 testArea.appendChild(checkAnswerBtn);
                 testArea.appendChild(answerResultDiv);
 
-                pairDiv.appendChild(questionPara);
-                pairDiv.appendChild(testArea);
-                pairDiv.appendChild(answerPara); // Add the initially hidden answer paragraph
+                checkAnswerBtn.addEventListener('click', () => {
+                    const userAnswer = userAnswerInput.value;
+                    const normalizedUserAnswer = normalizeAnswerForComparison(userAnswer);
+                    const normalizedCorrectAnswer = normalizeAnswerForComparison(correctAnswerKeyValue);
 
-            } else if (currentMode === 'audio') {
-                originalPara.classList.add('hidden'); // Both start hidden
-                translationPara.classList.add('hidden');
+                    if (normalizedUserAnswer === normalizedCorrectAnswer) {
+                        answerResultDiv.textContent = `${t.correctAnswerSymbol} ${t.answerCorrect}`;
+                        answerResultDiv.className = 'answer-result text-lg font-bold mt-1 answer-correct';
+                        incorrectlyAnsweredPairs.delete(sentenceData.id);
+                    } else {
+                        answerResultDiv.textContent = `${t.incorrectAnswerSymbol} ${t.answerIncorrect}`;
+                        answerResultDiv.className = 'answer-result text-lg font-bold mt-1 answer-incorrect';
+                        incorrectlyAnsweredPairs.add(sentenceData.id);
+                    }
+                    answerParaDOM.classList.remove('hidden'); // Show the answer text
 
-                const audioControlsDiv = document.createElement('div');
-                audioControlsDiv.className = 'audio-controls my-3 space-y-2';
-
-                if (sentenceData.audioSrc) { 
-                    const audioPlayer = document.createElement('audio');
-                    audioPlayer.className = 'audio-player';
-                    audioPlayer.controls = true;
-                    audioPlayer.src = sentenceData.audioSrc;
-                    audioControlsDiv.appendChild(audioPlayer);
-                } else { 
-                    const noAudioMsg = document.createElement('p');
-                    noAudioMsg.className = 'text-sm'; 
-                    noAudioMsg.style.color = 'var(--text-secondary)';
-                    noAudioMsg.textContent = t.noAudioForThisPair;
-                    audioControlsDiv.appendChild(noAudioMsg);
-                }
-
-                const buttonContainer = document.createElement('div');
-                buttonContainer.className = 'flex flex-wrap gap-2 mt-2';
-
-                const showOriginalBtnAudio = document.createElement('button');
-                showOriginalBtnAudio.className = 'btn btn-secondary btn-small';
-                showOriginalBtnAudio.textContent = t.showOriginalAudio;
-                showOriginalBtnAudio.dataset.target = "original";
-                showOriginalBtnAudio.addEventListener('click', () => {
-                    originalPara.classList.toggle('hidden');
-                    showOriginalBtnAudio.textContent = originalPara.classList.contains('hidden') ? t.showOriginalAudio : t.hideOriginalAudio;
+                    if (currentMode === 'audio') {
+                        questionParaDOM.classList.remove('hidden'); // Also show the question text
+                        // Update toggle button texts
+                        const qToggleBtn = pairDiv.querySelector('.audio-toggle-question');
+                        const aToggleBtn = pairDiv.querySelector('.audio-toggle-answer');
+                        if (qToggleBtn) qToggleBtn.textContent = questionTextKey === 'original' ? t.hideOriginalAudio : t.hideTranslationAudio;
+                        if (aToggleBtn) aToggleBtn.textContent = answerTextKey === 'original' ? t.hideOriginalAudio : t.hideTranslationAudio;
+                    }
+                    checkAnswerBtn.disabled = true;
+                    updateFilterIncorrectButtonState();
                 });
-
-                const showTranslationBtnAudio = document.createElement('button');
-                showTranslationBtnAudio.className = 'btn btn-secondary btn-small';
-                showTranslationBtnAudio.textContent = t.showTranslationAudio;
-                showTranslationBtnAudio.dataset.target = "translation";
-                showTranslationBtnAudio.addEventListener('click', () => {
-                    translationPara.classList.toggle('hidden');
-                    showTranslationBtnAudio.textContent = translationPara.classList.contains('hidden') ? t.showTranslationAudio : t.hideTranslationAudio;
-                });
-
-                buttonContainer.appendChild(showOriginalBtnAudio);
-                buttonContainer.appendChild(showTranslationBtnAudio);
-                audioControlsDiv.appendChild(buttonContainer);
-                pairDiv.appendChild(audioControlsDiv);
-                pairDiv.appendChild(originalPara);
-                pairDiv.appendChild(translationPara);
-
-                // Main reveal button for audio mode
-                const revealButtonContainerAudio = document.createElement('div');
-                revealButtonContainerAudio.className = 'mt-2';
-                const revealAllButtonAudio = document.createElement('button');
-                revealAllButtonAudio.className = 'btn btn-primary btn-small';
-                revealAllButtonAudio.textContent = t.showTextsAudio;
-                revealAllButtonAudio.addEventListener('click', () => {
-                    originalPara.classList.remove('hidden');
-                    translationPara.classList.remove('hidden');
-                    showOriginalBtnAudio.textContent = t.hideOriginalAudio;
-                    showTranslationBtnAudio.textContent = t.hideTranslationAudio;
-                    revealAllButtonAudio.disabled = true;
-                });
-                revealButtonContainerAudio.appendChild(revealAllButtonAudio);
-                pairDiv.appendChild(revealButtonContainerAudio);
             }
 
-
-            // Add merge buttons (common for all modes if applicable)
+            // Merge buttons (common for all modes if index > 0)
             const originalFullListIndex = currentPairedSentences.findIndex(p => p.id === sentenceData.id);
             if (originalFullListIndex > 0) { 
                 const mergeButtonContainer = document.createElement('div');
@@ -1691,10 +1697,9 @@
     toggleDisplayPriorityBtn.addEventListener('click', () => {
         displayPriority = displayPriority === 'originalFirst' ? 'translationFirst' : 'originalFirst';
         allTranslationsManuallyToggled = false; 
-        updateUIText(); 
-        // If in learning section, re-render to apply the new priority
+        updateUIText(); // This will update button text and style
         if (!learningSection.classList.contains('hidden') && currentPairedSentences.length > 0) {
-            renderSentences();
+            renderSentences(); // Re-render to apply new priority
         }
     });
 
@@ -1704,11 +1709,11 @@
         const currentTranslationText = translationTextInput.value;
 
         if (!currentOriginalText.trim() && !currentTranslationText.trim()) {
-            showMessage(t.errorBothTextsRequired, "error", false); // Changed isKey to false
+            showMessage(t.errorBothTextsRequired, "error"); 
             return;
         }
         if (!currentOriginalText.trim() || !currentTranslationText.trim()) {
-             showMessage(t.errorBothTextsRequired, "error", false); // Changed isKey to false
+             showMessage(t.errorBothTextsRequired, "error"); 
             return;
         }
        
@@ -1738,16 +1743,15 @@
         const pairCount = Math.min(originalSentences.length, translationSentences.length);
 
         if (originalSentences.length !== translationSentences.length) {
-            // Pass arguments to the i18n function
-            showMessage(t.warningSentenceCountMismatch(originalSentences.length, translationSentences.length, pairCount), "warning", false);
+            showMessage(t.warningSentenceCountMismatch(originalSentences.length, translationSentences.length, pairCount), "warning", false); // isKey=false for functions
         } else {
-            showMessage(t.successPairsCreated(pairCount), "success", false);
+            showMessage(t.successPairsCreated(pairCount), "success", false); // isKey=false for functions
         }
 
         let audioAssignedCount = 0;
         for (let i = 0; i < pairCount; i++) {
             const audioSrc =
-                currentMode === 'audio' && loadedAudioFiles[i] 
+                loadedAudioFiles[i] // Assign audio if available, regardless of currentMode at this stage
                     ? loadedAudioFiles[i].url
                     : null;
             if (audioSrc) audioAssignedCount++;
@@ -1755,11 +1759,11 @@
                 id: generatePairId(originalSentences[i], translationSentences[i]), 
                 original: originalSentences[i],
                 translation: translationSentences[i],
-                audioSrc: audioSrc
+                audioSrc: audioSrc // Audio src is now always assigned if files are loaded
             });
         }
 
-        if (currentMode === 'audio') {
+        if (currentMode === 'audio') { // Check specifically for audio mode warnings
             if (loadedAudioFiles.length === 0 && pairCount > 0) { 
                 showMessage("errorNoAudioFilesSelectedForAudioMode", "warning", true, 5000);
             } else if (audioAssignedCount < pairCount && pairCount > 0 && loadedAudioFiles.length > 0) {
@@ -1785,20 +1789,19 @@
             const currentMergingPair = currentPairedSentences[currentIndex];
             let messageKey = "";
 
-            // Remove merged items from incorrect tracking
+            // Remove merged items from incorrect set
             incorrectlyAnsweredPairs.delete(currentMergingPair.id);
             incorrectlyAnsweredPairs.delete(previousPair.id); 
 
 
             if (type === 'original') {
                 previousPair.original = (previousPair.original + " " + currentMergingPair.original).trim();
-                // Shift original texts up for subsequent items
+                // Shift original texts up
                 for (let i = currentIndex; i < currentPairedSentences.length - 1; i++) {
                     currentPairedSentences[i].original = currentPairedSentences[i + 1].original;
                 }
-                // Clear original text of the last item if it was shifted from
                 if (currentPairedSentences.length > currentIndex) { 
-                     currentPairedSentences[currentPairedSentences.length -1].original = "";
+                     currentPairedSentences[currentPairedSentences.length -1].original = ""; // Clear last original
                 }
                 messageKey = "successMerged";
             } else if (type === 'translation') {
@@ -1807,8 +1810,8 @@
                 for (let i = currentIndex; i < currentPairedSentences.length - 1; i++) {
                     currentPairedSentences[i].translation = currentPairedSentences[i + 1].translation;
                 }
-                if (currentPairedSentences.length > currentIndex) { 
-                    currentPairedSentences[currentPairedSentences.length -1].translation = "";
+                 if (currentPairedSentences.length > currentIndex) { 
+                    currentPairedSentences[currentPairedSentences.length -1].translation = ""; // Clear last translation
                 }
                 messageKey = "successMerged";
             } else if (type === 'full_pair') {
@@ -1818,16 +1821,16 @@
                 if (!previousPair.audioSrc && currentMergingPair.audioSrc) {
                     previousPair.audioSrc = currentMergingPair.audioSrc;
                 }
-                currentPairedSentences.splice(currentIndex, 1); // Remove the current pair
+                currentPairedSentences.splice(currentIndex, 1); // Remove the merged pair
                 messageKey = "successPairMerged";
             }
            
-            // Update ID of the modified previousPair
+            // Regenerate ID for the modified previousPair
             if (previousPair) { 
                  previousPair.id = generatePairId(previousPair.original, previousPair.translation);
             }
 
-            // If only one part was merged, check if the last pair became empty and remove it
+            // If a partial merge (original or translation) results in an empty pair at the end, remove it
             if (type === 'original' || type === 'translation') {
                 if (currentPairedSentences.length > 0) {
                     const lastPairIndex = currentPairedSentences.length - 1;
@@ -1892,7 +1895,7 @@
             if (displayPriority === 'originalFirst') {
                 translationEl.classList.toggle('hidden', !allTranslationsManuallyToggled);
                 individualToggleBtn.textContent = allTranslationsManuallyToggled ? t.hideTranslation : t.showTranslation;
-            } else { // translationFirst
+            } else { 
                 originalEl.classList.toggle('hidden', !allTranslationsManuallyToggled);
                 individualToggleBtn.textContent = allTranslationsManuallyToggled ? t.hideOriginal : t.showOriginal;
             }
@@ -1956,61 +1959,55 @@
         csvFileInput.click(); 
     });
 
-    // Custom CSV parser to handle quotes and newlines within fields
     function parseCSVText_custom(csvText) {
         const records = [];
         let currentRecord = [];
         let currentField = "";
         let inQuotes = false;
-        // Normalize line endings to \n
-        const normalizedText = csvText.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+        const normalizedText = csvText.replace(/\r\n/g, '\n').replace(/\r/g, '\n'); // Normalize line endings
 
         for (let i = 0; i < normalizedText.length; i++) {
             const char = normalizedText[i];
             if (inQuotes) {
                 if (char === '"') {
-                    // Check for escaped quote ("")
+                    // Check for escaped quote
                     if (i + 1 < normalizedText.length && normalizedText[i + 1] === '"') {
-                        currentField += '"'; // Add a single quote
-                        i++; // Skip the next quote
+                        currentField += '"'; // Add single quote
+                        i++; // Skip next quote
                     } else {
                         inQuotes = false; // End of quoted field
                     }
                 } else {
-                    currentField += char; // Add character to current field
+                    currentField += char; // Character inside quotes
                 }
             } else { // Not in quotes
                 if (char === '"') {
-                     // Start of a quoted field, only if currentField is empty (or handle as literal quote)
-                    if (currentField.length === 0) {
-                         inQuotes = true;
-                    } else {
-                         currentField += char; // Treat as a literal quote if field already has content
-                    }
+                     if (currentField.length === 0) { // Only start quotes if field is empty
+                          inQuotes = true;
+                     } else {
+                          currentField += char; // Treat as normal char if field not empty (malformed CSV)
+                     }
                 } else if (char === ',') {
                     currentRecord.push(currentField);
                     currentField = "";
                 } else if (char === '\n') {
-                    currentRecord.push(currentField); // Add last field of the row
-                    records.push([...currentRecord]); // Add completed record
+                    currentRecord.push(currentField); // Add last field of the record
+                    records.push([...currentRecord]); // Add copy of the record
                     currentRecord = []; // Reset for next record
                     currentField = "";
                 } else {
-                    currentField += char; // Add character to current field
+                    currentField += char; // Regular character
                 }
             }
         }
         // Add the last field and record if any
         currentRecord.push(currentField);
-        // Only add if the record has content or it's the very first empty record from an empty file
         if (currentRecord.some(f => f.trim().length > 0) || (records.length === 0 && currentRecord.length > 0) ) {
-             // Avoid adding a record that's just a single empty field from a file with only a newline
-             if (!(records.length === 0 && currentRecord.length === 1 && currentRecord[0].trim() === "")) { 
-                 records.push([...currentRecord]);
+             if (!(records.length === 0 && currentRecord.length === 1 && currentRecord[0].trim() === "")) { // Avoid empty single cell
+                records.push([...currentRecord]);
              }
         }
-        // Filter out completely empty records that might result from multiple trailing newlines
-        return records.filter(record => record.length > 0 && record.some(field => field.trim() !== ""));
+        return records.filter(record => record.length > 0 && record.some(field => field.trim() !== "")); // Filter out completely empty records
     }
 
 
@@ -2022,35 +2019,33 @@
                 const csvText = e.target.result;
                 try {
                     const parsedRows = parseCSVText_custom(csvText);
-                    // Ensure there's at least one row and that row has at least one non-empty cell in the first column
                     if (parsedRows.length > 0 && parsedRows.some(row => row.length >=1 && row[0].trim() !== "")) { 
                         let originalTextParts = [];
                         let translationTextParts = [];
                         parsedRows.forEach(rowCells => {
-                            // Ensure cells are treated as strings and handle undefined
                             let cellA = String(rowCells.length > 0 ? rowCells[0] : "").trim();
                             let cellB = String(rowCells.length > 1 ? rowCells[1] : "").trim();
                             // Replace literal '\n' from CSV with actual newlines for textarea
                             cellA = cellA.replace(/\\n/g, '\n');
                             cellB = cellB.replace(/\\n/g, '\n');
                            
-                            // Only add if the original cell (A) has content
-                            if (cellA) { 
+                            if (cellA) { // Only add if original text (cellA) exists
                                 originalTextParts.push(cellA);
                                 translationTextParts.push(cellB); // Add corresponding translation, even if empty
                             }
                         });
-                        // Join parts, ensuring each part ends with a sentence delimiter
+                        // Join parts with a common delimiter that splitTextIntoSentences will recognize
+                        // Ensure each part ends with a delimiter before joining
                         const finalOriginalText = originalTextParts
-                            .map(p => p.replace(/[.。？！]$/, "") + (/[一-龠ぁ-んァ-ヶ]/.test(p) ? "。" : ".")) // Add Japanese or English delimiter
-                            .join(" "); // Join with space, splitTextIntoSentences will handle it
+                            .map(p => p.replace(/[.。？！]$/, "") + (/[一-龠ぁ-んァ-ヶ]/.test(p) ? "。" : ".")) // Add delimiter if missing
+                            .join(" "); // Join with space, split will handle it
                         const finalTranslationText = translationTextParts
                             .map(p => {
-                                if (!p) return "."; // If translation is empty, use a dot to maintain pairing
+                                if (!p) return "."; // If translation is empty, use a placeholder dot
                                 return p.replace(/[.。？！]$/, "") + (/[一-龠ぁ-んァ-ヶ]/.test(p) ? "。" : ".");
                             })
                             .join(" ")
-                            .replace(/\s+\.\s*/g, ". ") // Clean up spaces around standalone dots
+                            .replace(/\s+\.\s*/g, ". ") // Clean up space around placeholder dots
                             .trim();
                         originalTextInput.value = finalOriginalText;
                         translationTextInput.value = finalTranslationText;
@@ -2061,7 +2056,7 @@
                         incorrectlyAnsweredPairs.clear(); 
                         isFilteringIncorrect = false;
 
-                        if (finalOriginalText || finalTranslationText) { // Check if any text was actually processed
+                        if (finalOriginalText || finalTranslationText) { 
                             showMessage("successCsvImported", "success", true);
                             addEntryToTextInputHistory(finalOriginalText, finalTranslationText, file.name); 
                             clearUndoRedoHistory(); 
@@ -2088,8 +2083,7 @@
             showMessage("errorNoPairsToExport", "warning", true); 
             return;
         }
-        // CSV Header
-        let csvContent = '"Original","Translation"\n'; 
+        let csvContent = '"Original","Translation"\n'; // CSV Header
         currentPairedSentences.forEach(pair => {
             // Escape double quotes within fields by doubling them
             const original = `"${pair.original.replace(/"/g, '""')}"`;
@@ -2099,7 +2093,7 @@
 
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
-        if (link.download !== undefined) { // Check for download attribute support
+        if (link.download !== undefined) { // Feature detection
             const url = URL.createObjectURL(blob);
             link.setAttribute("href", url);
             link.setAttribute("download", "learned_pairs.csv");
@@ -2134,12 +2128,12 @@
             sidebarToggleBtn.classList.remove('hidden'); 
             if (sidebarOpen) {
                  if(window.innerWidth > 768) { // Only apply margin on larger screens
-                     contentWrapper.classList.add('sidebar-open');
+                    contentWrapper.classList.add('sidebar-open');
                  } 
             } else {
                  contentWrapper.classList.remove('sidebar-open');
             }
-        } else { // Not in learning section
+        } else { 
             appSidebar.classList.remove('open'); 
             contentWrapper.classList.remove('sidebar-open'); 
             sidebarToggleBtn.classList.add('hidden'); 
@@ -2155,25 +2149,25 @@
     // --- Swipe gestures for mobile sidebar ---
     let touchStartX = 0;
     let touchEndX = 0;
-    const swipeThreshold = 50; // Minimum distance for a swipe
+    const swipeThreshold = 50; // Minimum swipe distance
 
     document.body.addEventListener('touchstart', (event) => {
         if (window.innerWidth > 768) return; // Only for mobile
-        // Only track startX if touch is near edge to open, or if sidebar is already open
+        // Only start swipe if near edge (when closed) or anywhere (when open)
         if ((!appSidebar.classList.contains('open') && event.touches[0].clientX < 30) || appSidebar.classList.contains('open')) {
             touchStartX = event.touches[0].clientX;
         } else {
-            touchStartX = 0; // Reset if touch starts elsewhere when sidebar is closed
+            touchStartX = 0; // Reset if touch starts elsewhere
         }
     }, { passive: true });
 
     document.body.addEventListener('touchmove', (event) => {
-        if (window.innerWidth > 768 || touchStartX === 0) return; // Only for mobile and if swipe started correctly
+        if (window.innerWidth > 768 || touchStartX === 0) return; // Only if swipe started correctly
         touchEndX = event.touches[0].clientX;
     }, { passive: true });
 
     document.body.addEventListener('touchend', () => {
-        if (window.innerWidth > 768 || touchStartX === 0) return; // Only for mobile and if swipe started correctly
+        if (window.innerWidth > 768 || touchStartX === 0) return; 
         const swipeDistance = touchEndX - touchStartX;
 
         if (!appSidebar.classList.contains('open') && swipeDistance > swipeThreshold && touchStartX < 30) { // Swipe right to open
@@ -2183,7 +2177,7 @@
         }
         updateSidebarVisibility(); 
         touchStartX = 0; // Reset for next touch
-        touchEndX = 0;   
+        touchEndX = 0;    
     }, { passive: true });
 
 
@@ -2202,10 +2196,10 @@
     });
 
     window.addEventListener('beforeunload', () => {
-        revokePreviousAudioUrls(); // Clean up blob URLs
+        revokePreviousAudioUrls(); // Clean up audio object URLs
     });
 
-    // Basic Service Worker registration
+    // --- Service Worker Registration ---
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js') // Assuming sw.js is in the same directory
