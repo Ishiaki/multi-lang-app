@@ -582,7 +582,7 @@
             mergeWithPreviousTranslation: "前の訳文と結合",
             mergePairWithPrevious: "ペアごと前と結合",
             backToInput: "入力に戻る",
-            displayPriorityLabel: "初期表示:", // Changed for all modes
+            displayPriorityLabel: "初期表示:", 
             toggleDisplayPriorityOriginalFirst: "訳文を隠す (原文優先)",
             toggleDisplayPriorityTranslationFirst: "原文を隠す (訳文優先)",
             errorBothTextsRequired: "原文と訳文の両方を入力してください。",
@@ -618,20 +618,22 @@
             shufflePairs: "ペアをシャッフル",
             successShuffled: "ペアの順番をシャッフルしました。",
             enterYourAnswerPlaceholder: "ここに訳文を入力してください",
-            enterYourOriginalPlaceholder: "ここに原文を入力してください", // New
+            enterYourOriginalPlaceholder: "ここに原文を入力してください", 
             checkAnswer: "判定",
             correctAnswerSymbol: "○",
             incorrectAnswerSymbol: "×",
             answerCorrect: "正解です！",
             answerIncorrect: "不正解です。",
+            markCorrectManual: "正解にする",
+            markIncorrectManual: "不正解にする",
             noAudioForThisPair: "このペアの音声はありません。",
             errorAudioFileAssignment: "音声ファイルの割り当てに問題が発生しました。ペアの数とファイル数が一致しないか、ファイルが選択されていません。",
             warningNotAllPairsHaveAudio: (assignedCount, totalPairs) => `音声ファイル ${assignedCount}件を ${totalPairs}件のペアに割り当てました。一部のペアには音声がない可能性があります。`,
             errorNoAudioFilesSelectedForAudioMode: "音声モードが選択されていますが、音声ファイルが読み込まれていません。「入力に戻る」からファイルを選択してください。",
-            showOriginalAudio: "原文表示", // For Audio mode button
-            hideOriginalAudio: "原文非表示", // For Audio mode button
-            showTranslationAudio: "訳文表示", // For Audio mode button
-            hideTranslationAudio: "訳文非表示", // For Audio mode button
+            showOriginalAudio: "原文表示", 
+            hideOriginalAudio: "原文非表示", 
+            showTranslationAudio: "訳文表示", 
+            hideTranslationAudio: "訳文非表示", 
             showAllTranslations: "訳文を一括表示",
             hideAllTranslations: "訳文を一括非表示",
             filterIncorrect: "間違えたペアを絞り込む", 
@@ -683,7 +685,7 @@
             mergeWithPreviousTranslation: "Merge with Previous Translation",
             mergePairWithPrevious: "Merge Pair with Previous",
             backToInput: "Back to Input",
-            displayPriorityLabel: "Initial Display:", // Changed for all modes
+            displayPriorityLabel: "Initial Display:", 
             toggleDisplayPriorityOriginalFirst: "Hide Translation (Original First)",
             toggleDisplayPriorityTranslationFirst: "Hide Original (Translation First)",
             errorBothTextsRequired: "Please enter both original and translated texts.",
@@ -719,20 +721,22 @@
             shufflePairs: "Shuffle Pairs",
             successShuffled: "Pair order has been shuffled.",
             enterYourAnswerPlaceholder: "Enter your translation here",
-            enterYourOriginalPlaceholder: "Enter original text here", // New
+            enterYourOriginalPlaceholder: "Enter original text here", 
             checkAnswer: "Check",
             correctAnswerSymbol: "✓",
             incorrectAnswerSymbol: "✗",
             answerCorrect: "Correct!",
             answerIncorrect: "Incorrect.",
+            markCorrectManual: "Mark Correct",
+            markIncorrectManual: "Mark Incorrect",
             noAudioForThisPair: "No audio for this pair.",
             errorAudioFileAssignment: "Problem assigning audio files. Number of files might not match pairs, or no files selected.",
             warningNotAllPairsHaveAudio: (assignedCount, totalPairs) => `Assigned ${assignedCount} audio files to ${totalPairs} pairs. Some pairs may not have audio.`,
             errorNoAudioFilesSelectedForAudioMode: "Audio mode is selected, but no audio files are loaded. Please go 'Back to Input' to select files.",
-            showOriginalAudio: "Show Original", // For Audio mode button
-            hideOriginalAudio: "Hide Original", // For Audio mode button
-            showTranslationAudio: "Show Translation", // For Audio mode button
-            hideTranslationAudio: "Hide Translation", // For Audio mode button
+            showOriginalAudio: "Show Original", 
+            hideOriginalAudio: "Hide Original", 
+            showTranslationAudio: "Show Translation", 
+            hideTranslationAudio: "Hide Translation", 
             showAllTranslations: "Show All Translations",
             hideAllTranslations: "Hide All Translations",
             filterIncorrect: "Filter Incorrect Pairs", 
@@ -1520,18 +1524,18 @@
                     answerParaDOM = translationPara;
                     questionTextKey = 'original';
                     answerTextKey = 'translation';
-                    placeholderKey = 'enterYourAnswerPlaceholder'; // User inputs translation
+                    placeholderKey = 'enterYourAnswerPlaceholder'; 
                     correctAnswerKeyValue = sentenceData.translation;
                 } else { // translationFirst
                     questionParaDOM = translationPara;
                     answerParaDOM = originalPara;
                     questionTextKey = 'translation';
                     answerTextKey = 'original';
-                    placeholderKey = 'enterYourOriginalPlaceholder'; // User inputs original
+                    placeholderKey = 'enterYourOriginalPlaceholder'; 
                     correctAnswerKeyValue = sentenceData.original;
                 }
 
-                answerParaDOM.classList.add('hidden'); // Answer is initially hidden
+                answerParaDOM.classList.add('hidden'); 
 
                 const testArea = document.createElement('div');
                 testArea.className = 'test-area mt-3 space-y-2';
@@ -1541,14 +1545,54 @@
                 userAnswerInput.placeholder = t[placeholderKey] || (placeholderKey === 'enterYourOriginalPlaceholder' ? (currentSelectedLang === 'ja' ? "ここに原文を入力してください" : "Enter original text here") : t.enterYourAnswerPlaceholder);
 
                 const checkAnswerBtn = document.createElement('button');
-                checkAnswerBtn.className = 'check-answer-btn btn btn-primary btn-small';
+                // Make checkAnswerBtn larger by removing btn-small and relying on .btn default or .btn-primary if it has larger padding
+                checkAnswerBtn.className = 'check-answer-btn btn btn-primary'; // Removed btn-small
                 checkAnswerBtn.textContent = t.checkAnswer;
+
+                const manualCorrectBtn = document.createElement('button');
+                manualCorrectBtn.className = 'manual-correct-btn btn btn-success btn-small ml-2';
+                manualCorrectBtn.textContent = t.markCorrectManual;
+                manualCorrectBtn.disabled = true; // Initially disabled until after first check
+
+                const manualIncorrectBtn = document.createElement('button');
+                manualIncorrectBtn.className = 'manual-incorrect-btn btn btn-danger btn-small ml-2';
+                manualIncorrectBtn.textContent = t.markIncorrectManual;
+                manualIncorrectBtn.disabled = true; // Initially disabled until after first check
+
 
                 const answerResultDiv = document.createElement('div');
                 answerResultDiv.className = 'answer-result text-lg font-bold mt-1';
 
+                const handleManualMarking = (isCorrect) => {
+                    answerResultDiv.textContent = isCorrect 
+                        ? `${t.correctAnswerSymbol} ${t.answerCorrect}` 
+                        : `${t.incorrectAnswerSymbol} ${t.answerIncorrect}`;
+                    answerResultDiv.className = `answer-result text-lg font-bold mt-1 ${isCorrect ? 'answer-correct' : 'answer-incorrect'}`;
+                    
+                    if (isCorrect) {
+                        incorrectlyAnsweredPairs.delete(sentenceData.id);
+                    } else {
+                        incorrectlyAnsweredPairs.add(sentenceData.id);
+                    }
+                    answerParaDOM.classList.remove('hidden');
+                    if (currentMode === 'audio') {
+                        questionParaDOM.classList.remove('hidden');
+                        const qToggleBtn = pairDiv.querySelector('.audio-toggle-question');
+                        const aToggleBtn = pairDiv.querySelector('.audio-toggle-answer');
+                        if (qToggleBtn) qToggleBtn.textContent = questionTextKey === 'original' ? t.hideOriginalAudio : t.hideTranslationAudio;
+                        if (aToggleBtn) aToggleBtn.textContent = answerTextKey === 'original' ? t.hideOriginalAudio : t.hideTranslationAudio;
+                    }
+                    // checkAnswerBtn remains disabled
+                    // manualCorrectBtn and manualIncorrectBtn remain enabled for further changes
+                    updateFilterIncorrectButtonState();
+                };
+
+                manualCorrectBtn.addEventListener('click', () => handleManualMarking(true));
+                manualIncorrectBtn.addEventListener('click', () => handleManualMarking(false));
+
+
                 if (currentMode === 'audio') {
-                    questionParaDOM.classList.add('hidden'); // In Audio mode, question text is initially hidden
+                    questionParaDOM.classList.add('hidden'); 
 
                     const audioControlsDiv = document.createElement('div');
                     audioControlsDiv.className = 'audio-controls my-3 space-y-2';
@@ -1579,7 +1623,7 @@
                         toggleQuestionBtn.textContent = questionParaDOM.classList.contains('hidden') ? questionBtnShowText : questionBtnHideText;
                     });
 
-                    const toggleAnswerBtn = document.createElement('button'); // This button toggles the *actual* answer text
+                    const toggleAnswerBtn = document.createElement('button'); 
                     toggleAnswerBtn.className = 'btn btn-secondary btn-small audio-toggle-answer';
                     let answerBtnShowText = answerTextKey === 'original' ? t.showOriginalAudio : t.showTranslationAudio;
                     let answerBtnHideText = answerTextKey === 'original' ? t.hideOriginalAudio : t.hideTranslationAudio;
@@ -1594,15 +1638,21 @@
                     audioControlsDiv.appendChild(buttonContainer);
                     pairDiv.appendChild(audioControlsDiv);
                 } else { // Test mode
-                    questionParaDOM.classList.remove('hidden'); // Question text is visible
+                    questionParaDOM.classList.remove('hidden'); 
                 }
 
                 pairDiv.appendChild(questionParaDOM);
                 pairDiv.appendChild(testArea);
                 pairDiv.appendChild(answerParaDOM);
 
+                const buttonGroupDiv = document.createElement('div'); // For check and manual buttons
+                buttonGroupDiv.className = 'flex flex-wrap gap-2 mt-1 items-center'; // Added items-center
+                buttonGroupDiv.appendChild(checkAnswerBtn);
+                buttonGroupDiv.appendChild(manualCorrectBtn);
+                buttonGroupDiv.appendChild(manualIncorrectBtn);
+                
                 testArea.appendChild(userAnswerInput);
-                testArea.appendChild(checkAnswerBtn);
+                testArea.appendChild(buttonGroupDiv); // Add the group
                 testArea.appendChild(answerResultDiv);
 
                 checkAnswerBtn.addEventListener('click', () => {
@@ -1619,10 +1669,10 @@
                         answerResultDiv.className = 'answer-result text-lg font-bold mt-1 answer-incorrect';
                         incorrectlyAnsweredPairs.add(sentenceData.id);
                     }
-                    answerParaDOM.classList.remove('hidden'); // Show the answer text
+                    answerParaDOM.classList.remove('hidden'); 
 
                     if (currentMode === 'audio') {
-                        questionParaDOM.classList.remove('hidden'); // Also show the question text
+                        questionParaDOM.classList.remove('hidden'); 
                         // Update toggle button texts
                         const qToggleBtn = pairDiv.querySelector('.audio-toggle-question');
                         const aToggleBtn = pairDiv.querySelector('.audio-toggle-answer');
@@ -1630,6 +1680,8 @@
                         if (aToggleBtn) aToggleBtn.textContent = answerTextKey === 'original' ? t.hideOriginalAudio : t.hideTranslationAudio;
                     }
                     checkAnswerBtn.disabled = true;
+                    manualCorrectBtn.disabled = false; // Enable manual buttons after check
+                    manualIncorrectBtn.disabled = false; // Enable manual buttons after check
                     updateFilterIncorrectButtonState();
                 });
             }
